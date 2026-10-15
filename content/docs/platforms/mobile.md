@@ -118,11 +118,6 @@ sentence explaining why. Add it under `ios_usage_descriptions` in the
 [manifest](/docs/packaging/metadata/). For the App Store, use
 [`bellui release`](/docs/packaging/release/), which builds a signed `.ipa`.
 
-{{< callout type="info" >}}
-WebGPU on iOS is verified in the simulator. Device builds compile and link but
-have not yet been verified on hardware.
-{{< /callout >}}
-
 ## The complete example
 
 {{< example "platforms/mobile/main.go" >}}

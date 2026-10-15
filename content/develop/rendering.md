@@ -29,7 +29,7 @@ There is no runtime switch; the tag decides what is compiled in.
 | Web (WebAssembly) | Browser WebGPU | Verified in Chromium |
 | Android | Vulkan | Verified in the emulator |
 | iOS Simulator | Metal | Verified |
-| iOS device | Metal | Builds; not yet verified on hardware |
+| iOS device | Metal | Verified on iPad |
 
 The OpenGL renderer supports the same desktop, mobile and web platforms.
 
