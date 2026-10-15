@@ -12,7 +12,9 @@ How you get them differs. The graphics, windowing and desktop libraries are
 dependencies of Bellui itself and arrive with `go get`. goffmpeg and its
 prebuilt libraries come with [x/mmedia](/extensions/mmedia/). gocef-libs is
 fetched by the `bellui` command when it packages a Linux app with a web view.
-uploader and clair are separate tools that Bellui apps can use.
+
+uploader and Clair are separate tools, not libraries Bellui depends on.
+They are described under [Tools](/tools/).
 
 ## Graphics and windowing
 
@@ -39,10 +41,3 @@ uploader and clair are separate tools that Bellui apps can use.
 | --- | --- | --- |
 | [goffmpeg](https://github.com/belluikit/goffmpeg) | Go bindings for FFmpeg (libavformat, libavcodec) with prebuilt libraries for each platform. Used by [x/mmedia](/extensions/mmedia/). | BSD-3-Clause |
 | [goffmpeg-libs](https://github.com/belluikit/goffmpeg-libs) | The prebuilt FFmpeg libraries for goffmpeg, one Go module per platform. | LGPL-2.1 |
-
-## Services and tools
-
-| Library | What it does | License |
-| --- | --- | --- |
-| [uploader](https://github.com/belluikit/uploader) | A resumable file upload and download service over gRPC, with a Go client SDK. | BSD-3-Clause |
-| [clair](https://github.com/belluikit/clair) | A knowledge-base assistant for code: a searchable index of a framework's API and your project, with optional LLM features. | Apache-2.0 |

@@ -29,18 +29,24 @@ menu:
     - name: Extensions
       pageRef: /extensions
       weight: 3
+    - name: Gallery
+      pageRef: /gallery
+      weight: 4
+    - name: Tools
+      pageRef: /tools
+      weight: 5
     - name: Libraries
       pageRef: /libraries
-      weight: 4
+      weight: 6
     - name: Support
       pageRef: /support
-      weight: 5
+      weight: 7
     - name: Search
-      weight: 6
+      weight: 8
       params:
         type: search
     - name: GitHub
-      weight: 7
+      weight: 9
       url: "https://github.com/belluikit"
       params:
         icon: github
