@@ -11,9 +11,9 @@ toolkit, and you do not need any of them to build a Bellui app. Each has its
 own repository, its own release cycle and its own license.
 
 {{< cards >}}
-  {{< card link="uploader" title="uploader" subtitle="A file transfer service over gRPC, with a Go client. Uploads and downloads that are cut off resume where they stopped." icon="cloud-upload" >}}
+  {{< card link="uploader" title="Uploader" subtitle="A file transfer service over gRPC, with a Go client. Uploads and downloads that are cut off resume where they stopped." icon="cloud-upload" >}}
   {{< card link="clair" title="Clair" subtitle="A searchable index of a Go framework's API and of your own project, with optional questions and answers through a language model." icon="document-search" >}}
-  {{< card link="alidade" title="alidade" subtitle="A graph of your whole repository for AI coding agents: who calls what, across Go, TypeScript, Python, .proto, SQL and Markdown." icon="share" >}}
+  {{< card link="alidade" title="Alidade" subtitle="A graph of your whole repository for AI coding agents: who calls what, across Go, TypeScript, Python, .proto, SQL and Markdown." icon="share" >}}
 {{< /cards >}}
 
 | Tool | What you get | Current release | License |
