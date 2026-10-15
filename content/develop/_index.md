@@ -1,4 +1,6 @@
 ---
+cascade:
+  type: docs
 title: Get started
 description: Install what Bellui needs, write your first app, and choose a renderer.
 weight: 1

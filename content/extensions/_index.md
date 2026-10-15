@@ -1,4 +1,6 @@
 ---
+cascade:
+  type: docs
 title: Extensions
 description: Optional modules for charts, data tables, a code editor, graphs and media.
 weight: 3

@@ -44,3 +44,9 @@ Several supporting libraries are forks too, each under its original license:
 | [typesetting](https://github.com/belluikit/typesetting) | go-text/typesetting |
 
 This website's content and examples are BSD 3-Clause licensed as well.
+
+## The gopher
+
+The Bellui logo is based on the Go gopher, which was designed by
+[Renée French](https://reneefrench.blogspot.com/) and is licensed under the
+[Creative Commons Attribution 4.0 license](https://creativecommons.org/licenses/by/4.0/).

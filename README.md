@@ -55,9 +55,17 @@ shortcode, which picks the light or dark image to match the reader's theme:
 {{< screenshot name="charts" alt="What the image shows" >}}
 ```
 
-To refresh them after a UI change, run the gallery with a capture hook that
-switches pages and theme variants and writes `Canvas().Capture()` to PNG.
-`scripts/screenshots/capture.go.txt` is the hook used for the current set.
+Two ways to make them:
+
+- **The gallery app.** Run the gallery with a capture hook that switches pages
+  and theme variants and writes `Canvas().Capture()` to PNG.
+  `scripts/screenshots/capture.go.txt` is the hook used for the current set.
+- **Any example.** `scripts/screenshots/shoot.sh <dir> <name> [WxH] [delay]`
+  runs `examples/<dir>` with its `bellui.ShowAndRun` call replaced by one that
+  captures both variants into `static/images/gallery/<name>-*.png` and quits.
+  Programs written only to be captured live in a `shots/` directory, for
+  example `examples/extensions/shots/dag/`; the check script compiles them
+  but does not require a page to show their code.
 
 ## Deploying (Cloudflare Pages)
 

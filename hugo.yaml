@@ -52,10 +52,10 @@ params:
     displayTitle: true
     displayLogo: true
     logo:
-      path: images/logo.svg
-      dark: images/logo.svg
-      width: 28
-      height: 28
+      path: images/logo-64.png
+      dark: images/logo-64.png
+      width: 32
+      height: 32
 
   page:
     width: wide

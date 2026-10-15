@@ -32,8 +32,10 @@ for f in $refs; do
 done
 
 # Every example file must be shown somewhere, or it is dead weight that is
-# compiled but documents nothing.
-for f in $(cd examples && find . -name '*.go' ! -name '*_test.go' | sed 's#^\./##' | sort); do
+# compiled but documents nothing. The exception is a shots/ directory: those
+# programs exist to be captured by scripts/screenshots/shoot.sh, and are
+# compiled here so they keep working, but no page shows their code.
+for f in $(cd examples && find . -name '*.go' ! -name '*_test.go' ! -path '*/shots/*' | sed 's#^\./##' | sort); do
 	if ! printf '%s\n' "$refs" | grep -qx "$f"; then
 		echo "unreferenced example: examples/$f"
 		status=1
