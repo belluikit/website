@@ -18,10 +18,10 @@ own repository, its own release cycle and its own license.
 
 | Tool | What you get | Current release | License |
 | --- | --- | --- | --- |
-| [uploader](uploader/) | A server binary and a Go SDK | v0.1.0 | BSD-3-Clause |
+| [Uploader](uploader/) | A server binary and a Go SDK | v0.1.0 | BSD-3-Clause |
 | [Clair](clair/) | A Go library and the `kbtool` command | No tagged release yet | Apache-2.0 |
-| [alidade](alidade/) | One binary, an MCP server | v0.13.0 | MIT |
+| [Alidade](alidade/) | One binary, an MCP server | v0.13.0 | MIT |
 
 The [gallery app](/gallery/) uses two of them. Its File Transfer page is a
-Bellui front end for an uploader server, and its Clair page searches an index
+Bellui front end for an Uploader server, and its Clair page searches an index
 of Bellui's own widgets.

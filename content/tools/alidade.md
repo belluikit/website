@@ -1,18 +1,18 @@
 ---
-title: alidade
+title: Alidade
 description: A graph of your whole repository for AI coding agents, served over MCP. It answers who calls a function, what implements an interface, and which code uses a schema.
 weight: 3
 ---
 
-alidade gives an AI coding agent a map of your repository. The agent can ask
+Alidade gives an AI coding agent a map of your repository. The agent can ask
 who calls a function, what implements an interface, or which code uses a
 database column, and get the answer from the compilers rather than from a
 text search.
 
-alidade is not a Bellui library, and it works on any repository. It is
+Alidade is not a Bellui library, and it works on any repository. It is
 useful to you if you build a Bellui app, or anything else in Go, with an AI
 agent such as Claude Code. A text search for a method name returns every type
-that has a method with that name. alidade knows which one a call actually
+that has a method with that name. Alidade knows which one a call actually
 reaches.
 
 - Repository: [github.com/belluikit/alidade](https://github.com/belluikit/alidade)
@@ -53,7 +53,7 @@ Or download a binary from the
 [releases page](https://github.com/belluikit/alidade/releases). There are
 builds for macOS and Linux, each on arm64 and amd64. The Linux builds need
 glibc 2.29 or newer. To build from source, see
-[Building alidade](https://github.com/belluikit/alidade/blob/main/docs/building.md).
+[Building Alidade](https://github.com/belluikit/alidade/blob/main/docs/building.md).
 
 Check the install:
 
@@ -63,8 +63,8 @@ alidade version
 
 The binary needs nothing else installed, except that it reads Go through the
 `go` command on your `PATH`. A repository that `go build` can build is one
-alidade can read. A `go` newer than the one alidade was built with is refused,
-with an error naming both versions, so keep alidade up to date with your Go.
+Alidade can read. A `go` newer than the one Alidade was built with is refused,
+with an error naming both versions, so keep Alidade up to date with your Go.
 
 ## Quick start with Claude Code
 
@@ -76,7 +76,7 @@ with an error naming both versions, so keep alidade up to date with your Go.
 alidade setup
 ```
 
-This registers alidade with Claude Code for your user account, so it serves
+This registers Alidade with Claude Code for your user account, so it serves
 every repository you open. Running it again after an upgrade is safe.
 
 ### Ask a question
@@ -92,7 +92,7 @@ alidade setup -enforce
 ```
 
 This adds a hook that refuses grep inside the repository and points the agent
-to alidade's tools instead. `alidade setup -no-enforce` removes the hook
+to Alidade's tools instead. `alidade setup -no-enforce` removes the hook
 again.
 
 {{% /steps %}}
@@ -114,11 +114,11 @@ server. `alidade setup -print` shows the configuration to use.
 | `graph_issues` | What the graph left out, and why |
 | `rebuild` | Builds the graph again now. Rarely needed |
 
-Answers stay current. Before each tool call, alidade checks whether any file
+Answers stay current. Before each tool call, Alidade checks whether any file
 changed and rebuilds what did, so there is no index to refresh after an edit
 or a checkout.
 
-alidade says what it does not know. Each edge in the graph records how it was
+Alidade says what it does not know. Each edge in the graph records how it was
 found, an answer cut short by its size limit says what it left out, and
 `graph_issues` lists what was dropped.
 
@@ -132,7 +132,7 @@ These flags go after `alidade serve`:
 - **Several modules.** Every `go.mod` under the root becomes part of the
   graph, and calls between the modules are joined. A repository with several
   Go modules needs no extra setup.
-- **Platform-specific files.** By default alidade loads the Go build
+- **Platform-specific files.** By default Alidade loads the Go build
   configuration of the machine it runs on. `-go-configs auto` also loads the
   configurations that bring in files the build tags exclude there. You can
   also pass a list such as `linux/amd64,windows/arm64`.
@@ -143,7 +143,7 @@ list, put it in a `.alidade.pxf` file at the root of the repository.
 
 ## More
 
-The repository's [Using alidade](https://github.com/belluikit/alidade/blob/main/docs/usage.md)
+The repository's [Using Alidade](https://github.com/belluikit/alidade/blob/main/docs/usage.md)
 guide covers every flag, what each kind of edge means, and the known limits.
 One limit to know: a file whose path contains a space or `#` is skipped and
 listed in `graph_stats`.

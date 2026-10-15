@@ -13,7 +13,7 @@ dependencies of Bellui itself and arrive with `go get`. goffmpeg and its
 prebuilt libraries come with [x/mmedia](/extensions/mmedia/). gocef-libs is
 fetched by the `bellui` command when it packages a Linux app with a web view.
 
-uploader and Clair are separate tools, not libraries Bellui depends on.
+Uploader and Clair are separate tools, not libraries Bellui depends on.
 They are described under [Tools](/tools/).
 
 ## Graphics and windowing

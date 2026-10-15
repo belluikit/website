@@ -98,10 +98,26 @@ description: A cross-platform Go UI toolkit with Material Design 3 widgets and W
   >}}
   {{< hextra/feature-card
     title="Libraries and tools"
-    subtitle="The Go libraries Bellui is built on, each usable on its own, and tools we publish alongside it: alidade, clair and uploader."
+    subtitle="The Go libraries Bellui is built on, each usable on its own, and tools we publish alongside it: Alidade, Clair and Uploader."
     link="tools/"
   >}}
 {{< /hextra/feature-grid >}}
+
+<div class="bellui-spotlight">
+<div class="bellui-spotlight-label">Also from the Bellui team</div>
+<h2 class="bellui-home-heading" style="margin-top:0.25rem">Alidade: a map of your code for AI agents</h2>
+
+<p>Alidade turns a whole repository into one graph and serves it to AI coding agents over MCP. An agent can ask who calls a function, what implements an interface, or which code uses a database column, and get the answer the compiler would give: Go through the Go type checker, TypeScript through its own compiler, plus <code>.proto</code>, SQL, Python and Markdown in the same graph. No model reads your code.</p>
+
+<p>In its published benchmark, 47 call-graph questions over four public repositories, agents using Alidade were as accurate as agents using grep, at about half the cost per correct answer.</p>
+
+```sh
+brew install belluikit/tap/alidade
+alidade setup
+```
+
+<p><a href="tools/alidade/">Read about Alidade &rarr;</a> &nbsp;·&nbsp; <a href="https://github.com/belluikit/alidade">github.com/belluikit/alidade</a></p>
+</div>
 
 <h2 class="bellui-home-heading">Hello, Bellui</h2>
 

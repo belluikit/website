@@ -1,10 +1,10 @@
 ---
-title: uploader
+title: Uploader
 description: A resumable file transfer service over gRPC, with a Go client SDK. Transfers that are cut off continue from where they stopped.
 weight: 1
 ---
 
-uploader moves large files between a client and a server. The client sends
+Uploader moves large files between a client and a server. The client sends
 the file in chunks. If the connection drops, the client asks the server how
 much it already has and sends only the rest. Downloads work the same way in
 the other direction.

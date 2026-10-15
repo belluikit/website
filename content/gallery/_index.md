@@ -160,11 +160,11 @@ with undo and redo; and a 100,000-row data set. See
 
 ### File Transfer
 
-A client for an [uploader](/tools/uploader/) server. Type the server's
+A client for an [Uploader](/tools/uploader/) server. Type the server's
 address (it starts as `localhost:9090`) and connect. Then pick a file to
 upload, and save the uploaded file somewhere else to download it. A progress
 bar follows each transfer, and a failed download shows the session ID to
-resume it with. The page needs a running uploader server.
+resume it with. The page needs a running Uploader server.
 
 ### File Tree
 
