@@ -50,6 +50,10 @@ menu:
       url: "https://github.com/belluikit"
       params:
         icon: github
+    - name: Theme
+      weight: 99
+      params:
+        type: theme-toggle
 
 params:
   description: Bellui is a cross-platform Go UI toolkit with Material Design 3 widgets and WebGPU rendering, for desktop, mobile and the web.
@@ -68,7 +72,7 @@ params:
 
   theme:
     default: system
-    displayToggle: true
+    displayToggle: false
 
   footer:
     enable: true

@@ -41,11 +41,6 @@ article, main, .content {
   min-width: 0;
 }
 
-/* Footer: a slim bar at the end of the content (Hextra's default is 48px of
-   padding above and below). */
-:root {
-  --bellui-footer-height: 5rem;
-}
 footer.hextra-footer > div:last-child {
   padding-top: 1.25rem;
   padding-bottom: 1.25rem;
@@ -108,4 +103,28 @@ footer.hextra-footer > div:last-child {
 }
 @media (max-width: 639px) {
   .bellui-spotlight { padding: 1.25rem 1rem; }
+}
+
+/* Footer: a single line with the copyright notice. */
+.bellui-footer {
+  border-top: 1px solid rgba(127, 127, 127, 0.2);
+  padding: 0.9rem 0 calc(0.9rem + env(safe-area-inset-bottom));
+  font-size: 0.8rem;
+  opacity: 0.75;
+}
+.bellui-footer a {
+  text-decoration: underline;
+}
+
+/* A solid navbar: content scrolling under it is hidden rather than showing
+   through the blur. */
+.hextra-nav-container-blur {
+  background-color: #fff !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.08) !important;
+}
+html.dark .hextra-nav-container-blur {
+  background-color: #111 !important;
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.08) !important;
 }
