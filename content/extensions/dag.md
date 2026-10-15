@@ -14,6 +14,11 @@ pipeline, a build, a workflow. It has two packages:
   draws a graph as cards joined by curved edges, and lets the user pan, zoom,
   select, move, connect and delete, with undo.
 
+{{< screenshot name="dag" alt="A data pipeline on the canvas: three sources, a group of three cleaning steps, a join, and model and dashboard outputs, with an annotation attached to the join. Each card has an icon, a subtitle and a coloured accent bar." >}}
+
+The screenshot shows a pipeline with a group, an annotation anchored to a node,
+and cards styled by a `NodeStyler` (see [Node appearance](#node-appearance)).
+
 ## Install
 
 ```sh

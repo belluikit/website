@@ -34,6 +34,8 @@ Read [Licensing](#licensing) before you ship an app that uses this module.
 
 ## Playing a file or stream
 
+{{< screenshot name="player" alt="The media player showing a test-pattern video with the word Bellui, and its control bar below: pause, stop, elapsed and total time, seek bar, mute and volume." >}}
+
 {{< example file="extensions/mmedia/player/main.go" region="player" >}}
 
 [`MediaPlayer`](https://pkg.go.dev/github.com/belluikit/bellui/x/mmedia#MediaPlayer)

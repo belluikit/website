@@ -53,52 +53,43 @@ returns the current one, so you can modify it and set it back.
 ## Series types
 
 Every series is a struct in the `series` package that you add to
-`Option.Series`. A chart can mix series that share axes, such as bars and a
-line.
+`Option.Series`. `x/charts` v1.0.0 has 27 of them. The pages below describe
+each one, with its main fields, a compiled example and a screenshot:
 
-| Family | Series |
-| --- | --- |
-| Cartesian | `LineSeries` (straight, smooth or stepped, with optional area fill), `BarSeries`, `ScatterSeries`, `EffectScatterSeries` (scatter with a ripple), `PictorialSeries` |
-| Financial and statistical | `CandlestickSeries`, `BoxplotSeries`, `HeatmapSeries` |
-| Proportions | `PieSeries` (set `InnerRadius` for a doughnut), `FunnelSeries`, `GaugeSeries` |
-| Hierarchies and flows | `TreemapSeries`, `SunburstSeries`, `TreeSeries`, `SankeySeries`, `GraphSeries` |
-| Multi-dimensional | `RadarSeries`, `ParallelSeries` |
-| 3D | `Bar3DSeries`, `Scatter3DSeries`, `SurfaceSeries`, `Line3DSeries` |
-| Maps | `MapSeries` (map tiles), `GeoScatterSeries`, `GeoLinesSeries`, `ChoroplethSeries` |
-| Your own | `CustomSeries`, which calls your function to produce canvas objects |
+{{< cards >}}
+  {{< card link="basic" title="Line, area, bar, scatter and pie" subtitle="The everyday charts, on category or value axes." icon="chart-bar" >}}
+  {{< card link="statistical" title="Statistical and financial" subtitle="Box plots, heatmaps and candlesticks." icon="presentation-chart-line" >}}
+  {{< card link="hierarchical" title="Hierarchies and flows" subtitle="Trees, treemaps, sunbursts, sankey diagrams and node-link graphs." icon="share" >}}
+  {{< card link="specialised" title="Specialised charts" subtitle="Radar, gauge, funnel, parallel coordinates, pictorial bars, effect scatter and custom series." icon="adjustments" >}}
+  {{< card link="3d" title="3D charts" subtitle="Bars, scatter points, surfaces and lines in a 3D scene you can orbit." icon="cube" >}}
+  {{< card link="maps" title="Maps" subtitle="Tile maps with points and routes, and choropleths from GeoJSON." icon="globe" >}}
+{{< /cards >}}
 
-This example puts four of them in a grid. Bars with the same `Stack` name are
-stacked on top of each other:
+Series fall into three groups, and the group decides how the chart lays them
+out:
 
-{{< example file="extensions/charts/types/main.go" region="stacked" >}}
+- **Cartesian series** (line, bar, scatter, effect scatter, pictorial,
+  candlestick and boxplot) are drawn on the chart's X and Y axes. Any number of
+  them can share one chart, such as bars and a line. Bars with the same `Stack`
+  name are stacked:
 
-A pie needs no axes. `Radius` is a fraction of the available space, and
-`InnerRadius` is a fraction of `Radius`:
+  {{< example file="extensions/charts/types/main.go" region="stacked" >}}
 
-{{< example file="extensions/charts/types/main.go" region="pie" >}}
+- **Self-laid-out series** (pie, gauge, radar, heatmap, funnel, treemap,
+  sunburst, tree, sankey, graph, parallel, custom and the map series) ignore
+  the axes and draw themselves in the whole plot area.
+- **3D series** draw into a 3D scene that the user can orbit.
 
-Candlesticks take one `CandlestickData` per category:
-
-{{< example file="extensions/charts/types/main.go" region="candles" >}}
-
-A gauge shows one value, with optional coloured sectors:
-
-{{< example file="extensions/charts/types/main.go" region="gauge" >}}
-
-How each series reads its data differs, so check the field comments:
-
-- `LineSeries` and `BarSeries` take one value per category. Put `math.NaN()`
-  in a line's data for a missing value; the line breaks there, or is joined with
-  a dashed segment if `ConnectNulls` is set.
-- `ScatterSeries` takes x, y pairs stored flat: `[x0, y0, x1, y1, ...]`.
-- When a line has more points than the plot is pixels wide, it is downsampled
-  before drawing, with the LTTB algorithm, which keeps the shape of the curve.
-
-**3D series** are drawn in a 3D scene. Drag to orbit the camera and scroll to
-zoom. **Map series** fetch map tiles over the network, from OpenStreetMap
-unless you set `MapSeries.TileURL` to another `{z}/{x}/{y}` URL template; drag
-to pan and scroll to zoom. A `ChoroplethSeries` takes its country outlines as
-GeoJSON, either from a URL (`GeoJSONURL`) or inline (`GeoJSON`).
+{{< callout type="info" >}}
+Some things hold for every series type in v1.0.0. The legend and the tooltip
+take each series' colour from the palette, so a colour set on the series
+itself (`Color`, `LineStyle.Color`) is not shown in its legend swatch. Pie,
+radar, funnel, treemap, sunburst, tree, sankey, graph and parallel series
+colour their parts from a fixed built-in palette, not from `Option.Color`.
+Legend labels, and the labels that radar, funnel, treemap, tree, sankey,
+graph and parallel series draw, use fixed light colours, so in the light theme
+they have low contrast, as several screenshots on these pages show.
+{{< /callout >}}
 
 ## Axes
 
