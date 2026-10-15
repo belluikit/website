@@ -41,13 +41,6 @@ article, main, .content {
   min-width: 0;
 }
 
-footer.hextra-footer > div:last-child {
-  padding-top: 1.25rem;
-  padding-bottom: 1.25rem;
-  min-height: var(--bellui-footer-height);
-  box-sizing: border-box;
-}
-
 /* Home page hero: the logo to the left of the headline; stacked on phones. */
 .bellui-hero {
   display: flex;
@@ -105,16 +98,6 @@ footer.hextra-footer > div:last-child {
   .bellui-spotlight { padding: 1.25rem 1rem; }
 }
 
-/* Footer: a single line with the copyright notice. */
-.bellui-footer {
-  border-top: 1px solid rgba(127, 127, 127, 0.2);
-  padding: 0.9rem 0 calc(0.9rem + env(safe-area-inset-bottom));
-  font-size: 0.8rem;
-  opacity: 0.75;
-}
-.bellui-footer a {
-  text-decoration: underline;
-}
 
 /* A solid navbar: content scrolling under it is hidden rather than showing
    through the blur. */
@@ -127,4 +110,43 @@ footer.hextra-footer > div:last-child {
 html.dark .hextra-nav-container-blur {
   background-color: #111 !important;
   box-shadow: 0 1px 0 rgba(255, 255, 255, 0.08) !important;
+}
+
+/* Footer: one line with the copyright notice, at a fixed height. Pages are
+   at least one screen tall minus that height, so on a short page the footer
+   sits at the bottom of the window with no scrolling, and on a long page it
+   follows the content. */
+:root {
+  --bellui-footer-height: 2.75rem;
+}
+.bellui-footer {
+  border-top: 1px solid rgba(127, 127, 127, 0.2);
+  box-sizing: border-box;
+  height: calc(var(--bellui-footer-height) + env(safe-area-inset-bottom));
+  padding-bottom: env(safe-area-inset-bottom);
+  display: flex;
+  align-items: center;
+  font-size: 0.8rem;
+  overflow: hidden;
+}
+.bellui-footer > div {
+  width: 100%;
+  opacity: 0.75;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.bellui-footer a {
+  text-decoration: underline;
+}
+article[class*="min-h-"] {
+  min-height: calc(100vh - var(--hextra-navbar-height) - var(--bellui-footer-height)) !important;
+}
+@media (max-width: 639px) {
+  :root {
+    --bellui-footer-height: 3.75rem;
+  }
+  .bellui-footer > div {
+    white-space: normal;
+  }
 }
