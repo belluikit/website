@@ -103,6 +103,18 @@ description: A cross-platform Go UI toolkit with Material Design 3 widgets and W
   >}}
 {{< /hextra/feature-grid >}}
 
+<h2 class="bellui-home-heading">Hello, Bellui</h2>
+
+{{< example "hello/main.go" >}}
+
+```sh
+go mod init example.com/hello
+go mod tidy
+go run .
+```
+
+<p><a class="bellui-link" href="develop/">Install the prerequisites and build your first app &rarr;</a></p>
+
 <div class="bellui-spotlight">
 <div class="bellui-spotlight-label">Also from the Bellui team</div>
 <h2 class="bellui-home-heading" style="margin-top:0.25rem">Alidade: a map of your code for AI agents</h2>
@@ -118,15 +130,3 @@ alidade setup
 
 <p><a href="tools/alidade/">Read about Alidade &rarr;</a> &nbsp;·&nbsp; <a href="https://github.com/belluikit/alidade">github.com/belluikit/alidade</a></p>
 </div>
-
-<h2 class="bellui-home-heading">Hello, Bellui</h2>
-
-{{< example "hello/main.go" >}}
-
-```sh
-go mod init example.com/hello
-go mod tidy
-go run .
-```
-
-[Install the prerequisites and build your first app &rarr;](develop/)

@@ -101,7 +101,8 @@ footer.hextra-footer > div:last-child {
   text-transform: uppercase;
   opacity: 0.7;
 }
-.bellui-spotlight a {
+.bellui-spotlight a,
+.bellui-link {
   color: #2e7dd7;
   font-weight: 500;
 }
