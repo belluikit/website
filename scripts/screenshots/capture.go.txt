@@ -1,0 +1,55 @@
+// Capture hook for the gallery's main.go: paste it just before
+// bellui.ShowAndRun(w). It needs the imports image, image/png, log, os,
+// path/filepath, strings and time, and uses main's registry, current,
+// rebuild, appBar, a and w.
+//
+//   BELLUI_SCALE=2 SHOTS_DIR=out \
+//   SHOTS_PAGES="Actions,Inputs,Navigation,Containment,Communication,Charts,Data Grid,Code Editor,Theme,Typography" \
+//   go run .
+//
+// writes out/<page>-light.png and out/<page>-dark.png, then quits.
+
+	if dir := os.Getenv("SHOTS_DIR"); dir != "" {
+		go func() {
+			names := strings.Split(os.Getenv("SHOTS_PAGES"), ",")
+			time.Sleep(3 * time.Second)
+			for _, variant := range []string{"light", "dark"} {
+				bellui.DoAndWait(func() {
+					if variant == "light" {
+						a.Settings().SetThemeVariant(theme.VariantLight)
+					} else {
+						a.Settings().SetThemeVariant(theme.VariantDark)
+					}
+				})
+				for _, name := range names {
+					idx := -1
+					for i, p := range registry {
+						if p.Name == name {
+							idx = i
+						}
+					}
+					if idx < 0 {
+						log.Printf("SHOTS: no page %q", name)
+						continue
+					}
+					bellui.DoAndWait(func() {
+						current = idx
+						rebuild()
+						appBar.Title = registry[idx].Name
+						appBar.Refresh()
+					})
+					time.Sleep(2500 * time.Millisecond)
+					var img image.Image
+					bellui.DoAndWait(func() { img = w.Canvas().Capture() })
+					fn := filepath.Join(dir, strings.ToLower(strings.ReplaceAll(name, " ", "-"))+"-"+variant+".png")
+					f, err := os.Create(fn)
+					if err == nil {
+						err = png.Encode(f, img)
+						f.Close()
+					}
+					log.Printf("SHOTS: wrote %s %v err=%v", fn, img.Bounds(), err)
+				}
+			}
+			bellui.DoAndWait(func() { a.Quit() })
+		}()
+	}

@@ -43,6 +43,22 @@ cd examples && go get github.com/belluikit/bellui@<version> && go mod tidy
 
 How pages are written is in [WRITING.md](WRITING.md).
 
+## Screenshots
+
+`static/images/gallery/<page>-light.png` and `-dark.png` are captures of the
+[gallery](https://github.com/belluikit/gallery) app, rendered by Bellui itself
+through `Canvas.Capture()` at `BELLUI_SCALE=2`; `static/images/hello-*.png`
+are the same for the hello example. Show them with the `screenshot`
+shortcode, which picks the light or dark image to match the reader's theme:
+
+```
+{{< screenshot name="charts" alt="What the image shows" >}}
+```
+
+To refresh them after a UI change, run the gallery with a capture hook that
+switches pages and theme variants and writes `Canvas().Capture()` to PNG.
+`scripts/screenshots/capture.go.txt` is the hook used for the current set.
+
 ## Deploying (Cloudflare Pages)
 
 The site is built and served by Cloudflare Pages from this repository.
@@ -54,7 +70,7 @@ The site is built and served by Cloudflare Pages from this repository.
 | Build output directory | `public` |
 | Environment variable | `HUGO_VERSION` = `0.168.0` |
 
-The custom domain is `bellui.com`; `www.bellui.com` and `bellui.io` redirect to it.
+The custom domain is `bellui.com`. `bellui.io` is meant to redirect to it once DNS is set up.
 
 ## License
 

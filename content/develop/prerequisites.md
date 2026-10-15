@@ -12,12 +12,13 @@ Every platform needs:
 
 You do not need to install a GPU library. The prebuilt WebGPU
 ([wgpu-native](https://github.com/gfx-rs/wgpu-native)) libraries ship inside
-the `github.com/belluikit/webgpu` Go module and are downloaded by `go build`
+per-platform Go modules (`github.com/belluikit/webgpu/libs-darwin`, `libs-linux`,
+`libs-windows` and so on) and are downloaded by `go build`
 like any other dependency.
 
-{{< tabs items="macOS,Windows,Linux" >}}
+{{< tabs >}}
 
-{{< tab >}}
+{{< tab name="macOS" >}}
 Install the Xcode command line tools, which include clang:
 
 ```sh
@@ -27,7 +28,7 @@ xcode-select --install
 Rendering uses Metal, which every supported Mac has.
 {{< /tab >}}
 
-{{< tab >}}
+{{< tab name="Windows" >}}
 Install a MinGW-w64 C toolchain and put its `bin` directory on your `PATH`.
 Either of these works:
 
@@ -47,7 +48,7 @@ Later builds reuse Go's build cache and are fast.
 {{< /callout >}}
 {{< /tab >}}
 
-{{< tab >}}
+{{< tab name="Linux" >}}
 Install a C compiler and the X11, Wayland and OpenGL development headers. On
 Debian and Ubuntu:
 

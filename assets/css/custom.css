@@ -1,0 +1,42 @@
+/* Gallery screenshots ({{< screenshot >}}). */
+.bellui-shot {
+  margin: 1.5rem auto;
+  max-width: 900px;
+}
+.bellui-shot img {
+  width: 100%;
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.18);
+}
+html.dark .bellui-shot img {
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.45);
+}
+
+/* Section headings on the home page. */
+.bellui-home-heading {
+  margin-top: 4rem;
+  margin-bottom: 0.5rem;
+  font-size: 1.875rem;
+  line-height: 2.25rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+/* Keep wide tables and code from widening the page on phones: they scroll
+   inside their own box instead. */
+.content table {
+  display: block;
+  max-width: 100%;
+  overflow-x: auto;
+}
+.content pre {
+  max-width: 100%;
+  overflow-x: auto;
+}
+article, main, .content {
+  min-width: 0;
+}
+.hextra-code-block {
+  max-width: 100%;
+  min-width: 0;
+}

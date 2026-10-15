@@ -7,12 +7,18 @@ set -eu
 
 cd "$(dirname "$0")/.."
 
-echo "== build and vet examples/ (bellui $(cd examples && go list -m -f '{{.Version}}' github.com/belluikit/bellui))"
-(
-	cd examples
-	GOWORK=off go build -o /dev/null ./...
-	GOWORK=off go vet ./...
-)
+# examples/ holds one Go module per directory that has a go.mod: the toolkit
+# examples in examples/, and the x/ extension examples in examples/extensions/,
+# which need the extension modules as well.
+for mod in $(find examples -name go.mod | sort); do
+	dir=$(dirname "$mod")
+	echo "== build and vet $dir (bellui $(cd "$dir" && go list -m -f '{{.Version}}' github.com/belluikit/bellui))"
+	(
+		cd "$dir"
+		GOWORK=off go build -o /dev/null ./...
+		GOWORK=off go vet ./...
+	)
+done
 
 status=0
 

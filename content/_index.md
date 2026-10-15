@@ -23,8 +23,7 @@ description: A cross-platform Go UI toolkit with Material Design 3 widgets and W
 
 <div class="hx:mt-6"></div>
 
-<img src="images/widgets-light.png" alt="The Bellui gallery app showing Material Design 3 widgets" class="hx:dark:hidden" style="max-width:100%; margin: 2rem auto;" />
-<img src="images/widgets-dark.png" alt="The Bellui gallery app showing Material Design 3 widgets in dark mode" class="hx:hidden hx:dark:block" style="max-width:100%; margin: 2rem auto;" />
+{{< screenshot name="actions" alt="The Bellui gallery app showing Material Design 3 buttons" >}}
 
 {{< hextra/feature-grid >}}
   {{< hextra/feature-card
@@ -49,11 +48,57 @@ description: A cross-platform Go UI toolkit with Material Design 3 widgets and W
   >}}
   {{< hextra/feature-card
     title="Batteries included"
-    subtitle="Data binding and reactive state, dialogs, storage, translations, accessibility, testing helpers, and extensions for charts, tables, a code editor, graphs and media."
+    subtitle="Data binding and reactive state, dialogs, storage, translations, accessibility, sign-in with OIDC, an embedded web view, developer tools and testing helpers."
   >}}
 {{< /hextra/feature-grid >}}
 
-## Hello, Bellui
+<h2 class="bellui-home-heading">Extensions</h2>
+
+<p style="margin-bottom:1.5rem;opacity:.75">Larger components ship as optional Go modules, so an app only pays for what it imports. All of them are drawn by Bellui itself: no HTML, no JavaScript.</p>
+
+{{< hextra/feature-grid >}}
+  {{< hextra/feature-card
+    title="Charts"
+    subtitle="Line, bar, scatter, pie, financial, hierarchical, 3D and geographic charts, with zoom, tooltips and animation."
+    link="extensions/charts/"
+    image="images/gallery/charts-light.png"
+    imageClass="hx:top-[40%] hx:left-[24px] hx:w-[180%] hx:sm:w-[110%] hx:dark:opacity-80"
+    class="hx:aspect-auto hx:md:aspect-[1.1/1] hx:max-md:min-h-[340px]"
+  >}}
+  {{< hextra/feature-card
+    title="Data grid"
+    subtitle="A spreadsheet-class table: virtual scrolling, sorting, filtering, editing, pinned columns, grouping and sparklines."
+    link="extensions/tables/"
+    image="images/gallery/data-grid-light.png"
+    imageClass="hx:top-[40%] hx:left-[24px] hx:w-[180%] hx:sm:w-[110%] hx:dark:opacity-80"
+    class="hx:aspect-auto hx:md:aspect-[1.1/1] hx:max-md:min-h-[340px]"
+  >}}
+  {{< hextra/feature-card
+    title="Code editor"
+    subtitle="Syntax highlighting, a gutter with line numbers, breakpoints and diagnostics, folding, find, completion and hover."
+    link="extensions/editor/"
+    image="images/gallery/code-editor-light.png"
+    imageClass="hx:top-[40%] hx:left-[24px] hx:w-[180%] hx:sm:w-[110%] hx:dark:opacity-80"
+    class="hx:aspect-auto hx:md:aspect-[1.1/1] hx:max-md:min-h-[340px]"
+  >}}
+  {{< hextra/feature-card
+    title="Graphs"
+    subtitle="An interactive node-and-edge canvas for directed acyclic graphs, over a graph model you can use without any UI."
+    link="extensions/dag/"
+  >}}
+  {{< hextra/feature-card
+    title="Media"
+    subtitle="Video and audio playback with subtitles and device capture, decoded by FFmpeg."
+    link="extensions/mmedia/"
+  >}}
+  {{< hextra/feature-card
+    title="Libraries"
+    subtitle="WebGPU, GLFW, FFmpeg bindings, system tray, file watching, text shaping, resumable uploads: the Go libraries Bellui is built on, each usable on its own."
+    link="libraries/"
+  >}}
+{{< /hextra/feature-grid >}}
+
+<h2 class="bellui-home-heading">Hello, Bellui</h2>
 
 {{< example "hello/main.go" >}}
 

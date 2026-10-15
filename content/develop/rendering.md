@@ -36,7 +36,8 @@ The OpenGL renderer supports the same desktop, mobile and web platforms.
 ## What WebGPU needs
 
 **On the desktop**, the build links the native wgpu-native library through cgo.
-The library comes with the `github.com/belluikit/webgpu` module, so there is
+The library comes as per-platform Go modules (`github.com/belluikit/webgpu/libs-*`),
+so there is
 nothing to install beyond the [prerequisites](../prerequisites/). Two things
 to know:
 

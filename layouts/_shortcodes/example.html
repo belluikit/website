@@ -54,4 +54,8 @@
   {{- end -}}
 {{- end -}}
 {{- $lang := .Get "lang" | default (strings.TrimPrefix "." (path.Ext $file)) -}}
-{{- highlight $code $lang "" -}}
+{{- /* Render as a fenced block so the theme's code-block hook styles it and
+     adds the copy button, exactly like a block written in Markdown. */ -}}
+{{- $fence := "```" -}}
+{{- if strings.Contains $code "```" -}}{{- $fence = "````" -}}{{- end -}}
+{{- .Page.RenderString (printf "%s%s\n%s\n%s" $fence $lang $code $fence) -}}
