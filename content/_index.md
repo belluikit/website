@@ -27,6 +27,8 @@ description: A cross-platform Go UI toolkit with Material Design 3 widgets and W
 
 {{< screenshot name="actions" alt="The Bellui gallery app showing Material Design 3 buttons" >}}
 
+<p style="text-align:center;opacity:.75;margin-top:-0.5rem">Every widget, theme and extension in one app: <a href="gallery/">take the gallery tour</a>.</p>
+
 {{< hextra/feature-grid >}}
   {{< hextra/feature-card
     title="Material Design 3"
@@ -94,9 +96,9 @@ description: A cross-platform Go UI toolkit with Material Design 3 widgets and W
     link="extensions/mmedia/"
   >}}
   {{< hextra/feature-card
-    title="Libraries"
-    subtitle="WebGPU, GLFW, FFmpeg bindings, system tray, file watching, text shaping, resumable uploads: the Go libraries Bellui is built on, each usable on its own."
-    link="libraries/"
+    title="Libraries and tools"
+    subtitle="The Go libraries Bellui is built on, each usable on its own, and tools we publish alongside it: alidade, clair and uploader."
+    link="tools/"
   >}}
 {{< /hextra/feature-grid >}}
 
