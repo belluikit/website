@@ -135,8 +135,9 @@ you have a right-hand axis, so its labels fit.
 **Tooltips** follow the pointer. With no `Tooltip` set, the chart shows the
 nearest data point. A
 [`TooltipConfig`](https://pkg.go.dev/github.com/belluikit/bellui/x/charts/component#TooltipConfig)
-changes that: `TooltipTriggerAxis` lists every series at the pointer's X
-position, `TooltipTriggerNone` turns tooltips off, `Crosshair` chooses
+changes that: `TooltipTriggerAxis` lists the line and scatter series at the
+pointer's X position (bar and candlestick series are not found by it in
+v1.0.0; see [Trading charts](trading/)), `TooltipTriggerNone` turns tooltips off, `Crosshair` chooses
 vertical, horizontal, both or no crosshair lines, and `Formatter` replaces the
 text. Clicking pins the tooltip.
 
