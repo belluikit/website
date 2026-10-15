@@ -1,0 +1,57 @@
+{{- /*
+  Includes a Go file from examples/ verbatim, so the code on the page is the
+  code scripts/check-examples.sh compiles.
+
+    {{< example "hello/main.go" >}}                 whole file
+    {{< example file="hello/main.go" region="ui" >}} lines between
+        //docs:start ui  and  //docs:end ui
+
+  Marker lines are never shown. A missing file or region fails the build.
+*/ -}}
+{{- $file := .Get "file" | default (.Get 0) -}}
+{{- $region := .Get "region" | default "" -}}
+{{- $path := printf "examples/%s" $file -}}
+{{- if not (fileExists $path) -}}
+  {{- errorf "example: %s does not exist (%s)" $path .Position -}}
+{{- end -}}
+{{- $lines := split (readFile $path) "\n" -}}
+{{- $out := slice -}}
+{{- $in := eq $region "" -}}
+{{- $found := eq $region "" -}}
+{{- range $lines -}}
+  {{- $t := trim . " \t" -}}
+  {{- if hasPrefix $t "//docs:start" -}}
+    {{- if and (ne $region "") (eq (trim (strings.TrimPrefix "//docs:start" $t) " ") $region) -}}{{- $in = true -}}{{- $found = true -}}{{- end -}}
+  {{- else if hasPrefix $t "//docs:end" -}}
+    {{- if and (ne $region "") (eq (trim (strings.TrimPrefix "//docs:end" $t) " ") $region) -}}{{- $in = false -}}{{- end -}}
+  {{- else if $in -}}
+    {{- $out = $out | append . -}}
+  {{- end -}}
+{{- end -}}
+{{- if not $found -}}
+  {{- errorf "example: region %q not found in %s (%s)" $region $path .Position -}}
+{{- end -}}
+{{- /* Drop a trailing empty line left by the file's final newline. */ -}}
+{{- if and (gt (len $out) 0) (eq (index $out (sub (len $out) 1)) "") -}}
+  {{- $out = first (sub (len $out) 1) $out -}}
+{{- end -}}
+{{- $code := delimit $out "\n" -}}
+{{- if ne $region "" -}}
+  {{- /* Remove the indentation common to every non-blank line. */ -}}
+  {{- $min := 1000 -}}
+  {{- range $out -}}
+    {{- if ne (trim . " \t") "" -}}
+      {{- $n := sub (len .) (len (strings.TrimLeft "\t" .)) -}}
+      {{- if lt $n $min -}}{{- $min = $n -}}{{- end -}}
+    {{- end -}}
+  {{- end -}}
+  {{- if and (gt $min 0) (lt $min 1000) -}}
+    {{- $trimmed := slice -}}
+    {{- range $out -}}
+      {{- if ge (len .) $min -}}{{- $trimmed = $trimmed | append (substr . $min) -}}{{- else -}}{{- $trimmed = $trimmed | append "" -}}{{- end -}}
+    {{- end -}}
+    {{- $code = delimit $trimmed "\n" -}}
+  {{- end -}}
+{{- end -}}
+{{- $lang := .Get "lang" | default (strings.TrimPrefix "." (path.Ext $file)) -}}
+{{- highlight $code $lang "" -}}

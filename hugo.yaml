@@ -1,0 +1,83 @@
+baseURL: "https://bellui.com/"
+title: Bellui
+locale: en-US
+
+enableRobotsTXT: true
+enableGitInfo: true
+
+module:
+  hugoVersion:
+    min: "0.146.0"
+  imports:
+    - path: github.com/imfing/hextra
+
+markup:
+  highlight:
+    noClasses: false
+  goldmark:
+    renderer:
+      unsafe: true
+
+menu:
+  main:
+    - name: Get started
+      pageRef: /develop
+      weight: 1
+    - name: Docs
+      pageRef: /docs
+      weight: 2
+    - name: Extensions
+      pageRef: /extensions
+      weight: 3
+    - name: Support
+      pageRef: /support
+      weight: 4
+    - name: Search
+      weight: 5
+      params:
+        type: search
+    - name: GitHub
+      weight: 6
+      url: "https://github.com/belluikit"
+      params:
+        icon: github
+
+params:
+  description: Bellui is a cross-platform Go UI toolkit with Material Design 3 widgets and WebGPU rendering, for desktop, mobile and the web.
+
+  navbar:
+    displayTitle: true
+    displayLogo: true
+    logo:
+      path: images/logo.svg
+      dark: images/logo.svg
+      width: 28
+      height: 28
+
+  page:
+    width: wide
+
+  theme:
+    default: system
+    displayToggle: true
+
+  footer:
+    enable: true
+    displayCopyright: true
+    displayPoweredBy: false
+
+  editURL:
+    enable: true
+    base: "https://github.com/belluikit/website/edit/main/content"
+
+  search:
+    enable: true
+    type: flexsearch
+    flexsearch:
+      index: content
+      tokenize: forward
+
+  highlight:
+    copy:
+      enable: true
+      display: hover
