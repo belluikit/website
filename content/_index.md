@@ -4,12 +4,13 @@ layout: hextra-home
 description: A cross-platform Go UI toolkit with Material Design 3 widgets and WebGPU rendering, for desktop, mobile and the web.
 ---
 
-<img src="images/logo-256.webp" alt="The Bellui gopher holding a toolkit, in front of an app window" width="160" height="160" style="margin-top:1.5rem" />
-
-<div class="hx:mt-6 hx:mb-6">
+<div class="bellui-hero">
+<img src="images/logo-256.webp" alt="The Bellui gopher holding a toolkit, in front of an app window" width="160" height="160" />
+<div>
 {{< hextra/hero-headline >}}
   Native apps in Go,&nbsp;<br class="hx:sm:block hx:hidden" />on every screen
 {{< /hextra/hero-headline >}}
+</div>
 </div>
 
 <div class="hx:mb-12">

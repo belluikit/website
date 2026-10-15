@@ -40,3 +40,39 @@ article, main, .content {
   max-width: 100%;
   min-width: 0;
 }
+
+/* Footer: a slim bar at the end of the content (Hextra's default is 48px of
+   padding above and below). */
+:root {
+  --bellui-footer-height: 5rem;
+}
+footer.hextra-footer > div:last-child {
+  padding-top: 1.25rem;
+  padding-bottom: 1.25rem;
+  min-height: var(--bellui-footer-height);
+  box-sizing: border-box;
+}
+
+/* Home page hero: the logo to the left of the headline; stacked on phones. */
+.bellui-hero {
+  display: flex;
+  align-items: center;
+  gap: 1.75rem;
+  margin: 1.5rem 0;
+}
+.bellui-hero img {
+  flex: none;
+  width: 160px;
+  height: 160px;
+}
+@media (max-width: 639px) {
+  .bellui-hero {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+  .bellui-hero img {
+    width: 120px;
+    height: 120px;
+  }
+}
