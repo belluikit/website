@@ -1,0 +1,11 @@
+{
+  "Welcome, {{.Name}}!": "Welcome, {{.Name}}!",
+  "files_selected": {
+    "one": "{{.Count}} file selected",
+    "other": "{{.Count}} files selected"
+  },
+  "button.save": "Save",
+  "profile_updated.female": "{{.Name}} updated her profile",
+  "profile_updated.male": "{{.Name}} updated his profile",
+  "profile_updated.other": "{{.Name}} updated their profile"
+}

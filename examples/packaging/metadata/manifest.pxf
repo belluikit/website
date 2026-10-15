@@ -1,0 +1,23 @@
+website = "https://example.com/notes"
+description = "A small note-taking app."
+
+details {
+  icon = "Icon.png"
+  name = "Notes"
+  id = "com.example.notes"
+  version = "1.2.0"
+  build = 7
+}
+
+development = {
+  ServerURL: "http://localhost:8080"
+}
+release = {
+  ServerURL: "https://api.example.com"
+}
+
+linux_and_bsd {
+  generic_name = "Note taker"
+  categories = ["Office", "Utility"]
+  comment = "Write things down"
+}

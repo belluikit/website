@@ -1,0 +1,16 @@
+<canvas size="107x68">
+	<content>
+		<container size="107x68">
+			<widget size="107x32" type="*widget.Label">
+				<widget size="107x32" type="*widget.RichText">
+					<text bold pos="8,8" size="46x16">Backup</text>
+				</widget>
+			</widget>
+			<widget pos="0,36" size="107x32" type="*widget.Label">
+				<widget size="107x32" type="*widget.RichText">
+					<text pos="8,8" size="91x16">Last run: today</text>
+				</widget>
+			</widget>
+		</container>
+	</content>
+</canvas>
