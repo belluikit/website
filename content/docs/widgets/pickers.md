@@ -25,6 +25,8 @@ font, without typing it in a particular format.
 is a month calendar. `Selected` holds the chosen date and `OnChanged` receives
 each new one.
 
+{{< screenshot name="pickers-date" alt="A date picker showing March 2026 with the 9th selected, arrows to the previous and next month either side of the title, and weekday initials above the days" >}}
+
 {{< example file="widgets/pickers/main.go" region="inline" >}}
 
 With the keyboard, the arrow keys move between days (and into the next or
@@ -34,8 +36,15 @@ Down move a month, and Enter or Space selects.
 [`TimePicker`](https://pkg.go.dev/github.com/belluikit/bellui/widget#TimePicker)
 is the MD3 clock dial. `Hour` and `Minute` hold the time, and `Use24Hour`
 switches between the 24-hour dial and AM/PM. The user can also type digits
-into the hour and minute fields. [`DateTimePicker`](https://pkg.go.dev/github.com/belluikit/bellui/widget#DateTimePicker)
-puts a date picker and a time picker on two tabs.
+into the hour and minute fields.
+
+{{< screenshot name="pickers-time" alt="A time picker in 12-hour mode set to 09:41 AM: hour and minute fields with an AM/PM switch above a clock dial whose hand points at 9" >}}
+
+[`DateTimePicker`](https://pkg.go.dev/github.com/belluikit/bellui/widget#DateTimePicker)
+puts a date picker and a time picker on two tabs, switched with Date and Time
+buttons above them.
+
+{{< screenshot name="pickers-datetime" alt="A date and time picker with Date selected in a two-button switch above the March 2026 calendar" >}}
 
 Each picker has a `Show` function that opens it in a modal dialog with OK
 and Cancel buttons. Your function runs only when the user presses OK:
@@ -58,6 +67,8 @@ and [`DateTimeEntry`](https://pkg.go.dev/github.com/belluikit/bellui/widget#Date
 are entries for forms. The user types a date in the locale's format, or taps
 the button at the end of the field to open a calendar. Characters that cannot
 be part of a date are ignored, including in pasted text.
+
+{{< screenshot name="pickers-entries" alt="A form with Birthday, Meeting and Deadline fields: 07/14/1990, 03/09/2026 9:41 AM and an empty field showing Not set, each with a calendar button at its end" >}}
 
 {{< example file="widgets/picker-entries/main.go" region="entries" >}}
 

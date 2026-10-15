@@ -1,25 +1,23 @@
 ---
 title: Right-to-left layout
-description: How Bellui mirrors layouts for Arabic, Hebrew and other right-to-left languages, and how to force or scope the direction.
+description: Force the layout direction, keep part of a window in one direction, and support right-to-left in your own layouts and text styles.
 weight: 7
 ---
 
-In a right-to-left (RTL) language such as Arabic or Hebrew, the whole
-interface reads from right to left. Bellui mirrors the layout for you:
+This page covers the API that controls layout direction: forcing it,
+scoping it to part of a window, and supporting it in your own layouts and
+text styles.
 
-- Horizontal containers place their first item on the right.
-- Text aligned to the leading edge sits on the right.
-- Paragraphs take a right-to-left base direction, so punctuation and mixed
-  Latin text land in the right place.
-- Keyboard focus moves through each row from right to left.
-- Directional icons, such as the back and next arrows, are drawn mirrored.
+If you are translating an app into Arabic, Hebrew, Persian or Urdu, start
+with [Right-to-left languages](/docs/localisation/right-to-left/) in the
+Localisation section. It covers what Bellui mirrors and what it does not,
+fonts, and the text-direction limits of v1.0.0.
 
 By default the direction comes from the app's locale. A locale whose script
-is written right to left, such as Arabic, Hebrew, Syriac or Thaana, gives a
-right-to-left layout; everything else is left to right.
-[`lang.SetLocale`](https://pkg.go.dev/github.com/belluikit/bellui/lang#SetLocale)
-changes the locale, and with it the direction. See
-[Localisation](/docs/localisation/).
+is written right to left, such as Arabic or Hebrew, gives a right-to-left
+layout; everything else is left to right. Horizontal containers then place
+their first item on the right, leading-aligned text sits on the right, and
+directional icons are drawn mirrored.
 
 ## Force a direction
 
@@ -55,6 +53,14 @@ focus order and the base direction of text. Scopes can be nested, and the
 innermost one wins. `DirectionAuto` makes a scope inherit the direction around
 it. To change a scope's direction later, call its `SetDirection` method.
 
+{{< callout type="warning" >}}
+In Bellui v1.0.0 a scope can be lost when the whole window is laid out
+again. After `Settings().SetThemeVariant` switches between light and dark,
+the scoped content follows the app's direction: a left-to-right scope in an
+Arabic app mirrors like the rest of the window. Check scoped content after
+a theme change before you rely on it.
+{{< /callout >}}
+
 ## Custom layouts
 
 The standard layouts mirror themselves. If you write your own
@@ -74,8 +80,11 @@ differs from the interface, such as a Hebrew quotation in an English
 document.
 
 The direction only sets the base order of runs and neutral characters such
-as punctuation. Arabic letter joining and Hebrew letter forms come from the
-text itself and do not depend on it.
+as punctuation. Arabic letter joining comes from the text itself and does
+not depend on it. `Language` in the same style overrides the language used
+for shaping; left empty, it follows the locale. For the limits of mixed
+right-to-left and left-to-right text in v1.0.0, see
+[Mixed Arabic and Latin text](/docs/localisation/right-to-left/#mixed-arabic-and-latin-text).
 
 The full program:
 
