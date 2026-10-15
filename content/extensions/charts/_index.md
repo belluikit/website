@@ -181,6 +181,13 @@ More interactions, each switched on in the `Option`:
   stacks several charts, such as price above volume, and keeps their zoom, pan
   and crosshair in step.
 
+Two pages go further, with examples and screenshots:
+
+{{< cards >}}
+  {{< card link="trading" title="Trading charts" subtitle="Price and volume panes, moving averages, a crosshair with axis tags, and drawing tools such as trend lines and Fibonacci retracements." icon="trending-up" >}}
+  {{< card link="interactive" title="Overlays, zoom and drill-down" subtitle="Reference lines and annotations, zoom buttons and a slider, the toolbox, brush selection, drill-down, timelines and colours by value." icon="cursor-click" >}}
+{{< /cards >}}
+
 ## Live data
 
 [`AppendData`](https://pkg.go.dev/github.com/belluikit/bellui/x/charts/chart#Chart.AppendData)

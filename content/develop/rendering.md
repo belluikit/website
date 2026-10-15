@@ -27,7 +27,7 @@ There is no runtime switch; the tag decides what is compiled in.
 | Linux (Wayland and X11) | Vulkan | Verified on Wayland; X11 builds and renders off-screen |
 | Windows | Direct3D 12 | Verified |
 | Web (WebAssembly) | Browser WebGPU | Verified in Chromium |
-| Android | Vulkan | Verified in the emulator |
+| Android | Vulkan | Verified on a device |
 | iOS Simulator | Metal | Verified |
 | iOS device | Metal | Verified on iPad |
 
