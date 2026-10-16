@@ -80,16 +80,6 @@ The site is built and served by Cloudflare Pages from this repository.
 
 The custom domain is `bellui.com`. `bellui.io` is meant to redirect to it once DNS is set up.
 
-## License
-
-Everything in this repository, the pages and the code in `examples/`, is
-released under the [BSD 3-Clause license](LICENSE), the same as Bellui. The
-vendored Hextra theme is MIT licensed; its license is in
-[`third_party/hextra/LICENSE`](third_party/hextra/LICENSE).
-
-Bellui began as a fork of [Fyne](https://fyne.io). Nothing here is copied from
-Fyne's documentation, which is not published under an open license.
-
 ## Live demo
 
 `/demo/` runs the [gallery](https://github.com/belluikit/gallery) in the
@@ -108,3 +98,13 @@ To update it:
 3. Point `GALLERY_WASM` in `static/demo/index.html` at the new path, and copy
    any other changed files from `wasm/` into `static/demo/`.
 4. Check that `curl -I` on the new URL shows `content-type: application/wasm`.
+
+## License
+
+Everything in this repository, the pages and the code in `examples/`, is
+released under the [BSD 3-Clause license](LICENSE), the same as Bellui. The
+vendored Hextra theme is MIT licensed; its license is in
+[`third_party/hextra/LICENSE`](third_party/hextra/LICENSE).
+
+Bellui began as a fork of [Fyne](https://fyne.io). Nothing here is copied from
+Fyne's documentation, which is not published under an open license.
