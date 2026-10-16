@@ -21,6 +21,7 @@ description: A cross-platform Go UI toolkit with Material Design 3 widgets and W
 
 <div class="hx:mb-6">
 {{< hextra/hero-button text="Get started" link="develop" >}}
+{{< hextra/hero-button text="Live demo" link="demo/" style="background: transparent; color: inherit; border: 1px solid currentColor;" >}}
 {{< hextra/hero-button text="View on GitHub" link="https://github.com/belluikit/bellui" style="background: transparent; color: inherit; border: 1px solid currentColor;" >}}
 </div>
 
