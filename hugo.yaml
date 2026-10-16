@@ -40,6 +40,9 @@ menu:
     - name: Gallery
       pageRef: /gallery
       weight: 4
+    - name: Live demo
+      url: /demo/
+      weight: 4
     - name: Tools
       pageRef: /tools
       weight: 5
