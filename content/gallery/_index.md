@@ -45,6 +45,19 @@ The gallery notices and changes its layout: the window is not resized, the
 inspector stays off, and wide pages scroll sideways as well as up and down
 instead of forcing a desktop width.
 
+To run it in a browser, install the `bellui` command and serve the checkout:
+
+```sh
+go install github.com/belluikit/bellui/cmd/bellui@latest
+bellui serve
+```
+
+Then open <http://localhost:8080> in a browser with WebGPU, such as Chrome or
+Edge. The first load downloads a large WebAssembly file (about 64 MB
+uncompressed), so give it a moment. A few pages are desktop-only. See
+[Web](/docs/platforms/web/) for building static files and the WebGL
+alternative.
+
 ### The top bar
 
 The menu button on the left opens a navigation drawer listing every page. The
