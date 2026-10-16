@@ -50,3 +50,6 @@ This website's content and examples are BSD 3-Clause licensed as well.
 The Bellui logo is based on the Go gopher, which was designed by
 [Renée French](https://reneefrench.blogspot.com/) and is licensed under the
 [Creative Commons Attribution 4.0 license](https://creativecommons.org/licenses/by/4.0/).
+The logo itself is AI-generated: it was made with Google Gemini, whose
+[Terms of Service](https://policies.google.com/terms) leave ownership of
+generated content with the user.
