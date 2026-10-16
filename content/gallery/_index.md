@@ -21,6 +21,11 @@ git clone https://github.com/belluikit/gallery.git
 cd gallery
 ```
 
+{{< callout >}}
+**Try it now:** the gallery runs in your browser at [bellui.com/demo](/demo/)
+(Chrome or Edge; the first load downloads about 64 MB).
+{{< /callout >}}
+
 ## Run it
 
 You need Go and the platform setup from [Prerequisites](/develop/prerequisites/).
