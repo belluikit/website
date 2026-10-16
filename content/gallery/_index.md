@@ -14,16 +14,17 @@ from it.
 
 {{< screenshot name="actions" alt="The gallery's Actions page, with the navigation drawer button and page title on the left of the top bar and five action icons on the right" >}}
 
-{{< callout type="info" >}}
-The gallery's source is not public yet; it will be published at
-[github.com/belluikit/gallery](https://github.com/belluikit/gallery). Until
-then, the commands below are for when it is.
-{{< /callout >}}
+The source is at [github.com/belluikit/gallery](https://github.com/belluikit/gallery):
+
+```sh
+git clone https://github.com/belluikit/gallery.git
+cd gallery
+```
 
 ## Run it
 
 You need Go and the platform setup from [Prerequisites](/develop/prerequisites/).
-In a checkout of the gallery:
+Then, in the checkout:
 
 ```sh
 go run .
