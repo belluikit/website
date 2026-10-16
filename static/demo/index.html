@@ -92,7 +92,15 @@
 								}
 							});
 							observer.observe(document.body, {childList: true, subtree: true});
-							WebAssembly.instantiateStreaming(fetch(GALLERY_WASM), go.importObject).then((result) => {
+							// A failed download (404, network, wrong type) used to leave
+							// the page on "Downloading web assembly file" forever.
+							const wasmResponse = fetch(GALLERY_WASM).then((resp) => {
+								if (!resp.ok) {
+									throw new Error("HTTP " + resp.status + " for " + GALLERY_WASM);
+								}
+								return resp;
+							});
+							WebAssembly.instantiateStreaming(wasmResponse, go.importObject).then((result) => {
 								action.innerHTML = "Starting application.";
 								// The WebGPU backend's zero-copy JS bridge reads
 								// globalThis.wasm.instance.exports.mem.buffer, so the instance
@@ -100,6 +108,10 @@
 								// docs/webgpu.md). Harmless for the WebGL (-tags gl) build.
 								window.wasm = result;
 								go.run(result.instance);
+							}).catch((err) => {
+								console.error(err);
+								action.innerHTML = "Could not load the application: " + err.message;
+								action.className = "action-error";
 							});
 						})
 					} else {
