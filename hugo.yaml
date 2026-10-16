@@ -1,0 +1,104 @@
+baseURL: "https://bellui.com/"
+title: Bellui
+locale: en-US
+
+enableRobotsTXT: true
+
+# HTML only: full-text RSS feeds of every docs section are megabytes of
+# duplicate content nobody subscribes to. Tag and category pages are unused.
+outputs:
+  home: [html]
+  section: [html]
+  page: [html]
+disableKinds: [taxonomy, term]
+enableGitInfo: true
+
+module:
+  hugoVersion:
+    min: "0.146.0"
+  imports:
+    - path: github.com/imfing/hextra
+
+markup:
+  highlight:
+    noClasses: false
+  goldmark:
+    renderer:
+      unsafe: true
+
+menu:
+  main:
+    - name: Get started
+      pageRef: /develop
+      weight: 1
+    - name: Docs
+      pageRef: /docs
+      weight: 2
+    - name: Extensions
+      pageRef: /extensions
+      weight: 3
+    - name: Gallery
+      pageRef: /gallery
+      weight: 4
+    - name: Tools
+      pageRef: /tools
+      weight: 5
+    - name: Libraries
+      pageRef: /libraries
+      weight: 6
+    - name: Support
+      pageRef: /support
+      weight: 7
+    - name: Search
+      weight: 8
+      params:
+        type: search
+    - name: GitHub
+      weight: 9
+      url: "https://github.com/belluikit"
+      params:
+        icon: github
+    - name: Theme
+      weight: 99
+      params:
+        type: theme-toggle
+
+params:
+  description: Bellui is a cross-platform Go UI toolkit with Material Design 3 widgets and WebGPU rendering, for desktop, mobile and the web.
+
+  navbar:
+    displayTitle: true
+    displayLogo: true
+    logo:
+      path: images/logo-64.png
+      dark: images/logo-64.png
+      width: 32
+      height: 32
+
+  page:
+    width: wide
+
+  theme:
+    default: system
+    displayToggle: false
+
+  footer:
+    enable: true
+    displayCopyright: true
+    displayPoweredBy: false
+
+  editURL:
+    enable: true
+    base: "https://github.com/belluikit/website/edit/main/content"
+
+  search:
+    enable: true
+    type: flexsearch
+    flexsearch:
+      index: content
+      tokenize: forward
+
+  highlight:
+    copy:
+      enable: true
+      display: hover

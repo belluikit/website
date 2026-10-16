@@ -1,0 +1,19 @@
+{{- /*
+  A gallery screenshot that follows the reader's theme: the light capture in
+  light mode, the dark capture in dark mode.
+
+    {{< screenshot name="charts" alt="What the image shows" >}}
+
+  Uses static/images/gallery/<name>-light.png and <name>-dark.png.
+*/ -}}
+{{- $name := .Get "name" -}}
+{{- $alt := .Get "alt" -}}
+{{- range slice "light" "dark" -}}
+  {{- if not (fileExists (printf "static/images/gallery/%s-%s.png" $name .)) -}}
+    {{- errorf "screenshot: static/images/gallery/%s-%s.png does not exist (%s)" $name . $.Position -}}
+  {{- end -}}
+{{- end -}}
+<figure class="bellui-shot">
+  <img src="{{ printf "/images/gallery/%s-light.png" $name | relURL }}" alt="{{ $alt }}" class="hx:dark:hidden" loading="lazy" />
+  <img src="{{ printf "/images/gallery/%s-dark.png" $name | relURL }}" alt="{{ $alt }}" class="hx:hidden hx:dark:block" loading="lazy" />
+</figure>

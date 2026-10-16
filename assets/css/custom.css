@@ -1,0 +1,152 @@
+/* Gallery screenshots ({{< screenshot >}}). */
+.bellui-shot {
+  margin: 1.5rem auto;
+  max-width: 900px;
+}
+.bellui-shot img {
+  width: 100%;
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.18);
+}
+html.dark .bellui-shot img {
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.45);
+}
+
+/* Section headings on the home page. */
+.bellui-home-heading {
+  margin-top: 4rem;
+  margin-bottom: 0.5rem;
+  font-size: 1.875rem;
+  line-height: 2.25rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+/* Keep wide tables and code from widening the page on phones: they scroll
+   inside their own box instead. */
+.content table {
+  display: block;
+  max-width: 100%;
+  overflow-x: auto;
+}
+.content pre {
+  max-width: 100%;
+  overflow-x: auto;
+}
+article, main, .content {
+  min-width: 0;
+}
+.hextra-code-block {
+  max-width: 100%;
+  min-width: 0;
+}
+
+/* Home page hero: the logo to the left of the headline; stacked on phones. */
+.bellui-hero {
+  display: flex;
+  align-items: center;
+  gap: 1.75rem;
+  margin: 1.5rem 0;
+}
+.bellui-hero img {
+  flex: none;
+  width: 160px;
+  height: 160px;
+}
+@media (max-width: 639px) {
+  .bellui-hero {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+  .bellui-hero img {
+    width: 120px;
+    height: 120px;
+  }
+}
+
+/* Home page spotlight for a sibling project (Alidade). */
+.bellui-spotlight {
+  margin: 4rem 0 1rem;
+  width: 100%;
+  max-width: none;
+  box-sizing: border-box;
+  padding: 1.75rem 2rem;
+  border-radius: 16px;
+  border: 1px solid rgba(127, 127, 127, 0.25);
+  background: radial-gradient(ellipse at 0% 0%, rgba(46, 125, 215, 0.14), transparent 60%),
+              radial-gradient(ellipse at 100% 100%, rgba(103, 80, 164, 0.14), transparent 60%);
+}
+.bellui-spotlight p {
+  margin: 0.75rem 0;
+  line-height: 1.7;
+  max-width: 52rem;
+}
+.bellui-spotlight-label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  opacity: 0.7;
+}
+.bellui-spotlight a,
+.bellui-link {
+  color: #2e7dd7;
+  font-weight: 500;
+}
+@media (max-width: 639px) {
+  .bellui-spotlight { padding: 1.25rem 1rem; }
+}
+
+
+/* A solid navbar: content scrolling under it is hidden rather than showing
+   through the blur. */
+.hextra-nav-container-blur {
+  background-color: #fff !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.08) !important;
+}
+html.dark .hextra-nav-container-blur {
+  background-color: #111 !important;
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.08) !important;
+}
+
+/* Footer: one line with the copyright notice, at a fixed height. Pages are
+   at least one screen tall minus that height, so on a short page the footer
+   sits at the bottom of the window with no scrolling, and on a long page it
+   follows the content. */
+:root {
+  --bellui-footer-height: 2.75rem;
+}
+.bellui-footer {
+  border-top: 1px solid rgba(127, 127, 127, 0.2);
+  box-sizing: border-box;
+  height: calc(var(--bellui-footer-height) + env(safe-area-inset-bottom));
+  padding-bottom: env(safe-area-inset-bottom);
+  display: flex;
+  align-items: center;
+  font-size: 0.8rem;
+  overflow: hidden;
+}
+.bellui-footer > div {
+  width: 100%;
+  opacity: 0.75;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.bellui-footer a {
+  text-decoration: underline;
+}
+article[class*="min-h-"] {
+  min-height: calc(100vh - var(--hextra-navbar-height) - var(--bellui-footer-height)) !important;
+}
+@media (max-width: 639px) {
+  :root {
+    --bellui-footer-height: 3.75rem;
+  }
+  .bellui-footer > div {
+    white-space: normal;
+  }
+}
