@@ -93,6 +93,21 @@ such as `event.KeyReturn` or `event.KeyEscape`. `KeyEvent.Modifier` holds the
 modifier keys that were down. On desktop, Tab moves focus to the next
 focusable object. Your code can move focus with `w.Canvas().Focus(obj)`.
 
+Some widgets keep Tab for themselves: a multi-line `Entry` types a tab
+character, and the DAG canvas moves between nodes. A custom widget does the
+same by implementing
+[`event.Tabbable`](https://pkg.go.dev/github.com/belluikit/bellui/event#Tabbable)
+with `AcceptsTab` returning true. So that keyboard users are never stuck in
+such a widget, two key sequences still move focus out of it:
+
+- **Escape, then Tab** (or Shift+Tab to go back). This works everywhere,
+  including the web. An Escape that closes a pop-up or dialog does not count;
+  press Escape once more.
+- **Ctrl+Tab** (or Ctrl+Shift+Tab), on desktop and mobile. Browsers keep
+  Ctrl+Tab for switching their own tabs, so it does not work on the web.
+
+The Escape sequence is new in v1.2.0.
+
 On desktop, a key pressed with Control, Alt or Super (Command on macOS) goes
 to the shortcut system, not to `TypedKey`. Only unmodified and
 Shift-modified keys reach `TypedKey`.
