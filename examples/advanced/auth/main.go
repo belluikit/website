@@ -15,7 +15,8 @@ import (
 const googleClientID = "1234567890-example.apps.googleusercontent.com"
 
 func main() {
-	a := app.New()
+	// Sign-in tokens are stored per app, so the app needs an ID.
+	a := app.NewWithID("com.example.signin")
 	w := a.NewWindow("Sign in")
 
 	status := widget.NewLabel("Not signed in")

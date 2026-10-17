@@ -96,12 +96,8 @@ the numeric GitHub user ID, and `Name` falls back to the login when the user
 has no display name. Of the three token fields, only `AccessToken` is set:
 GitHub sign-ins have no refresh token and no ID token.
 
-{{< callout type="warning" >}}
-Set the scopes for GitHub yourself, for example `Scopes: "user:email read:user"`
-on the button. If you leave them empty, the OpenID Connect defaults
-(`openid email profile`) are sent to GitHub too. This is a known issue:
-[bellui#335](https://github.com/belluikit/bellui/issues/335).
-{{< /callout >}}
+With no `Scopes` set, GitHub is asked for `user:email read:user`. (Before
+v1.1.0 it was sent the OpenID Connect defaults instead.)
 
 ## Without the button
 
@@ -126,15 +122,21 @@ it back at the next launch:
 returns empty strings, not an error, when nothing is stored. If you call
 `Authenticate` yourself, store the token with
 [`SaveToken`](https://pkg.go.dev/github.com/belluikit/bellui/auth#SaveToken).
-To sign out, remove it:
+Tokens are stored per app, so the app needs a unique ID: create it with
+`app.NewWithID`, or give it an ID in `manifest.pxf`. Without one,
+`SaveToken`, `LoadToken` and `ClearToken` return
+[`auth.ErrNoAppID`](https://pkg.go.dev/github.com/belluikit/bellui/auth#ErrNoAppID).
+To sign out, remove the token:
 
 {{< example file="advanced/auth/main.go" region="signout" >}}
 
 How the token is stored:
 
 - It is encrypted with AES-256-GCM in a file named `<provider>.enc`, in a
-  `bellui-auth` folder under the user's config directory (the one Go's
-  `os.UserConfigDir` returns).
+  folder named after the app's ID, inside a `bellui-auth` folder under the
+  user's config directory (the one Go's `os.UserConfigDir` returns). Two apps
+  that sign in with the same provider keep separate tokens, and the app ID is
+  part of the encryption key, so one app cannot read another's token.
 - The encryption key comes from a secret kept in the operating system's
   secret store: the Keychain on macOS, DPAPI on Windows, and the Secret
   Service (through the `secret-tool` command) on Linux.
@@ -142,6 +144,11 @@ How the token is stored:
   the secret is a random file in the same folder, readable only by the user.
 - Token files do not work on another machine. A file that cannot be decrypted
   is deleted, and the user simply signs in again.
+- Versions before v1.1.0 kept one token per provider for all apps, directly in
+  `bellui-auth`. Those tokens are not read any more, so users sign in once more
+  after upgrading. From v1.2.0, the old file for a provider
+  (`bellui-auth/<provider>.enc`) is deleted the first time any app saves or
+  clears a token for that provider.
 
 {{< callout type="info" >}}
 The package does not use the refresh token for you. It stores it and gives it
@@ -150,9 +157,6 @@ back. Exchanging it for a new access token is up to your app.
 
 ## Gotchas
 
-- **Token files are per provider, not per app.** Two Bellui apps run by the
-  same user that both sign in with `google` share one `google.enc` file, and
-  each sign-in replaces the other's token.
 - **`CancelAuth` only stops the button.** The button stops waiting and reports
   nothing. The local listener keeps waiting for the browser until the
   five-minute timeout.
