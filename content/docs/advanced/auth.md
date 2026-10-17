@@ -126,6 +126,13 @@ Tokens are stored per app, so the app needs a unique ID: create it with
 `app.NewWithID`, or give it an ID in `manifest.pxf`. Without one,
 `SaveToken`, `LoadToken` and `ClearToken` return
 [`auth.ErrNoAppID`](https://pkg.go.dev/github.com/belluikit/bellui/auth#ErrNoAppID).
+A button with an `Issuer` of your own (Okta, Keycloak or a custom provider)
+stores its token per issuer, so two buttons for one provider, such as two
+Keycloak realms, keep separate tokens. Read such a token with
+[`LoadTokenFor`](https://pkg.go.dev/github.com/belluikit/bellui/auth#LoadTokenFor)
+and the same provider and issuer; `SaveTokenFor` and `ClearTokenFor` match.
+(New in v1.2.0. Before, the second realm's sign-in replaced the first's token.)
+
 To sign out, remove the token:
 
 {{< example file="advanced/auth/main.go" region="signout" >}}
