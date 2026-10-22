@@ -32,7 +32,7 @@ The `wasm` folder it creates is a complete static site:
 
 | File | Purpose |
 | --- | --- |
-| `index.html` | The page. It shows your icon and a loading message, checks that the browser supports WebAssembly and WebGL, loads the app, and hides the loading screen when the app creates its canvas. |
+| `index.html` | The page. It shows your icon and a loading message, checks that the browser supports WebGPU (or WebGL, for a build with `-tags gl`) and says so if it does not, loads the app, and hides the loading screen when the app creates its canvas. It also credits the gopher artwork on the loading screen, which its licence requires. |
 | `<Name>.wasm` | Your compiled app. |
 | `wasm_exec.js` | Go's WebAssembly loader, copied from your Go installation. |
 | `icon.png`, `light.css`, `dark.css`, spinners | Page icon and loading-screen styling, in the user's light or dark preference. |

@@ -12,7 +12,7 @@ Bellui repository under `x/`, but each is a separate Go module. An app pays
 for one, in build time and binary size, only when it imports it.
 
 Each extension is released together with the toolkit and carries the same
-version number: `x/charts v1.0.0` goes with Bellui v1.0.0. Add one with
+version number: `x/charts v1.2.0` goes with Bellui v1.2.0. Add one with
 `go get`:
 
 ```sh

@@ -47,7 +47,7 @@ Users can set their scale, theme and primary colour for all Bellui apps with
 the settings app in the bellui module:
 
 ```sh
-go run github.com/belluikit/bellui/cmd/bellui_settings@v1.0.0
+go run github.com/belluikit/bellui/cmd/bellui_settings@v1.2.0
 ```
 
 Running desktop apps watch these settings and apply changes straight away.
