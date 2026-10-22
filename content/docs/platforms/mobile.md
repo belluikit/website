@@ -98,6 +98,8 @@ What you need:
 - a Mac with Xcode;
 - for a device, an Apple development certificate in your keychain.
 
+Apps packaged with `bellui` v1.1.0 or later run on iOS 15 and later.
+
 ```sh
 # The simulator needs the iossimulator target and build tag.
 bellui package -os iossimulator --tags iossimulator --app-id com.example.notes

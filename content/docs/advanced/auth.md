@@ -122,28 +122,45 @@ it back at the next launch:
 returns empty strings, not an error, when nothing is stored. If you call
 `Authenticate` yourself, store the token with
 [`SaveToken`](https://pkg.go.dev/github.com/belluikit/bellui/auth#SaveToken).
-Tokens are stored per app, so the app needs a unique ID: create it with
-`app.NewWithID`, or give it an ID in `manifest.pxf`. Without one,
-`SaveToken`, `LoadToken` and `ClearToken` return
-[`auth.ErrNoAppID`](https://pkg.go.dev/github.com/belluikit/bellui/auth#ErrNoAppID).
-A button with an `Issuer` of your own (Okta, Keycloak or a custom provider)
-stores its token per issuer, so two buttons for one provider, such as two
-Keycloak realms, keep separate tokens. Read such a token with
-[`LoadTokenFor`](https://pkg.go.dev/github.com/belluikit/bellui/auth#LoadTokenFor)
-and the same provider and issuer; `SaveTokenFor` and `ClearTokenFor` match.
-(New in v1.2.0. Before, the second realm's sign-in replaced the first's token.)
 
 To sign out, remove the token:
 
 {{< example file="advanced/auth/main.go" region="signout" >}}
 
+Tokens are stored per app, under its unique ID, so the app must be created
+with `app.NewWithID` (or have an ID in its manifest). Without one, every token
+function returns
+[`ErrNoAppID`](https://pkg.go.dev/github.com/belluikit/bellui/auth#ErrNoAppID).
+
+### Several issuers under one provider
+
+`LoadToken`, `SaveToken` and `ClearToken` keep one token per provider name.
+For a provider whose issuer you choose, such as two Keycloak realms or two
+Okta tenants under one name, use
+[`SaveTokenFor`](https://pkg.go.dev/github.com/belluikit/bellui/auth#SaveTokenFor),
+[`LoadTokenFor`](https://pkg.go.dev/github.com/belluikit/bellui/auth#LoadTokenFor)
+and
+[`ClearTokenFor`](https://pkg.go.dev/github.com/belluikit/bellui/auth#ClearTokenFor),
+which take the issuer as well, so each issuer keeps its own token. An empty
+issuer, or the provider preset's own, is the same as no issuer. (New in
+v1.2.0. Before, the second realm's sign-in replaced the first's token.)
+
+The button saves this way, with its `Issuer`. A button on a preset issuer
+(Google, Apple, GitHub, Microsoft's common endpoint) saves the provider's
+token, as in the example above. A button whose `Issuer` differs from its
+preset's, which is every "okta", "keycloak" and "custom" button and a
+"microsoft" button set to one tenant, saves a token that only `LoadTokenFor`
+finds and only `ClearTokenFor` removes. Read and clear it with the same
+provider and issuer as the button, or a sign-out leaves the token on disk.
+
 How the token is stored:
 
 - It is encrypted with AES-256-GCM in a file named `<provider>.enc`, in a
   folder named after the app's ID, inside a `bellui-auth` folder under the
-  user's config directory (the one Go's `os.UserConfigDir` returns). Two apps
-  that sign in with the same provider keep separate tokens, and the app ID is
-  part of the encryption key, so one app cannot read another's token.
+  user's config directory (the one Go's `os.UserConfigDir` returns). A token
+  for one issuer goes in an `issuers` folder beside it, under a hashed name.
+- Two apps that sign in with the same provider keep separate tokens, and the
+  app ID is part of the encryption key, so one app cannot read another's token.
 - The encryption key comes from a secret kept in the operating system's
   secret store: the Keychain on macOS, DPAPI on Windows, and the Secret
   Service (through the `secret-tool` command) on Linux.
@@ -164,6 +181,9 @@ back. Exchanging it for a new access token is up to your app.
 
 ## Gotchas
 
+- **The app needs an ID.** Tokens are kept per app, so `app.New()` without an
+  ID in the manifest makes every token call fail with `ErrNoAppID`. Use
+  `app.NewWithID`.
 - **`CancelAuth` only stops the button.** The button stops waiting and reports
   nothing. The local listener keeps waiting for the browser until the
   five-minute timeout.

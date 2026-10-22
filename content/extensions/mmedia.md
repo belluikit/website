@@ -185,8 +185,9 @@ the FFmpeg headers it contains.
 
 `x/mmedia` v1.0.0 requires `goffmpeg` v0.4.0 and `goffmpeg-libs` v0.3.0, and
 those module downloads carry no licence or notice files. From `goffmpeg`
-v0.4.1 and `goffmpeg-libs` v0.3.1 they do, around the same FFmpeg libraries.
-If you collect licences from your module cache, upgrade first:
+v0.4.1 and `goffmpeg-libs` v0.3.1 they do, around the same FFmpeg libraries;
+`x/mmedia` v1.1.0 and later require those versions. If you are still on
+`x/mmedia` v1.0.0 and collect licences from your module cache, upgrade first:
 
 ```sh
 go get github.com/belluikit/goffmpeg@v0.4.1

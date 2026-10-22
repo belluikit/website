@@ -37,6 +37,7 @@ in [Custom widgets](/docs/custom-widgets/). Every event method runs on the
 | [`Hoverable`](https://pkg.go.dev/github.com/belluikit/bellui/event#Hoverable) | `HoverIn`, `HoverMoved`, `HoverOut` | A mouse pointer enters, moves over, or leaves the object |
 | [`Draggable`](https://pkg.go.dev/github.com/belluikit/bellui/event#Draggable) | `Dragged(*DragEvent)`, `DragEnd()` | The pointer moves while pressed, and then is released |
 | [`Scrollable`](https://pkg.go.dev/github.com/belluikit/bellui/event#Scrollable) | `Scrolled(*ScrollEvent)` | A mouse wheel or touchpad scrolls over the object |
+| [`Pinchable`](https://pkg.go.dev/github.com/belluikit/bellui/event#Pinchable) | `Pinched(*PinchEvent)`, `PinchEnded()` | Two fingers on the object move apart or together; `PinchEnded` once when either lifts |
 
 A [`PointEvent`](https://pkg.go.dev/github.com/belluikit/bellui/event#PointEvent)
 has `Position`, relative to the object's top-left corner, and
@@ -44,6 +45,10 @@ has `Position`, relative to the object's top-left corner, and
 `ScrollEvent.Scrolled` are a [`geo.Delta`](https://pkg.go.dev/github.com/belluikit/bellui/geo#Delta):
 how far the pointer moved since the last event. `ScrollEvent.Source` says
 whether a scroll came from a mouse wheel, a touchpad or a touch gesture.
+A [`PinchEvent`](https://pkg.go.dev/github.com/belluikit/bellui/event#PinchEvent)
+is a `PointEvent` at the point between the fingers, plus `Scale`: the change
+since the previous event, above 1 when the fingers moved apart. Multiply
+successive values for the total zoom.
 
 {{< callout type="warning" >}}
 If an object implements `DoubleTappable`, a single tap is not delivered
@@ -63,11 +68,19 @@ differently:
 | Secondary tap | Right-click | Lifting the finger after a press and hold |
 | Long press | Holding the primary button down; it fires while the button is still down, and the release does not also deliver `Tapped` | Holding a finger still; it fires while the finger is still down |
 | Hover | Mouse movement | Not delivered: there is no pointer between touches |
-| Scroll | Mouse wheel or touchpad | Dragging a finger over scrollable content, such as a scroll container |
+| Scroll | Mouse wheel or touchpad | Dragging a finger over scrollable content, such as a scroll container, or two fingers moving together anywhere |
+| Pinch | Not delivered from a trackpad yet | Two fingers moving apart or together, when both are on a `Pinchable` |
 
 On touch, a widget that implements both `LongPressable` and
 `SecondaryTappable` gets `LongPressed` while the finger is held, and then
 `TappedSecondary` when it lifts.
+
+A pinch starts only when both fingers land on the same `Pinchable`. Two
+fingers on widgets either side of it, such as a slider and a button, keep
+their own drag and tap. Neither finger of a pinch or a two-finger scroll
+produces a tap or a drag. Two fingers moving together scroll the content
+under them, so a page of charts or 3D views, which keep one-finger drags for
+themselves, still scrolls.
 
 For desktop-only details there are extra interfaces in
 [`driver/desktop`](https://pkg.go.dev/github.com/belluikit/bellui/driver/desktop):

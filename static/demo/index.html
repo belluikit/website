@@ -2,8 +2,13 @@
 <html>
 	<head>
 		<style>
+			/* Roboto is the font the app draws with, but it lives inside the
+			   wasm binary, which isn't loaded yet. So name it first, for the
+			   devices that have it (Android, ChromeOS), then fall back to the
+			   system's own UI font. No font file ships with the page. */
 			body {
 				text-align:center;
+				font-family: Roboto, system-ui, -apple-system, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
 			}
 			.center {
 				margin-left: auto;
@@ -28,9 +33,10 @@
 				width: auto;
 				height: auto;
 			}
+			/* The GIF is 128 px, so 64 CSS px stays sharp on 2x screens. */
 			.spinner {
-				max-width: 48px;
-				max-height: 48px;
+				max-width: 64px;
+				max-height: 64px;
 			}
 			.credit {
 				margin-top: 2em;
@@ -43,15 +49,15 @@
 		<!-- Without this, phone browsers lay the page out 980 px wide: the app
 		     shows as a shrunken desktop page, and its canvas gets ~6x the pixels
 		     (2940x6393 instead of 1206x2622 on a 402x874 @3x iPhone). -->
-		<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 		<title>Bellui Gallery, live demo</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 		<link rel="icon" type="image/png" href="icon.png">
 		
 		<script>
 		// The gallery build is too large for Cloudflare Pages (25 MiB per file), so it
 		// is served from the R2 bucket behind assets.bellui.com. Versioned path: a new
 		// build gets a new path, so the file can be cached forever.
-		const GALLERY_WASM = "https://assets.bellui.com/gallery/4484154/gallery.wasm";
+		const GALLERY_WASM = "https://assets.bellui.com/gallery/52dd235/gallery.wasm";
 
 			function async_load(file, cb) {
 				var d = document, t = 'script',
@@ -162,7 +168,7 @@
 			<table class="center">
 				<tr><td><img class="application-icon" src="icon.png" alt="Application icon"/></td></tr>
 				<tr><td><div class="centered-text"><div class="application-name">MD3 Gallery</div></div></td></tr>
-				<tr><td><div class="centered-text"><div class="application-version">v1.0.2</div></div></td></tr>
+				<tr><td><div class="centered-text"><div class="application-version">v1.1.0</div></div></td></tr>
 				<tr>
 					<td>
 						<picture>
@@ -180,7 +186,7 @@
 					</td>
 				</tr>
 				<!-- The spinner is CC BY 4.0 artwork, which must be credited where it is shown (bellui #362). -->
-				<tr><td><div class="centered-text credit">Gopher by Renée French, <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></div></td></tr>
+				<tr><td><div class="centered-text credit">Gopher artwork based on the Go gopher by Renée French, <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></div></td></tr>
 			</table>
 			</div>
 		</div>
