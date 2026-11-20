@@ -112,4 +112,4 @@ params:
   adsense:
     client: ca-pub-9375931948227206
     slots:
-      docsEnd: ""   # end of the article on every docs-layout page
+      docsEnd: "9212261057"   # end of the article on every docs-layout page
