@@ -1,4 +1,4 @@
-{{- /* Google AdSense. Production builds only, so `hugo server` loads no ads. */ -}}
-{{- if hugo.IsProduction }}
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9375931948227206" crossorigin="anonymous"></script>
+{{- /* Google AdSense loader. Production builds only, so `hugo server` loads no ads. */ -}}
+{{- with and hugo.IsProduction site.Params.adsense.client }}
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client={{ . }}" crossorigin="anonymous"></script>
 {{- end }}

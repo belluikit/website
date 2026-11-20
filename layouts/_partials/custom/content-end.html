@@ -1,0 +1,11 @@
+{{- /* One ad unit at the end of the article, on every docs-layout page (Get
+   started, Docs, Extensions, Gallery, Tools). Production builds only, and
+   only once params.adsense.slots.docsEnd holds the unit's slot ID. */ -}}
+{{- $client := site.Params.adsense.client -}}
+{{- $slot := site.Params.adsense.slots.docsEnd -}}
+{{- if and hugo.IsProduction (eq .Type "docs") $client $slot }}
+<div class="bellui-ad">
+  <ins class="adsbygoogle" style="display:block" data-ad-client="{{ $client }}" data-ad-slot="{{ $slot }}" data-ad-format="auto" data-full-width-responsive="true"></ins>
+  <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+</div>
+{{- end }}
