@@ -16,7 +16,8 @@ information about you when you visit the site. If you have a question, write to
 - We do not set cookies of our own, and we do not run analytics.
 - The site shows ads from Google AdSense. Google and its partners use cookies
   to show and measure those ads. In the European Economic Area, the United
-  Kingdom and Switzerland they only do so after you agree.
+  Kingdom and Switzerland they only do so after you agree. In the United
+  States you can opt out.
 
 ## Advertising
 
@@ -47,6 +48,27 @@ personalised ads before any are used. You can accept, refuse, or choose by
 purpose. If you refuse, Google may still show ads that are not personalised.
 You can change your choice at any time through the privacy and cookie settings
 link that the message leaves on the page.
+
+### Your choices in the United States
+
+Several US states, including California, give residents the right to opt out
+of the "sale" or "sharing" of their personal information. Using cookies to pick
+ads based on your browsing on other websites counts as sharing under those
+laws.
+
+If you visit from one of those states, a message from Google offers a link to
+opt out. When you opt out, Google limits how it uses information from your
+visits to this site, and stops choosing ads based on your interests. You still
+see ads, but they are not personalised.
+
+If your browser sends a [Global Privacy Control](https://globalprivacycontrol.org/)
+signal, Google treats it as the same opt-out in the states whose laws require
+that.
+
+The information involved is what Google receives when an ad loads: your IP
+address, an identifier stored in a cookie, your browser details and the pages
+you visit here. It is used to show ads, to measure them and to protect against
+fraud.
 
 ## Hosting
 
