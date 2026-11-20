@@ -150,3 +150,13 @@ article[class*="min-h-"] {
     white-space: normal;
   }
 }
+
+/* AdSense unit at the end of docs pages. Collapse it when Google has no ad
+   to show, so an empty box is never left behind. */
+.bellui-ad {
+  margin-top: 2.5rem;
+  clear: both;
+}
+.bellui-ad:has(ins.adsbygoogle[data-ad-status="unfilled"]) {
+  display: none;
+}

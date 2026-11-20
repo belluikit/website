@@ -105,3 +105,11 @@ params:
     copy:
       enable: true
       display: hover
+
+  # Google AdSense, loaded in production builds only. Each ad unit is created in
+  # the AdSense dashboard, which gives it a slot ID; a unit with an empty slot
+  # is not rendered.
+  adsense:
+    client: ca-pub-9375931948227206
+    slots:
+      docsEnd: ""   # end of the article on every docs-layout page
