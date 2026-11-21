@@ -31,13 +31,10 @@ func main() {
 	show := func(offset geo.Position) {
 		where.SetText(fmt.Sprintf("Offset %.0f", offset.Y))
 	}
-	// Called when the user scrolls, and by ScrollToBottom.
+	// Called when the user scrolls, and when code moves the content.
 	scroll.OnScrolled = show
 
-	top := widget.NewButton("Top", func() {
-		scroll.ScrollToTop() // does not call OnScrolled
-		show(scroll.Offset)
-	})
+	top := widget.NewButton("Top", scroll.ScrollToTop)
 	bottom := widget.NewButton("Bottom", scroll.ScrollToBottom)
 	//docs:end control
 

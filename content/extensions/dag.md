@@ -118,6 +118,9 @@ What the user can do with the mouse and keyboard:
 - **Right-click** an element to fire its `On...SecondaryTapped` callback, which
   receives the pointer event so you can show a context menu there.
 
+On a touch screen, drag with one or two fingers to pan, and pinch to zoom. A
+pan keeps moving for a moment after a fast swipe.
+
 When you add or remove things from code, use the canvas's own methods
 (`c.AddNode`, `c.RemoveNode`, `c.AddGroup`, and so on). They change the graph
 and update the drawing together. After replacing the whole graph, call
@@ -166,6 +169,29 @@ there go through the canvas's undo stack.
 
 A node made from a component stores its property values as JSON in
 `Node.Metadata`, starting from each property's `Default`.
+
+On a touch screen, a swipe over the palette scrolls it. To drag an entry out
+onto the canvas, long-press it first, then drag. A quick tap adds the node,
+as a click does. With a mouse, a drag moves the entry at once.
+
+## Disabling the canvas
+
+`DAGCanvas` has `Disable`, `Enable` and `Disabled`, like other widgets. A
+disabled canvas keeps its place and its graph, and draws its nodes, edges,
+groups, ports and annotations in the disabled colours. It takes no input: no
+tap, drag, wheel, pinch, key or shortcut, so it neither selects, moves,
+connects, pans nor zooms. Tab skips it. A connection being dragged is
+cancelled.
+
+Disabling refuses the user, not your code: `AddNode`, `DeleteSelected`,
+`SelectNode`, the graph and the undo stack still work. A node's `Content`
+is your own widget and is left as it is. The palette and the properties
+panel are separate widgets, so disable them yourself if you need to. You can
+call `Disable` before the canvas is shown.
+
+This differs from a read-only canvas (see
+[Capabilities](#read-only-canvases)), which still lets the user pan, zoom
+and select.
 
 ## Licence
 

@@ -25,6 +25,10 @@ about the inner `widget.Icon`, it would never see `Tapped`.
 That is also why the constructor calls `SetResource` after
 `ExtendBaseWidget`, rather than calling `widget.NewIcon`: `NewIcon` would
 register the inner icon, and the outer type's methods would be ignored.
+Worse, the widget would end up with two renderers, and the one its own
+methods use could be destroyed while it is still shown. Bellui logs a warning
+when it finds such a wrapper in a window, once for each pair of types, and
+says how to fix it.
 
 ## Change a behaviour: an entry that takes only digits
 

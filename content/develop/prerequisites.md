@@ -6,7 +6,8 @@ weight: 1
 
 Every platform needs:
 
-- **Go 1.25 or later.** Check with `go version`.
+- **Go 1.26.2 or later.** Bellui and the `bellui` command both need it. Check
+  with `go version`.
 - **A C compiler**, because Bellui uses cgo for the native window system and
   GPU code. `CGO_ENABLED` must not be `0`.
 

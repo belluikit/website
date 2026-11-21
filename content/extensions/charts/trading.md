@@ -68,43 +68,56 @@ The tooltip settings in the example are the ones that suit a price chart:
   filled in by `Formatter`; a second click, or 15 seconds (`PinDuration`),
   removes it.
 
-{{< callout type="warning" >}}
-In v1.0.0 an axis tooltip only finds line and scatter series. It never finds
-candlestick or bar series, so a pane that holds only candles or bars shows no
-crosshair at all, and the group cannot show one in it either. The example
-works around this by adding a line series with a transparent colour through
-the closing prices, and another through the volumes. An unnamed series stays
-out of the legend.
-{{< /callout >}}
+An axis tooltip finds candlestick and bar series, so the volume pane, which
+holds only bars, shows the crosshair too.
 
 ### Zooming
 
 With `DataZoom` enabled, the wheel zooms around the pointer, a drag pans once
 you are zoomed in, and the **+**, **−** and **Reset** buttons sit at the top
 right of the pane. [Zoom](../interactive/#zoom) has the details. Three things
-matter for price charts in v1.0.0:
+matter for price charts:
 
 - The Y axis keeps the range of all the data. Zooming into a quiet week does
   not stretch it to fill the pane.
-- Candles and bars keep the width they have when all the data is shown, so
-  they look thin when you zoom in far.
+- Candles and bars get wider as a zoom shows fewer of them.
 - A category axis writes a label under every category. With 120 days that is
   unreadable, so the example passes a label for every tenth day and empty
   strings for the rest.
 
 To add candles as they arrive, see [Live data](../#live-data). In a group,
-append to every pane, including the hidden lines, so the panes keep the same
-number of points.
+append to every pane, so the panes keep the same number of points.
 
 ## Drawing tools
 
-The user draws on a chart after you switch a tool on with
-[`SetDrawingTool`](https://pkg.go.dev/github.com/belluikit/bellui/x/charts/chart#Chart.SetDrawingTool).
-There is no built-in toolbar: you make one from your own buttons.
+The user draws on a chart once a drawing tool is active.
+[`chart.NewDrawingToolbar`](https://pkg.go.dev/github.com/belluikit/bellui/x/charts/chart#NewDrawingToolbar)
+is a ready-made row of buttons for it: one per tool, with the active one
+highlighted, and **Clear All**, which removes every drawing and goes back to
+selecting. It wraps onto more rows when it is narrow. Place it anywhere in
+your layout. Pass tools to it to show only those, in that order;
+[`interact.DefaultDrawingTools`](https://pkg.go.dev/github.com/belluikit/bellui/x/charts/interact#DefaultDrawingTools)
+lists them all. To show the same buttons inside the chart, above the plot, set
+`ToolboxConfig.DrawingTools` instead.
 
 {{< example file="extensions/charts/trading/main.go" region="tools" >}}
 
-These are all the tools in v1.0.0, the
+For a UI of your own, call
+[`SetDrawingTool`](https://pkg.go.dev/github.com/belluikit/bellui/x/charts/chart#Chart.SetDrawingTool)
+from your own controls, and follow `interact.EventDrawingToolChanged` to show
+which tool is active. The event fires on every change of tool, from any source,
+and arrives on the main goroutine. A tool's `String` method gives the short
+name the toolbar shows, such as "Trend" or "Fib", and "Select" for
+`DrawingToolNone`.
+
+{{< callout type="info" >}}
+The drawing toolbar, `ToolboxConfig.DrawingTools`, `EventDrawingToolChanged`,
+`DrawingToolMode.String` and `DefaultDrawingTools` are experimental. They may
+change in a later release. `SetDrawingTool` and `DrawingTool` are the stable
+way to work with drawing tools.
+{{< /callout >}}
+
+These are all the tools, the
 [`interact.DrawingToolMode`](https://pkg.go.dev/github.com/belluikit/bellui/x/charts/interact#DrawingToolMode)
 values:
 
@@ -126,24 +139,19 @@ pointer. A new drawing takes its colour from a fixed set of six, picked by how
 many drawings the chart already has.
 
 A tool stays active after a drawing is finished, so the user can draw several
-in a row. The example switches back to selecting after each one.
+in a row. The example switches back to selecting after each one, and the
+toolbar follows.
 
 ### Selecting, moving and deleting
 
 With no tool active, a click within 10 pixels of a drawing selects it: it is
 drawn thicker, with square handles at its points. Dragging a selected drawing
 moves it. Delete or Backspace removes it, and Escape deselects it, or cancels a
-drawing that is still in progress. The chart takes keyboard focus when it is
-clicked, so these keys work right after a click.
+drawing that is still in progress. On desktop the chart takes keyboard focus
+when it is clicked, so these keys work right after a click.
 
-{{< callout type="warning" >}}
-A click on a chart that is showing a tooltip pins the tooltip instead of
-selecting a drawing. With an axis tooltip, which is showing almost everywhere
-over the plot, the user cannot select drawings at all. The example has a
-**Select** mode that sets `TooltipTriggerNone` while the user edits drawings,
-and puts the crosshair back for the drawing tools. Clicks with a drawing tool
-active are not affected.
-{{< /callout >}}
+A click on a drawing selects it even while a tooltip is showing. A click
+anywhere else pins the tooltip, as usual.
 
 ### Events
 
@@ -156,12 +164,13 @@ with the `DrawingID` and, for `EventDrawingCreated`, the `Drawing` itself:
 - `EventDrawingCreated` fires when the user finishes a drawing. It arrives on
   the UI thread, so the handler can update widgets.
 - `EventDrawingSelected` fires when the user clicks a drawing.
-- `EventDrawingDeleted` fires when the user presses Delete and when you call
-  `RemoveDrawing`.
+- `EventDrawingDeleted` fires when the user presses Delete, when you call
+  `RemoveDrawing`, and once for each drawing that `ClearDrawings` or
+  **Clear All** removes.
 
-Nothing fires when a drawing is moved, when you call `AddDrawing`, or when
-`ClearDrawings` removes everything. To keep a saved copy current, save again
-when the user is done, for example when the window closes.
+Nothing fires when a drawing is moved or when you call `AddDrawing`. To keep a
+saved copy current, save again when the user is done, for example when the
+window closes.
 
 ## Drawings from code
 
@@ -194,8 +203,8 @@ first point. The rest of the fields depend on the type:
 The other methods on the chart are `RemoveDrawing(id)`, `ClearDrawings()`,
 `Drawings()`, `SelectDrawing(id)`, `SelectedDrawing()` and `DrawingTool()`.
 
-Drawings are measured against the first Y axis. A text label always has a dark
-background, in both themes.
+Drawings are measured against the first Y axis. A text label sits on a chip in
+the theme's annotation background colour.
 
 ## Saving and restoring drawings
 
@@ -215,11 +224,10 @@ them:
 
 Things to know when you save drawings:
 
-- **Choose your own IDs.** The chart names the drawings the user makes
-  `drawing-1`, `drawing-2` and so on, counting from 1 for each chart, and does
-  not look at IDs already in use. A restored drawing called `drawing-1` would
-  share its ID with the next drawing the user makes, and `RemoveDrawing` would
-  then remove the wrong one.
+- **IDs can be kept.** The chart names the drawings the user makes
+  `drawing-1`, `drawing-2` and so on, and skips any ID a drawing on the chart
+  already has. A restored drawing keeps its saved ID without clashing with
+  the next one the user makes, so the example saves the IDs too.
 - **Copy before you keep.** `Drawings()` returns the chart's own list, and a
   drag moves a drawing by changing it in place.
 - **X is an index.** On a category axis, a saved X is a position in your data.

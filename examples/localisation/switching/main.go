@@ -25,15 +25,15 @@ func main() {
 	//docs:start bound
 	// A label whose text is re-translated on every language change.
 	welcome := widget.NewLabelWithData(
-		binding.NewLocalizedString("Welcome, {{.Name}}!", map[string]any{"Name": "Ada"}),
+		binding.NewLocalizedString("Welcome, {Name}!", map[string]any{"Name": "Ada"}),
 	)
 
 	// A plural that follows both the language and the count.
 	count := binding.NewInt()
 	_ = count.Set(1)
 	selected := widget.NewLabelWithData(
-		// With no template data, {{.Count}} is the live count.
-		binding.NewLocalizedPluralWithKey("files_selected", "{{.Count}} files selected", count),
+		// With no data values, {Count} is the live count.
+		binding.NewLocalizedPluralWithKey("files_selected", "{Count} files selected", count),
 	)
 	more := widget.NewButton("+1", func() {
 		n, _ := count.Get()
@@ -45,7 +45,7 @@ func main() {
 	// Surfaces without data binding: a button label and the window title.
 	save := widget.NewButton("", func() {})
 	lang.BindText("button.save", save.SetText)
-	lang.BindText("Welcome, {{.Name}}!", w.SetTitle, map[string]any{"Name": "Ada"})
+	lang.BindText("Welcome, {Name}!", w.SetTitle, map[string]any{"Name": "Ada"})
 	//docs:end bindtext
 
 	//docs:start switch

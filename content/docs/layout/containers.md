@@ -126,12 +126,56 @@ has a few more, used with `container.New`:
   where each child has a grow factor. Children with factor 0 keep their
   minimum size; the rest share the free space in proportion. The
   `MinWidth` and `MaxWidth` fields (or `MinHeight` and `MaxHeight`) clamp
-  individual children.
+  individual children. See [Flex boxes](#flex-boxes) below.
+- `NewAspectStackLayout(ratio)`: stacks its children, as a Stack does, in
+  the largest box of the given width to height ratio that fits, centred. A
+  ratio of 1 is a square. Use it for a video or a photo frame.
 - `NewShrinkLayout()`: reports a minimum size of zero and fills the space.
   Wrap content in it when a parent such as a split must be able to shrink
   below the content's natural minimum size.
 - `NewResponsiveLayout` and `NewRowWrapLayout`: see
   [Responsive layouts](../responsive/).
+
+### Flex boxes
+
+By default a flex row stretches every child to the row's height. Set
+`CrossAlign` to keep each child at its own minimum height instead, and place
+it at the top (`layout.CrossStart`), in the middle (`CrossCenter`) or at the
+bottom (`CrossEnd`). The default is `CrossStretch`. A flex column does the
+same across its width.
+
+Between children, a flex box puts the theme's padding, and a `Padding` of 0
+also means the theme's padding. Set `ExactPadding` to use `Padding` exactly
+as given, so 0 puts the children flush against each other.
+
+{{< example file="layout/extras/main.go" region="flex" >}}
+
+A fixed aspect ratio, with `NewAspectStackLayout`:
+
+{{< example file="layout/extras/main.go" region="aspect" >}}
+
+## Rounded clipping and translucency
+
+A container draws its children in full, even where they reach past its
+edges. Set `ClipToBounds` on a
+[`*bellui.Container`](https://pkg.go.dev/github.com/belluikit/bellui#Container)
+to cut them at its bounds. Add `ClipCornerRadius` to cut them to a rounded
+rectangle, as a card cuts its content. Without `ClipToBounds`,
+`ClipCornerRadius` does nothing.
+
+{{< example file="layout/extras/main.go" region="clip" >}}
+
+[`container.NewOpacity(content, opacity)`](https://pkg.go.dev/github.com/belluikit/bellui/container#Opacity)
+draws everything in its content translucent, from 0 (not drawn) to 1
+(unchanged). Nested `Opacity` containers multiply. Each object is faded on its
+own, so where two objects overlap, the lower one shows through. Change the
+value with `SetOpacity`. It redraws without refreshing the content, so you
+can animate it.
+
+{{< example file="layout/extras/main.go" region="opacity" >}}
+
+A widget of your own can be faded the same way by implementing
+[`core.OpacityGroup`](https://pkg.go.dev/github.com/belluikit/bellui/core#OpacityGroup).
 
 ## Changing a container's children
 
@@ -145,6 +189,29 @@ so the layout runs again:
 If you assign to `Objects` directly, call `Refresh()` afterwards.
 `Hide()` on a child removes it from the layout: the layouts above skip
 hidden children.
+
+### Swapping pages by hand
+
+`Window.SetContent` frees what the toolkit keeps for the content it
+replaces: widget renderers, records about the objects, and the textures they
+were drawn with. If you switch pages by changing a container's children
+instead, call
+[`bellui.Release(page)`](https://pkg.go.dev/github.com/belluikit/bellui#Release)
+with the page you dropped. The next frame then frees what was kept for it.
+Without the call, dropped content is freed only at a frame at least a
+minute after it was last drawn, and an idle app draws no frames.
+
+{{< example file="layout/extras/main.go" region="release" >}}
+
+Call `Release` on the UI thread, and only for content you will not show
+again. If you show it again later, its widgets get new renderers. A focused
+widget on a page you take out of the window loses the focus, with or
+without `Release`, so keys typed afterwards do not reach it.
+
+The program with the flex box, aspect, clipping, opacity and page-swap
+examples:
+
+{{< example "layout/extras/main.go" >}}
 
 ## The whole program
 

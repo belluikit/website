@@ -56,6 +56,27 @@ func main() {
 	add.Style = widget.IconButtonStyleFilled
 	//docs:end icon
 
+	//docs:start status
+	remove := widget.NewButtonWithIcon("Remove", theme.DeleteIcon(), say("Removed"))
+	remove.Style = widget.ButtonStyleText
+	remove.Importance = widget.DangerImportance
+
+	publish := widget.NewButton("Publish", say("Published"))
+	publish.Style = widget.ButtonStyleOutlined
+	publish.Importance = widget.SuccessImportance
+
+	trash := widget.NewIconButton(theme.DeleteIcon(), say("Trashed"))
+	trash.Importance = widget.DangerImportance
+	trash.SetAccessibilityLabel("Delete")
+	//docs:end status
+
+	//docs:start iconsize
+	play := widget.NewIconButton(theme.MediaPlayIcon(), say("Play"))
+	play.Style = widget.IconButtonStyleFilled
+	play.ButtonSize = widget.IconButtonSizeLarge
+	play.SetAccessibilityLabel("Play")
+	//docs:end iconsize
+
 	//docs:start group
 	group := widget.NewButtonGroup(
 		widget.NewButton("Cut", say("Cut")),
@@ -79,6 +100,7 @@ func main() {
 		container.NewHBox(filled, tonal, elevated, outlined, text),
 		container.NewHBox(del, next),
 		container.NewHBox(settings, add),
+		container.NewHBox(remove, publish, trash, play),
 		group,
 		period,
 		container.NewHBox(split),

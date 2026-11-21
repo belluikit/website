@@ -40,7 +40,7 @@ every language change:
   and
   [`NewLocalizedPluralWithKey`](https://pkg.go.dev/github.com/belluikit/bellui/data/binding#NewLocalizedPluralWithKey)
   take the count as an `Int` binding, so the text also changes with the
-  count. When you pass no template data, `{{.Count}}` in the message is the
+  count. When you pass no data values, `{Count}` in the message is the
   current count.
 
 A localized binding only listens for language changes while something is

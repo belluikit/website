@@ -3,8 +3,11 @@
 package main
 
 import (
+	"image/color"
+
 	"github.com/belluikit/bellui"
 	"github.com/belluikit/bellui/app"
+	"github.com/belluikit/bellui/canvas"
 	"github.com/belluikit/bellui/container"
 	"github.com/belluikit/bellui/theme"
 	"github.com/belluikit/bellui/widget"
@@ -42,9 +45,22 @@ func main() {
 	)
 	//docs:end lookup
 
+	//docs:start tint
+	// A fixed colour, whatever the theme: for an icon over artwork.
+	white := color.NRGBA{R: 0xff, G: 0xff, B: 0xff, A: 0xff}
+	onArtwork := widget.NewIcon(theme.NewColorizedResource(theme.FavoriteBorderIcon(), white))
+
+	// The same with the Icon widget's Color field. It stays tinted when
+	// its resource changes.
+	like := widget.NewIcon(theme.FavoriteBorderIcon())
+	like.Color = color.NRGBA{R: 0xd3, G: 0x2f, B: 0x2f, A: 0xff}
+	like.SetResource(theme.FavoriteIcon()) // still red
+	//docs:end tint
+
 	w.SetContent(container.NewVBox(
 		toolbar,
 		container.NewHBox(widget.NewIcon(star), widget.NewIcon(primaryStar), widget.NewIcon(errorStar)),
+		container.NewHBox(container.NewStack(canvas.NewRectangle(color.NRGBA{A: 0xff}), onArtwork), like),
 	))
 	bellui.ShowAndRun(w)
 }

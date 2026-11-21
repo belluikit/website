@@ -51,10 +51,10 @@ The main fields:
   between are blended. Without stops the scale runs from deep blue through
   yellow to deep red.
 
-The heatmap fills the whole plot area and draws no axes. `XLabels` and
-`YLabels` name the columns and rows in the tooltip only; they are not drawn
-next to the grid. Put the meaning of rows and columns in the title, as the
-example does, or in labels of your own around the chart.
+The heatmap fills the plot area and draws no axes. `XLabels` name the columns
+and are written under the grid; when they do not all fit, only every few are
+written. `YLabels` name the rows and are written to the left of it. Both also
+appear in the tooltip.
 
 ## Candlestick
 

@@ -20,6 +20,7 @@ and several specialised buttons for the MD3 patterns.
 | A main action with alternatives in a drop-down | `SplitButton` |
 | Several related actions joined into one shape | `ButtonGroup` |
 | Small actions, filters or tags among content | `Chip` |
+| A choice among options shown as chips | `ChipGroup` (see [Selection](../selection/#chipgroup)) |
 | A row of icon actions along the top of a window | `Toolbar` |
 
 ## Button
@@ -59,9 +60,20 @@ the colours instead:
 - `DangerImportance`, `WarningImportance` and `SuccessImportance` fill it with
   the theme's error, warning and success colours.
 
-A `Style` other than the default wins over `Importance`.
-
 {{< example file="widgets/buttons/main.go" region="importance" >}}
+
+With any other `Style`, `HighImportance` and `LowImportance` have no effect.
+The three status importances still apply, so a destructive action can have
+any emphasis:
+
+| Style | With `DangerImportance` | With `SuccessImportance` or `WarningImportance` |
+| --- | --- | --- |
+| `ButtonStyleFilled` | Filled with the error colour | Filled with the status colour |
+| `ButtonStyleFilledTonal` | Filled with the error container colour | Filled with the status colour |
+| `ButtonStyleElevated`, `ButtonStyleText` | Label and icon in the error colour | Label and icon in the status colour |
+| `ButtonStyleOutlined` | Label, icon and outline in the error colour | Label, icon and outline in the status colour |
+
+{{< example file="widgets/buttons/main.go" region="status" >}}
 
 `Alignment` moves the icon and text to the leading or trailing edge
 (`ButtonAlignLeading`, `ButtonAlignTrailing`), and `IconPlacement` puts the
@@ -79,6 +91,27 @@ shows only an icon. Its `Style` is `IconButtonStyleStandard` (no background),
 An icon button has no text, so screen readers have nothing to announce. Give
 it a name with `SetAccessibilityLabel`, and a hover hint with
 `SetToolTipText`.
+
+`Importance` colours an icon button with a status, as on `Button`. With
+`DangerImportance`, a standard or outlined icon button draws its icon (and
+outline) in the error colour, a filled one fills with the error colour and a
+tonal one with the error container colour. `SuccessImportance` and
+`WarningImportance` work the same way, with the status colour for both fills.
+The trash button in the example above uses it.
+
+`ButtonSize` picks one of the MD3 icon button sizes. The corners stay fully
+round at every size.
+
+| `ButtonSize` | Button | Icon |
+| --- | --- | --- |
+| `IconButtonSizeDefault` | the theme's icon button size | the theme's icon size |
+| `IconButtonSizeExtraSmall` | 32 dp | 20 dp |
+| `IconButtonSizeSmall` | 40 dp | 24 dp |
+| `IconButtonSizeMedium` | 56 dp | 24 dp |
+| `IconButtonSizeLarge` | 96 dp | 32 dp |
+| `IconButtonSizeExtraLarge` | 136 dp | 40 dp |
+
+{{< example file="widgets/buttons/main.go" region="iconsize" >}}
 
 ## Button groups, segmented and split buttons
 
@@ -129,8 +162,11 @@ small rounded label. Its `Style` decides what it is for:
 - `ChipStyleAssist` (from `NewChip`): an action, with an optional leading
   `Icon`.
 - `ChipStyleFilter` (from `NewFilterChip`): a toggle. Each tap flips
-  `Selected`, fills the chip with the secondary container colour while it is
-  selected, and calls your function with the new state.
+  `Selected` and calls your function with the new state. A selected filter
+  chip is filled with the secondary container colour and starts with a check
+  mark. The check takes the place of the chip's own icon. A chip without an
+  icon grows by the check's width while it is selected, so the chips after it
+  in a row move along.
 - `ChipStyleInput`: a tag the user can remove. Set `OnDeleted`; a tap on the
   trailing close mark calls it, and a tap anywhere else calls `OnTapped`.
 - `ChipStyleSuggestion`: an outlined label, drawn the same way as an assist
@@ -140,6 +176,9 @@ There is no constructor for input and suggestion chips, so build them as a
 struct literal.
 
 {{< example file="widgets/chips/main.go" region="chips" >}}
+
+For a set of filter chips where the user picks one or several options, use
+[`ChipGroup`](../selection/#chipgroup).
 
 ## Toolbar
 

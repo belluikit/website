@@ -1,6 +1,6 @@
 ---
 title: Pickers
-description: MD3 date, time and date-time pickers, inline or as dialogs, date entries that accept typed dates, the font picker and the theme selector.
+description: MD3 date, time and date-time pickers, inline or as dialogs, date entries that accept typed dates, the wheel picker, the font picker and the theme selector.
 weight: 4
 ---
 
@@ -16,6 +16,7 @@ font, without typing it in a particular format.
 | A form field where the user can type a date or open a calendar | `NewDateEntry` |
 | The same for a date and a time | `NewDateTimeEntry` |
 | A time on a clock dial, shown in place | `NewTimePicker` |
+| One item from a short list, on a wheel the user spins | `NewWheelPicker` |
 | A font family, size, weight and style | `NewFontPicker`, `NewFontPickerWithSystemFonts` |
 | A light, dark or system appearance setting with a colour | `NewThemeSelector` |
 
@@ -79,6 +80,31 @@ be part of a date are ignored, including in pasted text.
 - `SetDate` and `SetDateTime` write a value in the locale's format.
 - `DateTimeEntry.Use24Hour` is set from the locale and controls the time
   picker it opens.
+
+## Wheel picker
+
+[`WheelPicker`](https://pkg.go.dev/github.com/belluikit/bellui/widget#WheelPicker)
+is a short column of items the user spins through, like the picker wheels on
+iOS and Android. The item in the middle is the selection.
+
+{{< example file="widgets/wheel/main.go" region="wheel" >}}
+
+- A drag spins the wheel and a flick lets it coast. It always settles with one
+  item in the middle. A tap on another item spins that item to the middle.
+- `OnChanged` runs once for each change, when the wheel settles, not while it
+  spins. `SetSelected` changes the selection from code and fires
+  `OnChanged`; `SetSelectedSilently` does not.
+- Without `Wrap` the wheel stops at the first and last items. With `Wrap` the
+  items form a ring.
+- `Orientation` is `widget.Vertical` (the default) or `widget.Horizontal`.
+- `VisibleItems` is how many items show at once (5 by default; an even count
+  is rounded up). Items away from the middle are drawn smaller and fainter:
+  `ShrinkTo` and `FadeTo` set the scale (0.7 by default) and opacity (0.3 by
+  default) at the edge.
+
+The items are any canvas objects. Screen readers treat the wheel as an
+adjustable control: they read the selected item's label and step the
+selection by one. Name the wheel itself with `SetAccessibilityLabel`.
 
 ## Font picker
 

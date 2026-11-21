@@ -118,6 +118,19 @@ while the spring overshoots.
 The combined animation uses each child's curve and ignores the children's
 `RepeatCount` and `AutoReverse`. Set those on the combined animation instead.
 
+## Out of sight
+
+An animation keeps ticking while the object it changes is not drawn, for
+example on a tab that is not selected. When the work in `Tick` costs
+something, check
+[`bellui.IsOnScreen(obj)`](/docs/concepts/canvas-objects/#where-an-object-is-drawn)
+first and skip it while the object is out of sight. Bellui's own progress
+bars and activity indicators do this.
+
+To fade a group of objects in or out, animate the opacity of a
+[`container.Opacity`](/docs/layout/containers/#rounded-clipping-and-translucency)
+around them with `SetOpacity`.
+
 ## Respect the user's preference
 
 Built-in widgets skip their animations when the app's settings say not to

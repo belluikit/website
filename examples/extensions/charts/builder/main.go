@@ -29,7 +29,7 @@ func main() {
 			color.NRGBA{R: 255, G: 99, B: 132, A: 255},
 			color.NRGBA{R: 54, G: 162, B: 235, A: 255},
 		).
-		AddLine("Sales", 40, 65, 50, 80).Symbol(series.SymbolCircle).Smooth().Done().
+		AddLine("Sales", 40, 65, 50, 80).Symbol(series.SymbolCircle).Done().
 		AddLine("Cost", 30, 45, 35, 50).AreaFill(0.2).Done().
 		ReferenceLine(chart.AxisHorizontal, 60).Label("Average").Dashed().Done().
 		Animate().

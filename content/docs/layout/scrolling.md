@@ -47,12 +47,9 @@ how far the content is moved from its top-left corner.
 - `AddScrollListener(fn)` registers any number of extra listeners and
   returns a function that removes yours.
 
-{{< callout type="warning" >}}
-`ScrollToTop` and `ScrollToOffset` move the content without calling
-`OnScrolled` or the listeners. `ScrollToBottom` does call them. If you keep
-something in step with the offset, update it yourself after `ScrollToTop`, as
-the example does.
-{{< /callout >}}
+A move made from code is reported like a user scroll: `ScrollToTop`,
+`ScrollToBottom` and `ScrollToOffset` call `OnScrolled` and the listeners
+once when the offset changes, and not at all when it stays the same.
 
 Two fields change how the container looks:
 
@@ -65,6 +62,19 @@ Two fields change how the container looks:
 The `Direction` field holds which way the container scrolls:
 `container.ScrollBoth`, `ScrollHorizontalOnly`, `ScrollVerticalOnly` or
 `ScrollNone`. The three constructors set it for you.
+
+## On touch screens
+
+On Android and iOS, the user scrolls by dragging a finger. When the finger
+lifts while it is still moving, the content keeps moving and slows down, and
+the next touch stops it. Drags on desktop never keep moving after release. Only content that scrolls does this: a slider thumb
+or a split divider stops where the finger lifted. A custom widget that pans
+content can ask for the same with
+[`event.MomentumDraggable`](/docs/concepts/input-events/#drags-on-touch-screens).
+
+A scroll inside another scroll, such as a sideways row of cards in a page
+that scrolls down, takes only the drags that go its way. A drag the inner
+scroll cannot use moves the page around it.
 
 ## Long lists
 

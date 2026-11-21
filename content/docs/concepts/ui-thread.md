@@ -54,6 +54,14 @@ one. If a
 function can be reached both from callbacks and from background goroutines,
 use `RunOnMain`. It is safe from either.
 
+Each `DoAndWait` call waits for the main loop to wake up and run your
+function. On macOS 26 and later, the system delivers that wake-up late, on a
+grid of about 7 ms, so calls made one after another from the same goroutine
+run at about 145 a second. On macOS 15 a wake-up takes under half a
+millisecond. When you have many changes to make, put them in one call
+instead of making many calls in a row. `Do` does not wait, but there too the
+function can run a few milliseconds after the call.
+
 ## What is already safe
 
 Some widget setters move their work to the main goroutine for you, using

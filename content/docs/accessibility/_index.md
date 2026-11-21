@@ -57,7 +57,8 @@ Most standard widgets describe themselves: buttons, checks, radio groups,
 switches, entries, selects, sliders, progress bars, lists, tables, trees,
 tabs, menus, navigation bars and rails, date and time pickers, toasts,
 dialogs and more. A widget that can be disabled is reported as disabled
-automatically.
+automatically. A chip is reported as a button, and a selected filter chip as
+selected.
 
 Elements are listed in the order they appear in the widget tree, which is
 the order a screen reader reads them. Under a right-to-left layout the order

@@ -49,13 +49,28 @@ with an icon and a function.
 
 [`NavigationDrawer`](https://pkg.go.dev/github.com/belluikit/bellui/widget#NavigationDrawer)
 is a side panel that you open over the content with `Show(canvas)` or
-`Toggle(canvas)`, and close with `Hide()`. It is modal by default: the rest
-of the window is dimmed while it is open, and a tap outside the drawer closes
-it. Tapping a destination calls `OnChanged` and closes the drawer.
+`Toggle(canvas)`, and close with `Hide()`. `IsOpen()` tells you whether it
+is open. It is modal by default: the rest of the window is dimmed while it is
+open, and a tap outside the drawer closes it. Tapping a destination calls
+`OnChanged` and closes the drawer. When animations are on, the drawer slides
+in from its edge and back out to it.
 
 - An item with `IsDivider: true` draws a separator line. Dividers count as
   items, so indexes passed to `OnChanged` include them.
 - `Header` adds content, such as an account name, above the items.
+
+{{< example file="widgets/navigation/main.go" region="drawer" >}}
+
+- `Side` is the edge the drawer opens against. `DrawerSideStart`, the default,
+  is the left in a left-to-right layout and the right in a right-to-left one.
+  `DrawerSideEnd` is the other edge.
+- `Top` is the canvas y where the drawer and its dimmed background begin.
+  Zero, the default, covers the whole height. Set it to open the drawer below
+  a header: taps above `Top` reach the widgets there, such as the header's
+  buttons, and leave the drawer open.
+- `OnOpenChanged` runs each time the drawer opens or closes, whatever caused
+  it: your code, a destination, a tap outside, or Escape. It runs on a change
+  only, so showing an open drawer again does not call it.
 
 ## Bottom app bar
 

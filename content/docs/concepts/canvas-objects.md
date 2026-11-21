@@ -57,6 +57,17 @@ new size:
 
 {{< example file="concepts/canvas/main.go" region="raster" >}}
 
+A raster can also show pixels you push to it, such as video frames.
+`SetPixels(pix, width, height)` takes premultiplied RGBA bytes, four per
+pixel. `SetYCbCr(img, matrix, fullRange)` takes a frame as a video decoder
+produces it: an `image.YCbCr` with its colour matrix (`canvas.YCbCrBT601`,
+`YCbCrBT709` or `YCbCrBT2020`) and whether it uses the full byte range or
+the limited range most video uses. The default WebGPU renderer converts it to
+RGB on the GPU; the OpenGL and software renderers convert it on the
+processor. The raster keeps the image you pass, so do not write to it until
+a later call has replaced it. `SetYCbCr` is marked experimental: its shape
+may change, and `SetPixels` is the stable alternative.
+
 An image picks how to fill its space with `FillMode`:
 `ImageFillStretch` (the default, ignores the aspect ratio),
 `ImageFillContain` (fits inside, keeps the aspect ratio), `ImageFillCover`
@@ -65,8 +76,19 @@ pixel size as its minimum size).
 
 {{< example file="concepts/canvas/main.go" region="image" >}}
 
+When an image decodes a PNG or JPEG file that carries a colour profile, such
+as a Display P3 photo from a phone or an Adobe RGB export, it converts the
+pixels to sRGB, so the colours look as the file intends. Images without a
+profile are drawn as they are. A profile Bellui cannot convert, such as CMYK,
+greyscale, Lab or a lookup-table profile, is ignored: the image is drawn as
+sRGB and the problem is logged once.
+
 The package has more objects than the table shows, including arcs, polygons,
-paths and box shadows. See the
+paths, box shadows and the `Ripple` that draws a press effect. A `Ripple` is
+clipped to a rounded rectangle: `CornerRadius` rounds every corner, and
+`TopLeftCornerRadius`, `TopRightCornerRadius`, `BottomRightCornerRadius` and
+`BottomLeftCornerRadius` override it for one corner each, as on a
+`Rectangle`. See the
 [package reference](https://pkg.go.dev/github.com/belluikit/bellui/canvas).
 
 ### Minimum size of a primitive
@@ -91,6 +113,39 @@ The fields of a primitive are plain struct fields. After you change one, call
 `Refresh()` on the object so it is drawn again. Do both on the
 [UI thread](../ui-thread/); the clock example on that page changes a
 `canvas.Text` this way.
+
+## Where an object is drawn
+
+`Position()` is relative to the parent. Two functions convert between a point
+in an object's own coordinates and a point in the window:
+
+- [`bellui.AbsolutePositionForPoint(obj, pos)`](https://pkg.go.dev/github.com/belluikit/bellui#AbsolutePositionForPoint)
+  returns where `pos`, measured from `obj`'s top-left corner, is drawn in the
+  window.
+- [`bellui.PositionForAbsolutePoint(obj, abs)`](https://pkg.go.dev/github.com/belluikit/bellui#PositionForAbsolutePoint)
+  does the reverse.
+
+Both follow any move, rotation or scale applied to the object or its parents
+when it is drawn, so they give the place the user sees. Use them to anchor a
+pop-up to a widget:
+
+{{< example file="concepts/positions/main.go" region="anchor" >}}
+
+[`bellui.IsOnScreen(obj)`](https://pkg.go.dev/github.com/belluikit/bellui#IsOnScreen)
+reports whether an object is drawn. It is false on a tab that is not
+selected, under a hidden container, in a window that is not shown, and before
+the first frame that draws the object. It changes as soon as an ancestor is
+hidden or shown, without waiting for a frame. An object scrolled out of view
+still counts as on screen. Use it to skip work that runs on its own clock,
+such as a timer that updates a label:
+
+{{< example file="concepts/positions/main.go" region="onscreen" >}}
+
+Call these three functions on the [UI thread](../ui-thread/). Refreshing an
+object that is not on screen draws no frame, so `IsOnScreen` is for the work
+you do before the refresh.
+
+{{< example "concepts/positions/main.go" >}}
 
 ## Widgets are canvas objects
 

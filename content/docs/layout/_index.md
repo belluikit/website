@@ -39,7 +39,7 @@ child's height); others stretch them to fill (a Stack, a grid cell). Knowing
 which one does what is most of the work of laying out a screen.
 
 {{< cards >}}
-  {{< card link="containers/" title="Containers and layouts" subtitle="VBox, HBox, Border, Grid, GridWrap, Center, Stack, Padded and Form." >}}
+  {{< card link="containers/" title="Containers and layouts" subtitle="VBox, HBox, Border, Grid, GridWrap, Center, Stack, Padded, Form, flex boxes, clipping and opacity." >}}
   {{< card link="scrolling/" title="Scrolling" subtitle="Show content larger than the space it has." >}}
   {{< card link="split/" title="Split containers" subtitle="Panes the user resizes by dragging a divider." >}}
   {{< card link="tabs/" title="Tabs" subtitle="App tabs for navigation, document tabs the user opens and closes." >}}

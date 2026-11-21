@@ -1,4 +1,4 @@
-// Chips: assist, filter and input chips.
+// Chips: assist, filter and input chips, and a group of chips to pick from.
 package main
 
 import (
@@ -36,9 +36,23 @@ func main() {
 	tags.Add(tag)
 	//docs:end chips
 
+	//docs:start group
+	sizes := widget.NewChipGroup([]string{"Small", "Medium", "Large"}, false, func(picked []string) {
+		status.SetText(fmt.Sprint("Size: ", picked))
+	})
+	sizes.Required = true
+	sizes.Selected = []string{"Medium"}
+
+	toppings := widget.NewChipGroup([]string{"Cheese", "Olives", "Peppers", "Onions"}, true, func(picked []string) {
+		status.SetText(fmt.Sprint("Toppings: ", picked))
+	})
+	//docs:end group
+
 	w.SetContent(container.NewVBox(
 		container.NewHBox(directions, running),
 		tags,
+		sizes,
+		toppings,
 		status,
 	))
 	bellui.ShowAndRun(w)

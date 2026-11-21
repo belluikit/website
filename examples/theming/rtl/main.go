@@ -42,6 +42,20 @@ func main() {
 	)
 	//docs:end scope
 
-	w.SetContent(container.NewVBox(direction, row, widget.NewEntry(), code))
+	//docs:start directionof
+	// An event handler runs outside layout, so it asks for the direction
+	// of the object it is about. The answer takes the scope into account.
+	report := widget.NewLabel("")
+	var probe *widget.Button
+	probe = widget.NewButton("Which way?", func() {
+		if container.DirectionOf(probe) == bellui.DirectionRTL {
+			report.SetText("Right to left")
+		} else {
+			report.SetText("Left to right")
+		}
+	})
+	//docs:end directionof
+
+	w.SetContent(container.NewVBox(direction, row, widget.NewEntry(), code, container.NewHBox(probe, report)))
 	bellui.ShowAndRun(w)
 }

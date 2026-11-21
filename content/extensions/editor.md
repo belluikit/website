@@ -32,9 +32,9 @@ go get github.com/belluikit/bellui/x/editor@latest
 - `SetText` replaces the whole document. It clears the undo history and does
   not call `OnChanged`, which reports only the user's edits. To change the text
   the way a user edit would, with undo, use `ApplyEdit` or `ApplyEdits`.
-- `OnSave` and `OnRun` are called for Cmd+S and Cmd+R on macOS. On other
-  systems these, and the find shortcuts below, use the Super (Windows) key in
-  place of Cmd.
+- `OnSave` and `OnRun` are called for Cmd+S and Cmd+R on macOS, and Ctrl+S
+  and Ctrl+R on Linux and Windows. The find shortcuts below use Ctrl in place
+  of Cmd on those systems too.
 
 Keyboard shortcuts only reach the editor while it has focus: the user clicks
 into it, or you call `Focus()` once the window is showing.
@@ -47,7 +47,8 @@ layout. The editor logs a warning if it finds itself inside a scrolling
 container.
 {{< /callout >}}
 
-`SetReadOnly(true)` stops editing but keeps the syntax colours.
+`SetReadOnly(true)` stops editing but keeps the syntax colours. The user can
+still select and copy text.
 `MinRows` sets the minimum height in rows, and `AutoGrow` makes the editor grow
 with its content, between `MinAutoGrowRows` and `MaxAutoGrowRows`.
 
@@ -129,7 +130,7 @@ UI thread.
 
 ## Find
 
-Cmd+F opens a find bar above the text (the Super key on Linux and Windows).
+Cmd+F opens a find bar above the text (Ctrl+F on Linux and Windows).
 Typing highlights every match; Enter or Cmd+G moves to the next and
 Shift+Cmd+G to the previous; Escape closes it. A switch makes the search case
 sensitive. `ShowFind`, `FindNext`, `FindPrev` and `HideFind` do the same from
@@ -192,6 +193,22 @@ The gutter and the decorations are drawn only for the visible lines, so long
 files stay responsive. For documents of several megabytes, set `DeferTextSync`: the editor
 then reports the text to `OnChanged` at natural pauses (a new line, a deletion,
 moving to another line, losing focus) instead of on every keystroke.
+
+## Disabling the editor
+
+`Editor` has `Disable`, `Enable` and `Disabled`, like other widgets. A
+disabled editor keeps its place and draws its text in the disabled colour,
+without syntax colours. The editor's own gutter columns and decorations are
+dimmed too, but a redaction bar stays opaque. A gutter provider, row
+decorator or span decorator you wrote yourself draws as you draw it. The
+editor takes no key, tap, drag, scroll or focus.
+Its text can be neither selected nor copied, which is stricter than a
+disabled `Entry`. Open completion, hover and signature pop-ups close, and
+none opens while it is disabled. A find bar on show stays, disabled with it.
+You can call `Disable` before the editor is shown.
+
+Read-only is a separate setting. `Enable` returns the editor to whichever
+read-only state you set, even one set while it was disabled.
 
 ## Licence
 

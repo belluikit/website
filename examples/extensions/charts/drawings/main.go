@@ -58,17 +58,18 @@ func extreme(data []series.CandlestickData, from, to int, highest bool) interact
 //docs:start save
 // saved is one drawing in a form that encoding/json can write and read.
 type saved struct {
+	ID     interact.DrawingID
 	Tool   interact.DrawingToolMode
 	Points []interact.DataPoint
-	Label  string      `json:",omitempty"`
-	Text   string      `json:",omitempty"` // text labels only
+	Label  string       `json:",omitempty"`
+	Text   string       `json:",omitempty"` // text labels only
 	Color  *color.NRGBA `json:",omitempty"`
 }
 
 func save(drawings []interact.Drawing) ([]byte, error) {
 	out := make([]saved, 0, len(drawings))
 	for _, d := range drawings {
-		s := saved{Tool: d.Type(), Points: d.DataPoints(), Label: d.DrawingLabel()}
+		s := saved{ID: d.ID(), Tool: d.Type(), Points: d.DataPoints(), Label: d.DrawingLabel()}
 		if t, ok := d.(*interact.TextLabelDrawing); ok {
 			s.Text = t.Text
 		}
@@ -90,10 +91,10 @@ func restore(data []byte) ([]interact.Drawing, error) {
 		return nil, err
 	}
 	var out []interact.Drawing
-	for i, s := range in {
-		// Use IDs of your own: the chart numbers the drawings the user makes
-		// "drawing-1", "drawing-2"... and does not skip IDs already in use.
-		base := interact.DrawingBase{ID_: interact.DrawingID(fmt.Sprintf("saved-%d", i+1)), Label_: s.Label}
+	for _, s := range in {
+		// The saved ID is kept. A drawing the user makes later gets an ID
+		// that no drawing on the chart has yet.
+		base := interact.DrawingBase{ID_: s.ID, Label_: s.Label}
 		if s.Color != nil {
 			base.Color_ = *s.Color
 		}

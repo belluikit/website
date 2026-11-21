@@ -31,23 +31,17 @@ the version of the Bellui library your app uses.
 
 | Command | What it does |
 | --- | --- |
-| `bellui init [module]` | Starts a new project in the current folder: `go.mod`, `main.go`, `manifest.pxf` and `translations/en.json`. |
-| `bellui build` | Builds the executable. In this release it does not compile your app's metadata in; see [App metadata](metadata/). |
+| `bellui init [module]` | Starts a new project in the current folder: `go.mod`, `main.go`, `manifest.pxf` and `translations/en.pxf`. |
+| `bellui build` | Builds the executable, with your app's [metadata](metadata/) compiled in. |
 | `bellui package` | Builds and wraps the app in the package format of the target platform. |
 | `bellui install` | Packages the app and installs it on this computer, or on a connected phone. |
 | `bellui release` | Packages and signs the app for an app store or other public distribution. |
 | `bellui serve` | Builds the web version and serves it on `http://localhost:8080`. |
 | `bellui bundle` | Turns files into Go resources compiled into your app. |
-| `bellui translate` | Collects the strings your code translates into a translation file. |
+| `bellui translate` | Collects the strings your code translates into a PXF translation file. See [Translations](/docs/localisation/translations/). |
 | `bellui env` | Prints the Go, OS and Bellui versions, for bug reports. |
 
 Run `bellui help <command>` for every flag of a command.
-
-{{< callout type="warning" >}}
-In this release the `main.go` that `bellui init` writes ends with
-`w.ShowAndRun()`, which does not compile. Change that line to
-`bellui.ShowAndRun(w)`.
-{{< /callout >}}
 
 {{< cards >}}
   {{< card link="metadata/" title="App metadata" subtitle="The manifest.pxf file: ID, name, version, icon and more." >}}

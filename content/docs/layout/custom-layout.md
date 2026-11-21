@@ -21,7 +21,10 @@ positions are relative to the container's top-left corner.
 
 This layout makes its children as large as possible at a fixed width to
 height ratio, and centres them. It is the shape of a video player or a photo
-frame.
+frame. Bellui has one built in,
+[`layout.NewAspectStackLayout`](https://pkg.go.dev/github.com/belluikit/bellui/layout#NewAspectStackLayout),
+so in an app you would use that. Writing it yourself shows how a layout
+works.
 
 {{< example file="layout/customlayout/main.go" region="layout" >}}
 

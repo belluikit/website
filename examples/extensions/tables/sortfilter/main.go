@@ -33,7 +33,14 @@ func main() {
 		[]*tables.ColumnDef{
 			{Field: "symbol", HeaderName: "Symbol", Width: 100},
 			{Field: "sector", HeaderName: "Sector", Width: 140},
-			{Field: "price", HeaderName: "Price", Type: tables.ColumnNumber, Width: 100},
+			//docs:start order
+			{
+				Field: "price", HeaderName: "Price", Type: tables.ColumnNumber, Width: 100,
+				// Highest first on the first tap, then lowest first. No tap
+				// returns the column to unsorted, since SortNone is left out.
+				SortingOrder: []tables.SortDirection{tables.SortDescending, tables.SortAscending},
+			},
+			//docs:end order
 		},
 		func() int { return len(rows) },
 		func(row int) any { return rows[row] },

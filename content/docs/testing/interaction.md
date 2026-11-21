@@ -53,6 +53,29 @@ when it taps a position on the canvas rather than a widget.
 All of these are in the [`test`](https://pkg.go.dev/github.com/belluikit/bellui/test)
 package. The canvas `c` is usually `w.Canvas()` of your test window.
 
+## Testing an idle timer
+
+[`bellui.LastUserActivity`](https://pkg.go.dev/github.com/belluikit/bellui#LastUserActivity)
+returns when the user last tapped, dragged, scrolled or typed, for timers that
+act after a while untouched. The helpers in the table above that simulate
+input move it forward, as the real drivers do, whether or not a widget is
+there to receive the input. `MoveMouse` does not, since moving the mouse with
+no button held is not counted on a real device either. Nor does calling a
+widget's method or callback directly. `test.NewApp`, and so `NewTempApp`,
+starts it back at the zero time, so one test's input does not leak into the
+next.
+
+Write the idle rule so that it takes the current time, and the test does not
+have to wait:
+
+{{< example file="testing/idle/main.go" region="idle" >}}
+
+{{< example file="testing/idle/idle_test.go" region="test" >}}
+
+The whole app, which goes back to its home screen after two minutes:
+
+{{< example "testing/idle/main.go" >}}
+
 ## Assertion helpers
 
 The package has a few assertions for common checks. They report a failure
@@ -75,9 +98,31 @@ you need to.
 ## Themes in tests
 
 The test app starts with a test theme whose colours are deliberately plain.
+[`test.Theme`](https://pkg.go.dev/github.com/belluikit/bellui/test#Theme) and
+[`test.NewTheme`](https://pkg.go.dev/github.com/belluikit/bellui/test#NewTheme)
+define every size the theme has, so widgets lay out as they would with a
+real theme. For example, tab containers leave a content margin of 12 under
+`test.Theme` and 18 under `test.NewTheme`.
 To check how your UI looks with another theme,
 [`test.ApplyTheme(t, th)`](https://pkg.go.dev/github.com/belluikit/bellui/test#ApplyTheme)
 switches the theme and switches it back when the test ends.
+
+## Releasing renderers in benchmarks
+
+A widget's renderer is cached the first time it is needed, and outside a
+running app nothing releases it. A benchmark or test that builds widgets in a
+loop therefore keeps every one of them in memory.
+[`test.DestroyRenderers(tb, obj)`](https://pkg.go.dev/github.com/belluikit/bellui/test#DestroyRenderers)
+destroys the cached renderers of `obj` and everything under it, the way
+closing a window does:
+
+{{< example file="testing/idle/idle_test.go" region="bench" >}}
+
+It runs when you call it, not when the test ends. To release a tree at the
+end of a test, call it from `t.Cleanup`. It does not reach pop-ups and
+overlays, which are not under `obj`, nor the unused items a list or other
+collection keeps for reuse. A widget used again afterwards gets a new
+renderer.
 
 ## The complete test
 

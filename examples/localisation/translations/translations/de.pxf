@@ -1,0 +1,12 @@
+messages = {
+  "Welcome, {Name}!": "Willkommen, {Name}!"
+  files_selected: {
+    one = "{Count} Datei ausgewählt"
+    other = "{Count} Dateien ausgewählt"
+  }
+  "{Name} sent {Count} files": "{Name} hat {Count} Dateien gesendet"
+  "button.save": "Speichern"
+  "profile_updated.female": "{Name} hat ihr Profil aktualisiert"
+  "profile_updated.male": "{Name} hat sein Profil aktualisiert"
+  "profile_updated.other": "{Name} hat das Profil aktualisiert"
+}

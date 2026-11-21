@@ -52,8 +52,9 @@ nothing is stored between runs.
 - **It does not change other apps.** The choice applies to your app and is
   saved in your app's preferences. Bellui's system-wide settings, shared by
   all Bellui apps, are not touched.
-- **System is resolved when it is applied.** `Apply` with
-  `ThemeVariantSystem` reads the system appearance at that moment.
+- **System follows the system live.** `Apply` with `ThemeVariantSystem`
+  withdraws any Light or Dark choice, so the app follows later changes to the
+  system appearance. Light and Dark stay as chosen whatever the system does.
 - **No custom colours.** The swatches are the eight named primary colours.
   For any other colour, build a [custom theme](../custom/#generate-colours-from-a-seed-colour).
 

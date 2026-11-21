@@ -44,7 +44,24 @@ func main() {
 	}
 	//docs:end apptabs
 
-	w.SetContent(tabs)
+	//docs:start options
+	// Let the user drag along the titles to move the selection.
+	tabs.DragToSelect = true
+
+	hide := widget.NewCheck("Hide tab bar", func(on bool) {
+		tabs.HideTabBar = on
+		tabs.Refresh()
+	})
+	lock := widget.NewCheck("Lock", func(on bool) {
+		if on {
+			tabs.Disable() // also disables the widgets inside every tab
+		} else {
+			tabs.Enable()
+		}
+	})
+	//docs:end options
+
+	w.SetContent(container.NewBorder(container.NewHBox(hide, lock), nil, nil, nil, tabs))
 	w.Resize(geo.NewSize(640, 420))
 	bellui.ShowAndRun(w)
 }

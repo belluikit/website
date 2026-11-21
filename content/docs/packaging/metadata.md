@@ -51,19 +51,14 @@ When you start the app with `go run` from the folder that holds the manifest,
 Bellui reads `manifest.pxf` at start-up and fills in the metadata, using the
 `development` settings. `app.New` then takes the app ID from it.
 
-{{< callout type="warning" >}}
-In this release, `bellui build` and `bellui package` use the manifest to build
-the package (its name, ID, version and icon) but do not compile the metadata
-into the executable: a version check in the command predates Bellui 1.0 and
-skips that step. A packaged app started outside its source folder therefore
-has empty metadata, and `app.New` has no ID. Until this is fixed, create your
-app with `app.NewWithID` and do not rely on `Metadata()` or the `release`
-settings in packaged builds.
-{{< /callout >}}
+`bellui build`, `bellui package` and `bellui release` compile the metadata
+into the executable, so a packaged app has it wherever it runs. The app must
+require the Bellui module in its `go.mod`. If it does not, the command logs
+"Failed to inject metadata init file, omitting metadata" and builds without
+it.
 
-The `--metadata key=value` flag of `bellui build`, `package` and `release` is
-meant to add a custom value for one build without writing it in the manifest;
-it is affected by the same limitation.
+The `--metadata key=value` flag of `bellui build`, `package` and `release` adds
+a custom value for one build without writing it in the manifest.
 
 ## The build number
 

@@ -1,19 +1,21 @@
 ---
 title: Sign-in with OIDC and OAuth
-description: Let users sign in to a desktop app with Google, Microsoft, Apple, GitHub, Okta, Keycloak or any OpenID Connect provider.
+description: Let users sign in with Google, Microsoft, Apple, GitHub, Okta, Keycloak or any OpenID Connect provider, on desktop and on phones.
 weight: 1
 ---
 
 The [`auth`](https://pkg.go.dev/github.com/belluikit/bellui/auth) package signs
-a user in through their identity provider, using the browser they already use.
-It returns the user's name, email and tokens. The
+a user in through their identity provider. On a desktop it uses the browser
+they already use. On iOS and Android it uses the platform's own sign-in for
+Apple and Google (see [On phones](#on-phones)). It returns the user's name,
+email and tokens. The
 [`widget.AuthButton`](https://pkg.go.dev/github.com/belluikit/bellui/widget#AuthButton)
 wraps the whole flow in a branded button.
 
 The flow is OAuth 2.0 Authorization Code with PKCE (a one-time secret that
 proves the app that started the sign-in is the one finishing it). It is the
-flow intended for desktop apps. The package is written for desktop: it opens
-the system browser and listens on a local port.
+flow intended for desktop apps. On a desktop the package opens the system
+browser and listens on a local port.
 
 ## Add a sign-in button
 
@@ -32,7 +34,8 @@ button:
    It can update widgets directly.
 
 If the sign-in fails, `OnError` runs instead, also on the UI thread. A tap
-while a sign-in is already in progress is ignored.
+while a sign-in is already in progress is ignored. A disabled button does not
+stop a sign-in that is already running.
 
 The button draws the provider's logo and brand colors. Set `Text` or `Logo`
 to override them. `Scopes` is a space-separated list, for example
@@ -109,7 +112,65 @@ times out, so run it in a goroutine and come back to the UI thread with
 {{< example file="advanced/auth/main.go" region="direct" >}}
 
 [`auth.OIDCConfig`](https://pkg.go.dev/github.com/belluikit/bellui/auth#OIDCConfig)
-also has `Scopes` (a slice) and `Timeout` (five minutes when zero).
+also has `Scopes` (a slice) and `Timeout` (five minutes when zero). `Nonce`
+sets the nonce sent with the request, which the ID token must carry. Set it
+when your server issued the nonce and checks the token against it, so a
+captured token cannot be used for another request. Left empty, the package
+makes a random one and checks it itself.
+
+## On phones
+
+On iOS and Android there is no loopback redirect the providers accept, so
+`Authenticate` and the button use the platform's own sign-in instead:
+
+| Provider | Platform | What it shows | `ClientID` |
+| --- | --- | --- | --- |
+| `apple` | iOS | the Sign in with Apple sheet | optional: without one, the token's audience must be the app's bundle ID |
+| `google` | Android | Credential Manager | your Web client ID |
+| `google` | iOS | Google's sign-in page in an `ASWebAuthenticationSession` | your iOS client ID |
+
+Every other provider returns an error on phones. The ID token is checked as
+on a desktop: its signature against the provider's published keys, then its
+issuer, audience, expiry and nonce.
+
+{{< example file="advanced/auth/main.go" region="phone" >}}
+
+When the user closes the sheet without signing in, `Authenticate` returns
+[`auth.ErrCancelled`](https://pkg.go.dev/github.com/belluikit/bellui/auth#ErrCancelled).
+Test for it with `errors.Is`. A button passes it to `OnError`. The desktop
+flow cannot see the browser tab close, so it never returns `ErrCancelled`.
+
+Each flow needs something from the app:
+
+- **Sign in with Apple** needs the `com.apple.developer.applesignin`
+  entitlement. Put it in `ios/Entitlements.plist` next to your code; `bellui
+  package` adds it when it signs the app (see [Mobile](/docs/platforms/mobile/)):
+
+  ```xml
+  <?xml version="1.0" encoding="UTF-8"?>
+  <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+  <plist version="1.0">
+  <dict>
+  	<key>com.apple.developer.applesignin</key>
+  	<array>
+  		<string>Default</string>
+  	</array>
+  </dict>
+  </plist>
+  ```
+
+  The sheet gives no access or refresh token. Instead,
+  `OIDCResult.AuthorizationCode` holds a one-time code that your server
+  redeems with Apple for the user's refresh token. Apple gives the user's
+  name only on the first sign-in.
+- **Google on Android** needs the Credential Manager libraries in
+  `android/libs`: `androidx.credentials:credentials`,
+  `androidx.credentials:credentials-play-services-auth` and
+  `com.google.android.libraries.identity.googleid:googleid`, with all their
+  dependencies. `bellui package` does not download them; see
+  [Mobile](/docs/platforms/mobile/#android-libraries).
+- **Google on iOS** redirects to the reversed client ID, the
+  `com.googleusercontent.apps.<id>` scheme of your iOS client ID.
 
 ## Remembering the user
 
@@ -166,6 +227,8 @@ How the token is stored:
   Service (through the `secret-tool` command) on Linux.
 - With no secret store available, for example on a headless Linux machine,
   the secret is a random file in the same folder, readable only by the user.
+- A new token is written beside the old one and then renamed over it, so an
+  app killed in the middle of a save keeps the token it had.
 - Token files do not work on another machine. A file that cannot be decrypted
   is deleted, and the user simply signs in again.
 - Versions before v1.1.0 kept one token per provider for all apps, directly in

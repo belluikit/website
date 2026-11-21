@@ -20,7 +20,32 @@ bellui serve
 This builds the web version, writes it to a `wasm` folder, and serves that
 folder at `http://localhost:8080`. Open the address in a browser that supports
 WebGPU. `--http-port` picks another port, and `--debug` builds a debug version;
-by default `serve` builds in release mode.
+by default `serve` builds in release mode. `serve` stops on Ctrl-C or when it
+is sent SIGTERM.
+
+### Opening the app on a phone
+
+Browsers offer WebGPU only to a secure page: one served over https, or from
+`localhost`. A phone that opens `http://<your computer's address>:8080`
+gets neither, so the page says "WebGPU needs a secure page: open this app over
+https, or at localhost on this computer." Two flags give the phone a secure
+page:
+
+```sh
+bellui serve --https     # a self-signed certificate, on your network
+bellui serve --tunnel    # a public https address through Cloudflare
+```
+
+- **`--https`** serves over https with a self-signed certificate made for this
+  computer's addresses. `serve` prints each network address to open and the
+  certificate's SHA-256 fingerprint. The browser warns about the certificate
+  once per run before it opens the page. Compare the fingerprint before you
+  accept it.
+- **`--tunnel`** also opens a Cloudflare quick tunnel and prints its public
+  `trycloudflare.com` address. Browsers trust that address's certificate, so
+  there is no warning. It needs Cloudflare's `cloudflared` command on your
+  `PATH`, and no Cloudflare account. Anyone who has the address can open the
+  app while `serve` runs. The tunnel closes when `serve` stops.
 
 ## Packaging for a web server
 
@@ -82,8 +107,11 @@ The `index.html` that `bellui package -os web` writes does this already.
 
 WebGPU is only available to pages in a **secure context**. `bellui serve` on
 `localhost` counts as secure; a page served over plain HTTP from another
-address does not, and WebGPU is not available to it. Serve production builds
-over HTTPS, or use the WebGL build if you cannot.
+address does not, and WebGPU is not available to it. The page that `bellui`
+writes then says that a secure page is needed, rather than that the browser
+lacks WebGPU. Serve production builds over HTTPS, or use the WebGL build if
+you cannot. To try a build on another device, see
+[Opening the app on a phone](#opening-the-app-on-a-phone).
 
 There is no automatic fallback at run time: the renderer is chosen when you
 build. To reach browsers without WebGPU, publish the WebGL build.
