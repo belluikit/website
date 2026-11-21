@@ -57,7 +57,7 @@
 		// The gallery build is too large for Cloudflare Pages (25 MiB per file), so it
 		// is served from the R2 bucket behind assets.bellui.com. Versioned path: a new
 		// build gets a new path, so the file can be cached forever.
-		const GALLERY_WASM = "https://assets.bellui.com/gallery/9adb911/gallery.wasm";
+		const GALLERY_WASM = "https://assets.bellui.com/gallery/04af679/gallery.wasm";
 
 			function async_load(file, cb) {
 				var d = document, t = 'script',
@@ -101,6 +101,11 @@
 				webgpu_support().then(function(ok) {
 					if (ok) {
 						start_application();
+					} else if (window.isSecureContext === false) {
+						// Browsers offer WebGPU only to a secure page (https, or
+						// localhost), so over plain http another browser cannot
+						// help (bellui #1358).
+						report_error("WebGPU needs a secure page: open this app over https, or at localhost on this computer.");
 					} else {
 						report_error("This browser does not support WebGPU, which this demo needs. Try a recent version of Chrome, Edge or Safari.");
 					}
