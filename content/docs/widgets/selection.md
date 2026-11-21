@@ -1,6 +1,6 @@
 ---
 title: Selection controls
-description: Check boxes, radio groups, drop-downs, switches, sliders and spin boxes for choosing among options or values.
+description: Check boxes, radio groups, chip groups, drop-downs, switches, sliders and spin boxes for choosing among options or values.
 weight: 3
 ---
 
@@ -16,6 +16,7 @@ can read at any time.
 | Turn a setting on or off that applies at once | `Switch` |
 | Pick any number from a short list | `CheckGroup` |
 | Pick exactly one from a short list, all options visible | `RadioGroup` |
+| Pick one or several options shown as chips that wrap onto new rows | `ChipGroup` |
 | Pick one from a longer list, shown on demand | `Select` (or `SearchSelect` for long lists, see [Text input](../text-input/#choices-and-search)) |
 | Pick one of 2 to 5 options shown as buttons | `SegmentedButton` (see [Buttons](../buttons/#button-groups-segmented-and-split-buttons)) |
 | Pick a value along a range | `Slider` |
@@ -48,6 +49,22 @@ keeps at most one option selected and passes its text to `OnChanged`.
 Tapping the selected option again clears the selection, unless `Required` is
 set. `SetSelected` picks an option from code and is safe to call from any
 goroutine.
+
+## ChipGroup
+
+{{< example file="widgets/chips/main.go" region="group" >}}
+
+[`ChipGroup`](https://pkg.go.dev/github.com/belluikit/bellui/widget#ChipGroup)
+shows one [filter chip](../buttons/#chips) per option. Each chip is as wide
+as its label, and the chips wrap onto the next row when a row is full.
+
+- Without `Multiple`, one chip can be selected, and tapping another moves the
+  selection to it. With `Multiple`, any number can be selected.
+- Tapping a selected chip deselects it, unless `Required` is set and it is
+  the last one selected.
+- `OnChanged` receives the selected options, in the order they were
+  selected. `Selected` holds them.
+- `SetSelected` selects options from code, fires `OnChanged` and refreshes.
 
 ## Select
 

@@ -1,12 +1,12 @@
 ---
 title: Containment and overlays
-description: Cards, accordions and carousels that group content, and sheets, pop-ups, menus and tooltips that float above it.
+description: Cards, accordions, carousels and swipe areas that hold content, and sheets, pop-ups, menus and tooltips that float above it.
 weight: 6
 ---
 
 Some widgets exist to hold other content. Cards, accordions and carousels
 group it in place. Sheets, pop-ups, menus and tooltips float above the rest
-of the window for a moment.
+of the window for a moment. A swipe area reports swipes across what it holds.
 
 {{< screenshot name="containment" alt="The gallery's Containment page: a tree view on the left, elevated, filled and outlined cards, and a carousel showing its first slide" >}}
 
@@ -17,6 +17,7 @@ of the window for a moment.
 | A titled box around related content | `Card` |
 | Sections the user expands one at a time | `Accordion` |
 | A row of items the user steps through one at a time | `Carousel` |
+| Content the user swipes left, right, up or down, such as a card to keep or skip | `SwipeArea` |
 | Extra actions or content sliding up from the bottom | `BottomSheet` |
 | Supplementary details beside the main content | `SideSheet` |
 | Any content floating above the window | `PopUp` |
@@ -56,12 +57,48 @@ code; without `MultiOpen`, `OpenAll` opens only the first item. `Append`,
 
 [`Carousel`](https://pkg.go.dev/github.com/belluikit/bellui/widget#Carousel)
 shows one item at a time, with previous and next buttons beside it and a row
-of dots below that marks the current item. Dragging does not move it.
+of dots below that marks the current item. The user can also swipe
+sideways: the current item follows the finger and the next one slides in
+beside it.
 
 {{< example file="widgets/containment/main.go" region="carousel" >}}
 
+When the user lets go, the carousel moves to the next item if the swipe went
+more than a fifth of its width or was a quick flick. Otherwise it goes back to
+the current item. Past the first or last item the drag meets resistance and
+always goes back. In a right-to-left layout the order, buttons and swipe
+direction are mirrored.
+
 `CurrentItem` is the index shown and `OnChanged` receives it after each move.
 `Next()` and `Previous()` move from code.
+
+## SwipeArea
+
+[`SwipeArea`](https://pkg.go.dev/github.com/belluikit/bellui/widget#SwipeArea)
+holds one object and tells you when the user swipes across it. A swipe is a
+drag that goes far enough and mostly along one axis. `OnSwiped` receives the
+direction the finger moved: `SwipeLeft`, `SwipeRight`, `SwipeUp` or
+`SwipeDown`. Taps still reach the content.
+
+{{< example file="widgets/swipe/main.go" region="swipe" >}}
+
+Set `Follow` to make the content a card that moves with the finger and tilts
+a little as it goes:
+
+{{< example file="widgets/swipe/main.go" region="card" >}}
+
+- A release a fifth of the way across, or a flick, throws the card off that
+  side. `OnSwiped` runs and the content is back in place, ready for the next
+  item. A shorter drag springs it back.
+- `OnSwipeProgress` reports how close the card is to a swipe, from 0 at rest
+  to 1 where a release would swipe. Use it to show a hint as the card leaves.
+- `Directions` sets what a swipe does in each direction. `SwipeThrow` (the
+  default for any direction not in the map) throws the card. `SwipeStay`
+  lets the card follow the finger but springs it back, and runs `OnSwiped`
+  as it starts back. `SwipeIgnore` keeps the card still in that direction and
+  never runs `OnSwiped` for it.
+
+With animations off in the app settings, the card moves at once.
 
 ## Bottom and side sheets
 
@@ -97,9 +134,11 @@ dialogs are built on it.
 - A normal pop-up closes when the user taps outside it. A modal one covers the
   window with a dimmed overlay, ignores taps outside, and stays until your
   code hides it. Escape closes both.
-- Set `OnDismissed` to run your own close logic instead of the plain hide
-  when the user presses Escape. A tap outside a normal pop-up still hides it
-  directly.
+- Set `OnDismissed` to run your own close logic whenever the user dismisses
+  the pop-up: Escape, a tap or right-click outside a normal pop-up, or the
+  screen reader's dismiss action. When it is set, it replaces the plain hide,
+  so your function must call `Hide()` itself. Calling `Hide()` from code does
+  not run it.
 
 ## Menus
 

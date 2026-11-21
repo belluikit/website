@@ -123,6 +123,10 @@ Editing features are off until you turn them on:
 | `AllowRename` | double-click a node to rename it |
 | `AllowDelete` | delete a node with the Delete key or the context menu |
 
+With a mouse, a drag moves a node at once. On a touch screen, a swipe over
+the tree scrolls it, and the user moves a node by long-pressing it and then
+dragging.
+
 Each change is reported to `OnMoved`, `OnRenamed` or `OnDeleted`, so you can
 update your own data. `ShowGuideLines` draws indent guides, and
 `ContextActions` adds your own entries to a node's right-click menu.

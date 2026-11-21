@@ -66,6 +66,20 @@ func main() {
 	}
 	//docs:end top
 
+	//docs:start drawer
+	// Open from the end edge: the right in a left-to-right layout.
+	drawer.Side = widget.DrawerSideEnd
+	// Show an X on the bar's button while the drawer is open.
+	drawer.OnOpenChanged = func(open bool) {
+		if open {
+			top.NavigationIcon = theme.CancelIcon()
+		} else {
+			top.NavigationIcon = theme.MenuIcon()
+		}
+		top.Refresh()
+	}
+	//docs:end drawer
+
 	w.SetContent(container.NewBorder(top, bar, rail, nil, content))
 	bellui.ShowAndRun(w)
 }

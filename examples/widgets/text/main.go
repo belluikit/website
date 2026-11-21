@@ -46,7 +46,12 @@ func main() {
 	row := container.NewHBox(widget.NewIcon(theme.InfoIcon()), widget.NewLabel("Saved to cloud"))
 	//docs:end icon
 
+	//docs:start bigicon
+	empty := widget.NewIcon(theme.FolderOpenIcon())
+	empty.IconSize = 96 // dp; zero keeps the theme's icon size
+	//docs:end bigicon
+
 	w.SetContent(container.NewVBox(title, body, path, warning, id,
-		widget.NewSeparator(), site, help, row))
+		widget.NewSeparator(), site, help, row, empty))
 	bellui.ShowAndRun(w)
 }

@@ -41,7 +41,10 @@ goroutine.
 - `Importance` colours the text: `LowImportance` uses the disabled colour,
   `HighImportance` the primary colour, and `DangerImportance`,
   `WarningImportance` and `SuccessImportance` the matching theme colours.
-- `Selectable` lets the user select and copy the text.
+- `Selectable` lets the user select and copy the text. With a mouse, a drag
+  selects. On a phone or tablet, a finger drag over the text scrolls the page
+  instead; to select, the user long-presses a word (a drag that follows
+  extends the selection) or moves the selection handles.
 
 A wrapping or truncating label asks for almost no width, so give it room
 with a layout. `IntrinsicSize()` tells you the size the text would need on one
@@ -78,7 +81,8 @@ not inline starts its own block. Other segment types add links
 (`CodeSegment`).
 
 After you change `Segments`, call `Refresh()`. Set `Wrapping` for text that
-should wrap, and `Selectable` to let the user copy it.
+should wrap, and `Selectable` to let the user copy it. Selecting by touch
+works as on a [selectable label](#label).
 
 ### Markdown
 
@@ -132,7 +136,12 @@ previews and terminals.
 
 [`Icon`](https://pkg.go.dev/github.com/belluikit/bellui/widget#Icon) shows a
 resource, usually one of the theme icons such as `theme.InfoIcon()`, and
-recolours it to match the theme. `SetResource` swaps it.
+recolours it to match the theme. `SetResource` swaps it. An icon is drawn
+at the theme's icon size unless you set `IconSize`, its width and height in
+dp. Call `Refresh` after changing it.
+
+{{< example file="widgets/text/main.go" region="bigicon" >}}
+
 [`FileIcon`](https://pkg.go.dev/github.com/belluikit/bellui/widget#FileIcon)
 takes a file URI and shows an icon labelled with the file's type.
 [`Separator`](https://pkg.go.dev/github.com/belluikit/bellui/widget#Separator)

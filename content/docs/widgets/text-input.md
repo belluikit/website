@@ -43,6 +43,12 @@ If the user must pick from a fixed list and may not type their own value, use
 - `Undo()` and `Redo()` step through the edit history; the usual keyboard
   shortcuts work too.
 
+With a mouse, a drag over the text selects it. On a phone or tablet, a finger
+drag scrolls instead, as in native text fields: a multi-line entry scrolls its
+own text, and once that cannot move further the page around it scrolls. To
+select by touch, the user long-presses a word (a drag that follows extends the
+selection) or moves the selection handles.
+
 ### Variants
 
 {{< example file="widgets/entry/main.go" region="variants" >}}
@@ -59,7 +65,9 @@ If the user must pick from a fixed list and may not type their own value, use
   make it at least `n` rows tall (3 by default).
 - **Read-only.** `ReadOnly = true` stops editing but keeps the normal look,
   and the user can still focus, select and copy the text. `Disable()` instead
-  blocks all interaction and draws the entry in the disabled style.
+  stops editing and draws the entry in the disabled style. The user can still
+  select and copy its text, but Tab skips it, and on a phone or tablet it
+  shows no keyboard.
 - **Alignment and style.** `Alignment` aligns the text, and `TextStyle` sets
   bold, italic or monospace for the whole entry.
 
@@ -174,6 +182,12 @@ through `Wrapping`.
   `OnContentChanged` receives the segments.
 - `InsertImage` and `InsertInlineImage` add an image as a block or within a
   line of text.
+- `Disable()` dims the text and images and stops all input, including focus.
+  Unlike a disabled `Entry`, its text cannot be selected or copied while it
+  is disabled. `Enable()` brings back the selection it had.
+
+On a phone or tablet, a finger drag over a `RichEntry` scrolls the page around
+it. Long-press to select, as in an `Entry`.
 
 `RichEntry` is newer than `Entry` and has fewer features. It has no
 validator, placeholder or completion, and images added with `SetSegments` are
