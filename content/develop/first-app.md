@@ -35,11 +35,13 @@ Reading it from the top:
 ### Fetch the dependencies
 
 ```sh
+go get github.com/belluikit/bellui@v1.3.0-rc.4
 go mod tidy
 ```
 
-Run this after writing the code, not before. `go mod tidy` adds exactly the
-modules your imports need, and on an empty module it has nothing to go on.
+Run these after writing the code, not before. `go get` picks the Bellui
+version these pages describe, and `go mod tidy` then adds exactly the modules
+your imports need. On an empty module it has nothing to go on.
 
 ### Run it
 

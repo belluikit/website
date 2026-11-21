@@ -110,6 +110,7 @@ description: A cross-platform Go UI toolkit with Material Design 3 widgets and W
 
 ```sh
 go mod init example.com/hello
+go get github.com/belluikit/bellui@v1.3.0-rc.4
 go mod tidy
 go run .
 ```

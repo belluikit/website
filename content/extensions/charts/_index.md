@@ -19,7 +19,7 @@ ECharts' `option` object, the field names will look familiar.
 ## Install
 
 ```sh
-go get github.com/belluikit/bellui/x/charts@latest
+go get github.com/belluikit/bellui/x/charts@v1.3.0-rc.4
 ```
 
 The module is split into packages. You import the ones you use:

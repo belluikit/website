@@ -16,7 +16,7 @@ prebuilt FFmpeg libraries with it.
 ## Install
 
 ```sh
-go get github.com/belluikit/bellui/x/mmedia@latest
+go get github.com/belluikit/bellui/x/mmedia@v1.3.0-rc.5
 ```
 
 There is no FFmpeg to install. `x/mmedia` v1.3.0-rc.5 requires `goffmpeg`
