@@ -22,7 +22,7 @@ and cards styled by a `NodeStyler` (see [Node appearance](#node-appearance)).
 ## Install
 
 ```sh
-go get github.com/belluikit/bellui/x/dag@latest
+go get github.com/belluikit/bellui/x/dag@v1.3.0-rc.4
 ```
 
 ## The graph model

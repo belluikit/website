@@ -18,7 +18,7 @@ its own: `x/mmedia v1.3.0-rc.5` goes with Bellui v1.3.0-rc.4. Add one with
 `go get`:
 
 ```sh
-go get github.com/belluikit/bellui/x/charts@latest
+go get github.com/belluikit/bellui/x/charts@v1.3.0-rc.4
 ```
 
 {{< cards >}}
