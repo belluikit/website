@@ -58,6 +58,22 @@ and the browser must support WebGPU. See [Web](/docs/platforms/web/).
 **On Android and iOS**, the `bellui` command packages the right native library
 for the target. See [Mobile](/docs/platforms/mobile/).
 
+## Partial repaint
+
+On desktop, and on Android and iOS with the default WebGPU renderer, Bellui
+redraws only the part of the window that changed in each frame and keeps
+the rest. Web builds, and Android and iOS builds with `-tags gl`, redraw the
+whole window every frame. To turn partial repaint off, set
+`BELLUI_PARTIAL_REPAINT=0` when you run the app, or build with the
+`nopartialrepaint` tag:
+
+```sh
+BELLUI_PARTIAL_REPAINT=0 go run .
+go build -tags nopartialrepaint .
+```
+
+The variable is read once, at startup.
+
 ## When to use the OpenGL renderer
 
 Use `-tags gl` when the target has no usable WebGPU: an older GPU or driver

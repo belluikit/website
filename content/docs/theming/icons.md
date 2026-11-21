@@ -26,6 +26,20 @@ lists every `IconName…` constant. They cover common actions (add, remove,
 copy, paste, undo, search), files and folders, media controls, mail,
 navigation, visibility, volume, zoom and window controls.
 
+Some icons for common app features, each with a function and an `IconName…`
+constant:
+
+| For | Functions |
+| --- | --- |
+| Like and save buttons | `FavoriteIcon` (a filled heart), `FavoriteBorderIcon` (an outlined one), `BookmarkIcon`, `BookmarkBorderIcon` |
+| Notices | `NotificationsIcon` (an outlined bell) |
+| Captions | `ClosedCaptionIcon` (filled, captions on), `ClosedCaptionOffIcon` (outlined, captions off) |
+| Places and people | `PlaceIcon` (a map pin), `PeopleIcon` (a group), `ChildIcon` (a child's face) |
+| Shopping and purchases | `ShoppingCartIcon`, `AddShoppingCartIcon`, `StorefrontIcon`, `ShoppingBagIcon`, `WorkspacePremiumIcon` (a medal, for a premium feature), `DiamondIcon`, `AutorenewIcon` (for a subscription that renews), `CardMembershipIcon`, `CreditCardIcon`, `ReceiptLongIcon`, `LockIcon` |
+
+`ZoomFitIcon` draws Material's "fit screen" picture, and `ViewRestoreIcon`
+the "exit full screen" one.
+
 Theme icons are SVG images. Most are drawn in the theme's foreground colour,
 so they are dark in the light variant and light in the dark variant.
 
@@ -58,12 +72,43 @@ drawn:
 This works for SVG icons only. For anything that is not SVG, the wrapper logs
 an error and draws the image with its own colours.
 
+## Tint an icon with any colour
+
+A themed resource takes its colour from the theme. For an icon that must keep
+one colour of your own, such as a white icon over a photo, use
+[`theme.NewColorizedResource(res, colour)`](https://pkg.go.dev/github.com/belluikit/bellui/theme#NewColorizedResource).
+The colour stays the same when the theme changes. A theme icon is tinted
+from its original SVG.
+
+[`widget.Icon`](https://pkg.go.dev/github.com/belluikit/bellui/widget#Icon)
+has a `Color` field that does the same for the icon it shows. The icon stays
+tinted when you change its resource. Leave `Color` nil, the default, to draw
+the resource as it is, so a theme icon keeps following the theme. Call
+`Refresh` after you change the field.
+
+{{< example file="theming/icons/main.go" region="tint" >}}
+
+Both draw a resource that is not an SVG unchanged.
+
 ## Replace icons in a custom theme
 
 A custom theme's `Icon` method can return a different resource for any icon
 name. Widgets that use that icon then draw yours. For an example, see the
-`Icon` method in [Custom themes](../custom/#wrap-the-default-theme). In a JSON
-theme, the `Icons` object maps icon names to resource URIs.
+`Icon` method in [Custom themes](../custom/#wrap-the-default-theme). In a
+[PXF theme](../custom/#load-a-theme-from-pxf), the `icons` field maps icon
+names to resource URIs:
+
+```text
+icons = { play: "file:///path/to/play.svg" }
+```
+
+The names are the string values of the `IconName…` constants. Most are
+Material's icon names: `play` for `IconNameMediaPlay`, `add` for
+`IconNameContentAdd`, `fullscreen_exit` for `IconNameViewRestore`. A theme
+file that uses an older name, such as `mediaPlay` or `contentAdd`, still
+works. One name changed meaning: `help` is now the question mark
+(`IconNameQuestion`), and the help icon (`IconNameHelp`) is `help_outline`.
+A theme file that replaces `help` now replaces the question mark.
 
 Return a themed resource from `Icon` if your replacement should follow the
 theme colours like the built-in icons do.

@@ -24,6 +24,15 @@ before it tries the system's fonts. The symbol subsets are such fallbacks:
 they keep symbols the same size on every platform. Chinese, Japanese and
 Korean are not in the bundled set; see [Other scripts](#other-scripts) below.
 
+Each character is drawn as text or as emoji by its default in Unicode.
+Symbols meant to look like text, such as ✔ ⚠ ❤ ▶ and the arrows, are drawn
+from the symbol fonts in the text colour. Characters meant to look like emoji,
+such as ⭐ ⚡ ☕ 😀, are drawn in colour from the emoji font. To ask for the
+other form, put a variation selector after the character: U+FE0F asks for
+the colour emoji ("❤\uFE0F" in Go), and U+FE0E asks for the plain text glyph.
+A text-style symbol that no bundled text font has, such as 🖥 or 🗑, is still
+drawn as emoji.
+
 Two build tags leave fonts out to make the binary smaller:
 `-tags no_emoji` drops the emoji font, and `-tags no_symbols` drops the
 symbol subsets (about 390 KB).

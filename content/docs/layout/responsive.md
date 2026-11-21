@@ -101,9 +101,10 @@ size.
 `NewRowWrapLayoutWithCustomPadding(h, v)` sets the gaps between items and
 between rows.
 
-Every row is as tall as the tallest child. Until the layout has run once, its
-minimum height assumes one child per row; after that it reports the height
-of the rows it actually made.
+Every row is as tall as the tallest child. The minimum width is the width
+of the widest child, so the window can always get narrower. Until the layout
+has run once, its minimum height assumes one child per row; after that it
+reports the height of the rows it actually made.
 
 ## The whole program
 

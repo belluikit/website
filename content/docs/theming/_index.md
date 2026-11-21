@@ -16,7 +16,7 @@ colours are generated from one primary colour.
 
 {{< cards >}}
   {{< card link="material/" title="The default theme" subtitle="Light and dark, following the system, primary colours and the dense theme." >}}
-  {{< card link="custom/" title="Custom themes" subtitle="Override colours, sizes, fonts and icons, in Go or in JSON." >}}
+  {{< card link="custom/" title="Custom themes" subtitle="Override colours, sizes, fonts and icons, in Go or in PXF." >}}
   {{< card link="icons/" title="Icons" subtitle="Theme icons and your own icons that follow the theme colours." >}}
   {{< card link="typography/" title="Fonts and typography" subtitle="Bundled fonts, text styles, the MD3 type scale and extra scripts." >}}
   {{< card link="scaling/" title="Scaling" subtitle="How sizes map to pixels on each display." >}}

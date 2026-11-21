@@ -17,7 +17,8 @@ Shift+Tab to the previous one. At either end, focus wraps around.
 
 - The order is the order of the widget tree: the order of objects in their
   containers, depth first. To change the order, change the layout.
-- Disabled widgets are skipped.
+- Disabled widgets are skipped. A widget that is disabled while it has the
+  focus gives the focus up.
 - Under a [right-to-left layout](/docs/theming/right-to-left/), Bellui reorders
   focus to follow the screen: rows from top to bottom, and each row from
   right to left. A single column keeps its order.
@@ -39,14 +40,21 @@ The canvas also has `FocusNext`, `FocusPrevious`, `Unfocus` and `Focused`.
 
 A widget that implements
 [`event.Tabbable`](https://pkg.go.dev/github.com/belluikit/bellui/event#Tabbable)
-and returns `true` from `AcceptsTab` receives Tab itself, instead of
-moving focus. A multi-line entry does this so that Tab inserts a tab
-character. It also keeps Shift+Tab, and Bellui gives it no other key that
-moves focus out, so a keyboard user who reaches one cannot Tab past it.
+and returns `true` from `AcceptsTab` receives Tab and Shift+Tab itself,
+instead of moving focus. A multi-line entry does this so that Tab inserts a
+tab character.
 
-If you write such a widget, give users another key that leaves it, and move
-focus on yourself with the canvas's `FocusNext`. A widget that keeps Tab
-with no way out traps keyboard users.
+So that keyboard users are never trapped in such a widget, two key sequences
+still move focus out of it:
+
+- **Escape, then Tab** (or Shift+Tab to go back). This works everywhere,
+  including the web.
+- **Ctrl+Tab** (or Ctrl+Shift+Tab). Browsers keep Ctrl+Tab for switching
+  their own tabs, so this one does not work on the web.
+
+If you write such a widget, these sequences work for it with no extra code.
+Tell users about them, or give the widget a key of its own that moves focus
+on with the canvas's `FocusNext`.
 
 ## Make a custom widget focusable
 

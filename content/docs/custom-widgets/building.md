@@ -96,9 +96,32 @@ minimum size to their layouts:
 - **Disabling:** embed
   [`widget.DisableableWidget`](https://pkg.go.dev/github.com/belluikit/bellui/widget#DisableableWidget)
   instead of `BaseWidget` to get `Enable`, `Disable` and `Disabled`. Check
-  `Disabled()` in your renderer's `Refresh` and in your event methods.
+  `Disabled()` in your event methods. While the widget is disabled, Bellui
+  draws it and everything inside it at 38% opacity, on every platform, so it
+  looks disabled with no work from you. If your renderer draws a disabled look
+  of its own, such as the theme's disabled colours, implement
+  [`core.DisabledLook`](https://pkg.go.dev/github.com/belluikit/bellui/core#DisabledLook)
+  with `DrawsDisabledLook()` returning true, so it is not dimmed a second
+  time. A widget inside a disabled widget that has no look of its own is
+  dimmed with it, whatever it reports.
 - **Keyboard:** implement [`event.Focusable`](https://pkg.go.dev/github.com/belluikit/bellui/event#Focusable)
   to receive keys when focused.
 - **Tooltips:** `BaseWidget.SetToolTipText` gives the widget a hover tooltip.
+- **Touch drags:** a `Draggable` widget can take touch drags in some
+  directions only, and keep moving after a fling. See
+  [Drags on touch screens](/docs/concepts/input-events/#drags-on-touch-screens).
+- **Direction:** in an event handler, ask
+  [`container.DirectionOf`](/docs/theming/right-to-left/#ask-which-direction-applies)
+  whether the widget sits in a right-to-left layout.
+- **Theme overrides:** if the widget creates objects after it is first
+  shown, such as rows as it grows, pass them to
+  [`theme.MatchScope`](/docs/theming/custom/#apply-a-theme-to-part-of-the-window)
+  so they follow a theme override around the widget.
+- **Translucency:** implement
+  [`core.OpacityGroup`](https://pkg.go.dev/github.com/belluikit/bellui/core#OpacityGroup)
+  to draw the whole widget at an opacity of its own.
+- **Work out of sight:** a widget that updates itself on a timer can skip
+  the work while [`bellui.IsOnScreen`](/docs/concepts/canvas-objects/#where-an-object-is-drawn)
+  reports it is not drawn.
 - **Debugging:** set `widget.DebugLayout = true` to log every `MinSize` and
   `Resize`, or `widget.DebugRefresh = true` to log every `Refresh`.

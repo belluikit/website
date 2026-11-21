@@ -1,6 +1,6 @@
 ---
 title: Input events
-description: How taps, hover, drags, scrolling, keys and shortcuts reach your objects, and what differs between desktop and touch.
+description: How taps, hover, drags, scrolling, keys and shortcuts reach your objects, what differs between desktop and touch, and how to tell when the user is idle.
 weight: 4
 ---
 
@@ -82,6 +82,39 @@ produces a tap or a drag. Two fingers moving together scroll the content
 under them, so a page of charts or 3D views, which keep one-finger drags for
 themselves, still scrolls.
 
+## Drags on touch screens
+
+Two optional interfaces refine how a `Draggable` behaves under a finger. They
+change nothing for a mouse drag.
+
+{{< example file="concepts/drag/main.go" region="strip" >}}
+
+- [`event.DragClaimer`](https://pkg.go.dev/github.com/belluikit/bellui/event#DragClaimer)
+  lets a widget take a touch drag in some directions only. When a finger
+  starts to drag, Bellui asks the `Draggable` widgets under it, innermost
+  first, with `ClaimsDrag(delta)`, where `delta` is the first movement. The
+  first one that returns true gets the drag until the finger lifts. A drag
+  that nobody claims scrolls whatever can scroll there. A `Draggable` without
+  `ClaimsDrag` takes every drag that starts on it. `ClaimsDrag` must not
+  change any state, because it is asked while the target is still being
+  chosen. A drag that follows a long press is not offered: it goes to the
+  innermost `Draggable`.
+- [`event.MomentumDraggable`](https://pkg.go.dev/github.com/belluikit/bellui/event#MomentumDraggable)
+  lets a drag keep moving after a fast release, on Android, iOS and embedded
+  devices. If `DragMomentum()` returns true, the widget gets more `Dragged`
+  events that slow down, then `DragEnd`. Every other `Draggable` gets
+  `DragEnd` where the finger lifted. Use it for widgets that pan content,
+  such as a map or a canvas. Do not use it for something the user moves
+  directly, such as a slider thumb or a divider: what the user let go of has
+  to stay there. Scroll containers already use it.
+
+In the example, an upward swipe that starts on the strip scrolls the page,
+and a sideways one pans the strip:
+
+{{< example "concepts/drag/main.go" >}}
+
+## Platform-specific interfaces
+
 For desktop-only details there are extra interfaces in
 [`driver/desktop`](https://pkg.go.dev/github.com/belluikit/bellui/driver/desktop):
 `Mouseable` (`MouseDown` and `MouseUp`, with the button and modifier keys),
@@ -118,8 +151,6 @@ such a widget, two key sequences still move focus out of it:
   press Escape once more.
 - **Ctrl+Tab** (or Ctrl+Shift+Tab), on desktop and mobile. Browsers keep
   Ctrl+Tab for switching their own tabs, so it does not work on the web.
-
-The Escape sequence is new in v1.2.0.
 
 On desktop, a key pressed with Control, Alt or Super (Command on macOS) goes
 to the shortcut system, not to `TypedKey`. Only unmodified and
@@ -162,3 +193,34 @@ which provides `TypedShortcut`, `AddShortcut` and `RemoveShortcut`.
 The complete example:
 
 {{< example "concepts/events/main.go" >}}
+
+## Detecting an idle user
+
+[`bellui.LastUserActivity()`](https://pkg.go.dev/github.com/belluikit/bellui#LastUserActivity)
+returns when the user last gave the app input, in any of its windows. Use it
+for an idle timer: go back to a home screen, dim, or lock after a while
+without input. A timer reads it and compares it with `time.Now`:
+
+{{< example file="concepts/idle/main.go" region="idle" >}}
+
+It counts input as it arrives, before any widget sees it, so a scroll inside
+a list counts even though the list reports nothing. What counts:
+
+- a mouse button pressed or released, and the mouse moved while a button is
+  held;
+- a touch going down, moving or lifting;
+- a scroll from a wheel or a trackpad;
+- a key pressed or released, typed text, and input from an on-screen
+  keyboard;
+- files dropped into a window.
+
+Moving the mouse with no button held does not count. Neither does anything
+the app does itself: an animation, a timer, content that keeps scrolling after
+the finger lifts, or a value set from code. Actions a screen reader performs
+through the accessibility API, such as activating a button, are not counted
+yet. Before the first input it returns the zero time. You can call it from
+any goroutine.
+
+The whole program:
+
+{{< example "concepts/idle/main.go" >}}

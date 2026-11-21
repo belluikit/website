@@ -30,7 +30,11 @@ To choose a variant yourself, call `SetThemeVariant` on the app's settings:
 {{< example file="theming/variants/main.go" region="variant" >}}
 
 `Settings().ThemeVariant()` returns the variant in use. The call takes effect
-for the running app only. It is not saved.
+for the running app only. It is not saved. While the app runs, the choice
+stands: later changes to the system appearance do not change it. To follow
+the system again, call `ClearThemeVariant` on settings that implement
+[`bellui.ThemeVariantSettings`](https://pkg.go.dev/github.com/belluikit/bellui#ThemeVariantSettings),
+as the app's settings do.
 
 {{< callout type="info" >}}
 To let users choose between System, Light and Dark and remember their choice,
@@ -64,7 +68,9 @@ which can change it at runtime:
 
 {{< example file="theming/variants/main.go" region="primary" >}}
 
-Like the variant, this changes the running app only.
+Like the variant, this changes the running app only, and it stays until the
+app changes it again. An empty name returns to the colour set in Bellui's
+system-wide settings.
 
 To use any other colour as the starting point, generate the scheme yourself
 from a seed colour. See [Custom themes](../custom/#generate-colours-from-a-seed-colour).

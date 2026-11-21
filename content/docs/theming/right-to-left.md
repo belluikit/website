@@ -11,7 +11,7 @@ text styles.
 If you are translating an app into Arabic, Hebrew, Persian or Urdu, start
 with [Right-to-left languages](/docs/localisation/right-to-left/) in the
 Localisation section. It covers what Bellui mirrors and what it does not,
-fonts, and the text-direction limits of v1.0.0.
+fonts, and the limits of text direction.
 
 By default the direction comes from the app's locale. A locale whose script
 is written right to left, such as Arabic or Hebrew, gives a right-to-left
@@ -49,17 +49,33 @@ timeline. Wrap it in
 {{< example file="theming/rtl/main.go" region="scope" >}}
 
 The scope sets the direction for everything inside it: layout, alignment,
-focus order and the base direction of text. Scopes can be nested, and the
-innermost one wins. `DirectionAuto` makes a scope inherit the direction around
-it. To change a scope's direction later, call its `SetDirection` method.
+focus order, input such as swipes and arrow keys, and the base direction of
+text. Pop-ups that a widget inside the scope opens, such as a `Select`'s menu
+or a date picker, take the scope's direction too. The scope keeps its
+direction when the content is laid out again, for example after a theme
+change. Scopes can be nested, and the innermost one wins. `DirectionAuto`
+makes a scope inherit the direction around it. To change a scope's direction
+later, call its `SetDirection` method.
 
-{{< callout type="warning" >}}
-In Bellui v1.0.0 a scope can be lost when the whole window is laid out
-again. After `Settings().SetThemeVariant` switches between light and dark,
-the scoped content follows the app's direction: a left-to-right scope in an
-Arabic app mirrors like the rest of the window. Check scoped content after
-a theme change before you rely on it.
-{{< /callout >}}
+A pop-up you show yourself with `widget.PopUp` keeps its window's direction.
+Wrap its content in a `DirectionScope` when it needs another.
+
+A single window can also have its own direction. Its canvas has an optional
+`SetDirection(bellui.Direction)` method, which you reach with a type
+assertion on `w.Canvas()`.
+
+## Ask which direction applies
+
+[`container.DirectionOf(obj)`](https://pkg.go.dev/github.com/belluikit/bellui/container#DirectionOf)
+returns the direction that applies where an object sits: its innermost
+`DirectionScope`, else its window's direction, else the app's. The answer is
+always `bellui.DirectionLTR` or `bellui.DirectionRTL`.
+
+`lang.IsRTLDirection` gives the same answer only while a layout or a paint
+is running. A widget's renderer can use it in `Layout` and `Refresh`. Code
+that runs outside those, such as an event handler, calls `DirectionOf`:
+
+{{< example file="theming/rtl/main.go" region="directionof" >}}
 
 ## Custom layouts
 
@@ -83,7 +99,7 @@ The direction only sets the base order of runs and neutral characters such
 as punctuation. Arabic letter joining comes from the text itself and does
 not depend on it. `Language` in the same style overrides the language used
 for shaping; left empty, it follows the locale. For the limits of mixed
-right-to-left and left-to-right text in v1.0.0, see
+right-to-left and left-to-right text, see
 [Mixed Arabic and Latin text](/docs/localisation/right-to-left/#mixed-arabic-and-latin-text).
 
 The full program:

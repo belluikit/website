@@ -1,6 +1,6 @@
 ---
 title: Custom themes
-description: Change colours, sizes, fonts and icons by wrapping the default theme, generating colours from a seed colour, or loading a JSON theme.
+description: Change colours, sizes, fonts and icons by wrapping the default theme, generating colours from a seed colour, or loading a theme written in PXF.
 weight: 2
 ---
 
@@ -58,8 +58,18 @@ draws its content with a different theme from the rest of the app:
 
 Everything inside the container uses the theme you pass, including widgets in
 nested containers. If you add objects to the content later, call `Refresh` on
-the `ThemeOverride` so they pick up its theme. Use overrides sparingly: a
-window with several looks is harder to read.
+the `ThemeOverride` so they pick up its theme. Lists, tables and trees inside
+an override take its theme for the rows and cells they make as they scroll.
+Use overrides sparingly: a window with several looks is harder to read.
+
+An override reaches only the objects that exist when it is applied. A
+[custom widget](/docs/custom-widgets/building/) that makes objects as it
+grows, such as rows or dividers, calls
+[`theme.MatchScope(parent, objs...)`](https://pkg.go.dev/github.com/belluikit/bellui/theme#MatchScope)
+with itself as `parent` and the new objects. They then draw with the
+override around the widget, and not the app theme. Objects that already
+have it are skipped, so calling it on every layout is cheap. Outside an
+override it does nothing.
 
 ## Generate colours from a seed colour
 
@@ -86,41 +96,59 @@ intensity to read as an accent, even from a greyish seed.
 
 {{< example file="theming/seedcolor/main.go" region="apply" >}}
 
-## Load a theme from JSON
+## Load a theme from PXF
 
-[`theme.FromJSON`](https://pkg.go.dev/github.com/belluikit/bellui/theme#FromJSON)
-builds a theme from JSON. Anything the JSON does not set comes from the
-default theme:
+[`theme.FromPXF`](https://pkg.go.dev/github.com/belluikit/bellui/theme#FromPXF)
+builds a theme from text in PXF, the data format Bellui uses for its own
+files. Anything the data does not set comes from the default theme:
 
-{{< example file="theming/jsontheme/main.go" region="json" >}}
+{{< example file="theming/pxftheme/main.go" region="pxf" >}}
 
-The keys are the string values of the theme names: `"primary"` for
-`ColorNamePrimary`, `"text"` for `SizeNameText`, and so on.
+The fields are `colors`, `colors_light`, `colors_dark`, `sizes`, `fonts` and
+`icons`. Inside each, the keys are the string values of the theme names:
+`primary` for `ColorNamePrimary`, `text` for `SizeNameText`, and so on.
 
-- `Colors` applies to both variants. `Colors-light` and `Colors-dark` apply
-  to one variant and win over `Colors`.
+- `colors` applies to both variants. `colors_light` and `colors_dark` apply
+  to one variant and win over `colors`.
 - Colours are hex strings: `#rgb`, `#rgba`, `#rrggbb` or `#rrggbbaa`, with or
   without the `#`.
-- `Sizes` holds numbers.
-- `Fonts` and `Icons` map names to resource URIs, such as `file:///…`. Icon
-  keys are icon names. Font keys are `regular`, `bold`, `boldItalic` and
-  `monospace`. Other styles use one of these: italic, medium and symbol
-  text use `regular`, and bold monospace text uses `bold`.
+- `sizes` holds numbers.
+- `fonts` and `icons` map names to resource URIs, such as `file:///…`. Icon
+  keys are icon names; see [Icons](../icons/#replace-icons-in-a-custom-theme).
+  Font keys are `regular`, `bold`, `boldItalic` and `monospace`. Other styles
+  use one of these: italic, medium and symbol text use `regular`, and bold
+  monospace text uses `bold`.
 
-If the JSON cannot be parsed, `FromJSON` returns the error together with the
+If the data cannot be parsed, `FromPXF` returns the error together with the
 default theme, so the app still has a usable theme:
 
-{{< example file="theming/jsontheme/main.go" region="load" >}}
+{{< example file="theming/pxftheme/main.go" region="load" >}}
 
-[`theme.FromJSONWithFallback`](https://pkg.go.dev/github.com/belluikit/bellui/theme#FromJSONWithFallback)
-takes the theme to fall back to instead. `FromJSONReader` and
-`FromJSONReaderWithFallback` read from an `io.Reader`.
+[`theme.FromPXFWithFallback`](https://pkg.go.dev/github.com/belluikit/bellui/theme#FromPXFWithFallback)
+takes the theme to fall back to instead. `FromPXFReader` and
+`FromPXFReaderWithFallback` read from an `io.Reader`.
 
 {{< callout type="warning" >}}
-A JSON theme does not select the modern widget style, so widgets are drawn in
-the classic style. To keep the modern style, wrap the JSON theme in a Go type
+A PXF theme does not select the modern widget style, so widgets are drawn in
+the classic style. To keep the modern style, wrap the PXF theme in a Go type
 with a `RenderStyle` method, as in [Wrap the default theme](#wrap-the-default-theme).
 {{< /callout >}}
+
+On desktop, `theme.DefaultTheme()` also reads a user-wide theme from the
+file `theme.pxf` in Bellui's configuration folder, the folder that holds
+the global `settings.pxf`. When there is no `theme.pxf`, it reads an older
+`theme.json` there instead.
+
+### Themes written in JSON
+
+`theme.FromJSON`, `FromJSONWithFallback`, `FromJSONReader` and
+`FromJSONReaderWithFallback` still read the same data written as JSON, with
+the fields named `Colors`, `Colors-light`, `Colors-dark`, `Sizes`, `Fonts`
+and `Icons`. They are deprecated: use the `FromPXF` functions for new code.
+
+The whole program:
+
+{{< example "theming/pxftheme/main.go" >}}
 
 ## Check a theme
 
