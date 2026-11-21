@@ -45,7 +45,6 @@ func main() {
 				SeriesName: "Growth %",
 				Data:       []float64{12, 53, 40, 33, 8, 77},
 				YAxisIndex: 1, // plotted against the second Y axis
-				Smooth:     true,
 			},
 		},
 		Overlays: overlays,

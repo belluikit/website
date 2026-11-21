@@ -28,7 +28,7 @@ with `Opacity` as the fill's opacity (default 0.3).
 
 The fill is drawn as a fan of lines from the centre, so it looks striped rather
 than solid. Polygons take their colours from the built-in palette, and
-`DataNames` is not used for drawing in v1.0.0.
+`DataNames` is not used for drawing.
 
 ## Gauge
 
@@ -36,7 +36,7 @@ A [`GaugeSeries`](https://pkg.go.dev/github.com/belluikit/bellui/x/charts/series
 shows one value on a dial, with coloured ranges for normal, warning and
 critical.
 
-{{< screenshot name="charts-gauge" alt="A gauge reading 312 out of 500, with the gap at the bottom; the value arc runs from the bottom right over the top, followed by a yellow and a red range" >}}
+{{< screenshot name="charts-gauge" alt="A gauge reading 312 out of 500, with the gap at the bottom and a green, a yellow and a red range" >}}
 
 {{< example file="extensions/charts/series/gauge/main.go" region="gauge" >}}
 
@@ -49,19 +49,15 @@ The main fields:
   with `Min`, `Max` and `Color`.
 - `ShowValue` writes the value, with the series name under it, in the middle.
 - `Radius` is a fraction of the available space (default 0.85).
-- `StartAngle` and `EndAngle`, in degrees with 0 at the top, set where the
-  scale starts and ends.
+- `StartAngle` and `EndAngle`, in degrees with 0 at the top and angles growing
+  clockwise, set where the scale starts and ends. `Min` sits at `StartAngle`,
+  and values fill clockwise to `Max` at `EndAngle`. The defaults, -135 and
+  135, give a 270-degree scale from the bottom left over the top to the bottom
+  right, with the gap at the bottom.
 
-{{< callout type="warning" >}}
-The gauge does not draw as its documentation describes in v1.0.0. Values
-always advance counter-clockwise from `StartAngle`. With the default angles
-(225 and -45) the scale starts at the bottom left and runs through the bottom,
-the right and the top, leaving the gap on the left side. The example sets
-`StartAngle: 135, EndAngle: -135`, which puts the gap at the bottom, with the
-minimum at the bottom right. The value arc is drawn over the sectors, so a
-sector below the current value is hidden. The value text is a fixed light
-colour, which is faint in the light theme.
-{{< /callout >}}
+With `Sectors` set, the value is drawn as a thin ring inside the coloured
+ranges, so the ranges stay in view. The value text takes the theme's text
+colour.
 
 ## Funnel
 
@@ -78,8 +74,10 @@ whose width is proportional to their value. All stages are the same height,
 unless `DynamicHeight` is set, which makes each stage's height proportional to
 its value.
 
-Stages are drawn top to bottom in the order you give them. `Sort` is declared
-but has no effect in v1.0.0, so put the stages in order yourself.
+`Sort` orders the stages by value: `"descending"`, the default, puts the
+widest on top, `"ascending"` the narrowest, and `"none"` keeps the order you
+give them. A stage keeps its colour when sorted. Stage names are written in
+black or white, whichever stands out more on the stage.
 
 ## Parallel coordinates
 
@@ -127,7 +125,7 @@ points stand out, here alerts over ordinary readings.
 `Data` stores x, y pairs flat, like a scatter series. `SymbolSize` sets the
 point size (default 8), and `RippleScale` the size of the ring relative to the
 point (default 2.5). The ring grows during the chart's entrance animation and
-then stays still: in v1.0.0 it does not pulse.
+then stays still: it does not pulse.
 
 ## Custom
 
@@ -145,6 +143,8 @@ and returns the canvas objects to draw. The fields you will use most:
 
 - `Viewport` is the plot area in pixels. Position everything inside it.
 - `Color` is the series' colour from the palette.
+- `TextColor` is the colour for labels you draw on the plot's background. The
+  chart sets it to the theme's text colour.
 - `Animate` and `AnimProgress` (0 to 1) tell you when the entrance animation is
   running, so you can animate too.
 

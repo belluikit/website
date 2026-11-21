@@ -23,6 +23,7 @@ func main() {
 		rows = append(rows, map[string]any{
 			"id": i + 1, "first": fmt.Sprintf("First %d", i), "last": fmt.Sprintf("Last %d", i),
 			"city": "Lisbon", "country": "Portugal", "phone": "+351 000 000", "balance": float64(i * 10),
+			"vip": map[bool]string{true: "★", false: ""}[i%7 == 0],
 		})
 	}
 
@@ -30,6 +31,9 @@ func main() {
 	grid := tables.NewDataGrid(
 		[]*tables.ColumnDef{
 			{Field: "id", HeaderName: "ID", Type: tables.ColumnNumber, Width: 60, Pinned: tables.PinLeft},
+			// The star says what the column is, so its header is left blank.
+			// Screen readers, export and the filter popup still call it "VIP".
+			{Field: "vip", HeaderName: "VIP", HideHeaderText: true, Width: 40},
 			{
 				HeaderName: "Name", ColID: "name", OpenByDefault: true,
 				Children: []*tables.ColumnDef{

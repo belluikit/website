@@ -21,7 +21,7 @@ func main() {
 		Series: []series.Series{
 			&series.FunnelSeries{
 				SeriesName: "Checkout",
-				// Stages are drawn top to bottom in this order.
+				// Sort is empty, so the widest stage is drawn on top.
 				Data: []series.FunnelData{
 					{Name: "Product page", Value: 10000},
 					{Name: "Added to cart", Value: 4200},

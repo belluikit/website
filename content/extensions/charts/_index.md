@@ -53,7 +53,7 @@ returns the current one, so you can modify it and set it back.
 ## Series types
 
 Every series is a struct in the `series` package that you add to
-`Option.Series`. `x/charts` v1.0.0 has 27 of them. The pages below describe
+`Option.Series`. `x/charts` has 27 of them. The pages below describe
 each one, with its main fields, a compiled example and a screenshot:
 
 {{< cards >}}
@@ -81,14 +81,12 @@ out:
 - **3D series** draw into a 3D scene that the user can orbit.
 
 {{< callout type="info" >}}
-Some things hold for every series type in v1.0.0. The legend and the tooltip
-take each series' colour from the palette, so a colour set on the series
-itself (`Color`, `LineStyle.Color`) is not shown in its legend swatch. Pie,
-radar, funnel, treemap, sunburst, tree, sankey, graph and parallel series
+Pie, radar, funnel, treemap, sunburst, sankey, graph and parallel series
 colour their parts from a fixed built-in palette, not from `Option.Color`.
-Legend labels, and the labels that radar, funnel, treemap, tree, sankey,
-graph and parallel series draw, use fixed light colours, so in the light theme
-they have low contrast, as several screenshots on these pages show.
+Labels a series writes on the plot's background take the theme's text colour,
+except pie labels, which take their slice's colour.
+Labels on a coloured tile, such as a funnel stage or a treemap rectangle, are
+black or white, whichever stands out more.
 {{< /callout >}}
 
 ## Axes
@@ -114,11 +112,35 @@ its Y axis with `YAxisIndex`:
 
 {{< example file="extensions/charts/axes/main.go" region="axes" >}}
 
+Each `axis.Config` also sets how its axis looks:
+
+- `Name` is the axis title. An X axis writes it under its labels, a Y axis
+  above its top.
+- `Position` moves the X axis to the top (`axis.PositionTop`), or puts a Y
+  axis on the left or right (`axis.PositionLeft`, `axis.PositionRight`).
+- `Inverse` runs the axis backwards. Series, tooltips, zoom and pan follow it.
+- `LineColor` colours the axis line and ticks, and `LabelColor` the labels and
+  the name. Without them the axis takes the theme's colours.
+- `Hide` hides parts of the axis: an
+  [`axis.Parts`](https://pkg.go.dev/github.com/belluikit/bellui/x/charts/axis#Parts)
+  with `Line`, `Ticks` and `Labels`. Its zero value hides nothing.
+- `SplitLine` draws grid lines across the plot. `axis.SplitLineAuto`, the
+  default, draws them for the first Y axis only. `SplitLineShow` and
+  `SplitLineHide` turn them on or off for one axis. A value, log or time axis
+  draws them at its ticks. A category axis draws them between its
+  categories, so in a bar chart they separate the bars.
+- `Offset` moves the axis that many pixels outward from the plot. Use it to
+  put two Y axes side by side on one side; the chart makes room for them.
+
+{{< example file="extensions/charts/axisparts/main.go" region="axisparts" >}}
+
+The plot shrinks to leave room for axis names, for labels on the right or at
+the top, and for offset axes.
+
 {{< callout type="info" >}}
-`axis.Config` also declares `Name`, `Position`, `Inverse`, `ShowLine`,
-`ShowTicks`, `ShowLabels`, `ShowSplitLine`, `LineColor` and `LabelColor`. In
-v1.0.0 the chart renderer does not read them, so setting them has no effect.
-The same is true of `Option.VisualMap` and `Option.Decal`.
+`axis.Config`'s `ShowLine`, `ShowTicks`, `ShowLabels` and `ShowSplitLine` are
+deprecated and have no effect. Use `Hide` and `SplitLine` instead.
+`Option.VisualMap` and `Option.Decal` are not applied by the chart either.
 {{< /callout >}}
 
 **Overlays** mark values on the plot in data coordinates: a reference line, a
@@ -127,17 +149,17 @@ an arrow.
 
 {{< example file="extensions/charts/axes/main.go" region="overlays" >}}
 
-`Grid` sets the margins around the plot area, in pixels. Widen `Right` when
-you have a right-hand axis, so its labels fit.
+`Grid` sets the margins around the plot area, in pixels. The chart adds the
+room its axes need inside these margins.
 
 ## Interaction
 
 **Tooltips** follow the pointer. With no `Tooltip` set, the chart shows the
 nearest data point. A
 [`TooltipConfig`](https://pkg.go.dev/github.com/belluikit/bellui/x/charts/component#TooltipConfig)
-changes that: `TooltipTriggerAxis` lists the line and scatter series at the
-pointer's X position (bar and candlestick series are not found by it in
-v1.0.0; see [Trading charts](trading/)), `TooltipTriggerNone` turns tooltips off, `Crosshair` chooses
+changes that: `TooltipTriggerAxis` lists the line, bar, scatter and
+candlestick series at the pointer's X position, `TooltipTriggerNone` turns
+tooltips off, `Crosshair` chooses
 vertical, horizontal, both or no crosshair lines, and `Formatter` replaces the
 text. Clicking pins the tooltip.
 
@@ -174,10 +196,10 @@ More interactions, each switched on in the `Option`:
   child `Option` for a clicked point. The chart shows the child with a
   breadcrumb trail back to the parent.
 - **Toolbox.** `Toolbox: &component.ToolboxConfig{SaveAsImage: true}` adds a
-  button that opens a save dialog and writes a PNG. In v1.0.0 that PNG holds
-  only the chart's background colour, not the chart.
+  button that opens a save dialog and writes a PNG of the chart.
   `MagicType: []string{"line", "bar"}` adds buttons that switch the series
-  between line and bar.
+  between line and bar. `DrawingTools` adds buttons for the drawing tools (see
+  [Trading charts](trading/#drawing-tools)).
 - **Multi-pane layouts.** [`chart.NewChartGroup`](https://pkg.go.dev/github.com/belluikit/bellui/x/charts/chart#NewChartGroup)
   stacks several charts, such as price above volume, and keeps their zoom, pan
   and crosshair in step.
@@ -234,7 +256,12 @@ Series colours come from a palette that starts with the theme's primary colour.
 To choose the series colours yourself, set `Option.Color` (or call
 `Palette` on the builder); series use the colours in order and wrap around.
 A colour set directly on a series, such as `LineStyle.Color`, wins over the
-palette.
+palette, and the legend shows it too. The series types that take one colour
+for the whole series implement
+[`series.ColoredSeries`](https://pkg.go.dev/github.com/belluikit/bellui/x/charts/series#ColoredSeries),
+whose `SeriesColor` returns that colour, or nil for the palette colour. Line,
+bar, scatter, effect scatter, box plot, pictorial, geo scatter, geo lines, 3D
+scatter and 3D line series implement it.
 
 ## Animation
 

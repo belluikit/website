@@ -54,11 +54,9 @@ func main() {
 	tl := component.NewTimelineState(len(years),
 		component.TimelineConfig{Interval: 1500 * time.Millisecond, Loop: true},
 		func(i int) {
-			// Play calls this from its own goroutine: hop to the UI thread.
-			bellui.Do(func() {
-				c.SetOption(optionFor(i))
-				year.SetText(fmt.Sprintf("%s (%d of %d)", years[i], i+1, len(years)))
-			})
+			// Every step runs on the UI thread, during playback too.
+			c.SetOption(optionFor(i))
+			year.SetText(fmt.Sprintf("%s (%d of %d)", years[i], i+1, len(years)))
 		})
 
 	controls := container.NewHBox(

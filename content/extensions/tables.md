@@ -37,7 +37,8 @@ Each column's `Field` names a struct field or a map key:
 The full program builds 100,000 orders. The grid creates cells only for the
 rows in view and reuses them as you scroll.
 
-- `HeaderName` is the header text. It defaults to `Field`.
+- `HeaderName` is the header text. It defaults to `Field`. Set
+  `HideHeaderText` to leave the header blank; see [Columns](#columns).
 - `Type` chooses how the column draws, sorts and filters its values:
   `ColumnText` (the default), `ColumnNumber`, `ColumnDate` or
   `ColumnBoolean`.
@@ -59,9 +60,10 @@ so the grid reads it again.
 
 ## Sorting and filtering
 
-Click a header to sort by that column; click again to reverse or clear the sort.
-Shift-click adds the column to a multi-column sort. Right-click a header for a
-menu with sort, filter, pin and hide commands. The menu's filter matches cells
+Tap or click a header to sort by that column; tap again to reverse or clear
+the sort. This works with a finger as well as a mouse. Shift-click adds the
+column to a multi-column sort. Right-click a header for a menu with sort,
+filter, pin and hide commands. The menu's filter matches cells
 containing the text you type. `Options.FloatingFilters` also adds a filter field
 under every header.
 
@@ -70,6 +72,14 @@ From code, use the grid's
 returned by `grid.API()`:
 
 {{< example file="extensions/tables/sortfilter/main.go" region="sortfilter" >}}
+
+`SortingOrder` changes the directions a header tap goes through, in order,
+for one column, or for every column through `DefaultColDef`. Leave
+`SortNone` out of it and the column never goes back to unsorted, which suits
+a list that should always be sorted by that column. Unset, the order is
+ascending, descending, none.
+
+{{< example file="extensions/tables/sortfilter/main.go" region="order" >}}
 
 A column filter is any `func(value any) bool`. The
 [`filter`](https://pkg.go.dev/github.com/belluikit/bellui/x/tables/filter)
@@ -138,6 +148,10 @@ a number.
 - **Column groups** put a shared header over several columns. A `ColumnDef`
   with `Children` is a group, and its `ColID` names it.
 - **Hidden columns** are defined but not shown until you make them visible.
+- A **blank header** suits a column whose cells say what it is, such as a
+  column of icons. `HideHeaderText` leaves out only the painted text: the
+  column keeps its `HeaderName` for screen readers, export, the filter popup
+  and group totals, and its header still sorts and resizes.
 - Users **resize** a column by dragging the edge of its header, and **move** it
   by dragging the header. `MinWidth` and `MaxWidth` bound resizing;
   `Resizable` and `Movable` turn each off.
@@ -159,8 +173,26 @@ row that the user expands and collapses:
 
 {{< example file="extensions/tables/grouping/main.go" region="group" >}}
 
+A tap on a group row, or Enter or Space on it, opens or closes the group. The
+tap is not reported to `OnCellClicked`.
 `ExpandAllGroups` and `CollapseAllGroups` open and close every group; pass
 `""` to `SetRowGroupColumn` to remove the grouping.
+
+A column with an `AggFunc` shows its aggregate on each group row, in its own
+column: `pipeline.AggSum`, `AggAvg`, `AggMin`, `AggMax`, `AggCount`,
+`AggFirst` or `AggLast`. Wrap it with `bellui.Ptr`, as above. A collapsed
+group still counts all of its rows, and a screen reader hears the aggregates
+as part of the group row's label.
+
+- Values are read as numbers of any Go integer or float type. Anything else,
+  `nil` and `""` included, is blank and skipped. `AggCount` counts every row,
+  blank ones included.
+- When every cell in a group is blank, the average, minimum, maximum, first
+  and last are left empty, and the sum shows 0.
+- The aggregate is a `float64`. It is shown through the column's
+  `ValueFormatter`, which must then accept a `float64`. Without one, a column
+  drawn by a `cell.NumberRenderer` uses its `Format`, and any other column
+  rounds to two decimals. A count is always a whole number.
 
 A **pivot** turns the values of one column into columns of their own and
 aggregates a third column into the cells, with `pipeline.AggSum`, `AggAvg`,
@@ -175,11 +207,25 @@ row's ID, the other its parent's ID, or a negative number for a top-level row.
 {{< example file="extensions/tables/grouping/main.go" region="tree" >}}
 
 The parent function returns an `int`, and it is looked up among the values the
-ID function returns. Return the ID as an `int` too, or parents will not be
-found and every row will appear at the top level.
+ID function returns. An ID of any Go integer type matches it, such as an
+`int64` database key; a string ID never does. A row whose parent is not found
+is shown at the top level, and so is the first row of a loop of rows that
+are each other's parents.
 
 **Pagination** splits the rows into pages: `EnablePagination(50)`, then
 `SetPage` and `GetPageCount` to move between them.
+
+## Loading rows in pages
+
+`OnVisibleRowsChanged` reports the first and last display rows in view
+whenever scrolling, a resize or new data changes them. An empty grid reports
+0, -1. To load data a page at a time, compare `last` with `RowCount` and
+fetch the next page as the user nears the end:
+
+{{< example file="extensions/tables/paging/main.go" region="paging" >}}
+
+The callback can run while the grid lays itself out, so fetch on another
+goroutine and add the rows back on the UI thread with `bellui.Do`.
 
 ## Master-detail rows
 
@@ -220,6 +266,22 @@ sorting, with formatted values:
 | `ExportPXF` | A typed PXF document with an embedded schema. Number columns need `ExportType` set. |
 
 Each writes to an `io.Writer`, so you choose where the file goes.
+
+## Touch screens
+
+A swipe that starts on the grid scrolls the grid if its body can still move
+that way. Otherwise it scrolls the page around the grid. A swipe on the
+header always scrolls the page.
+
+## Disabling the grid
+
+`DataGrid` has `Disable`, `Enable` and `Disabled`, like other widgets. A
+disabled grid keeps its place and its rows, and draws its text in the
+disabled colours. It takes no input: no tap, drag, scroll, key or shortcut,
+and Tab skips it. It neither selects, sorts, filters, resizes, reorders nor
+edits. An open editor closes without saving its value. Cells drawn by a
+column's `CellRenderer`, and master-detail content, are your own widgets and
+are left as they are. You can call `Disable` before the grid is shown.
 
 ## Licence
 

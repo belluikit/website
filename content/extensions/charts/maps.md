@@ -45,8 +45,9 @@ draws a dot at each place.
 {{< example file="extensions/charts/series/geoscatter/main.go" region="geoscatter" >}}
 
 `Data` stores longitude, latitude pairs flat: `[lon0, lat0, lon1, lat1, ...]`.
-`SymbolSize` sets the dot size (default 6) and `Color` its colour. Dots are
-always circles; `Symbol` has no effect in v1.0.0.
+`SymbolSize` sets the dot size (default 6) and `Color` its colour. `Symbol`
+picks the marker. Unset or `SymbolCircle` draws circles; `SymbolRect`,
+`SymbolTriangle` and `SymbolDiamond` draw squares, as on a line series.
 
 
 When the chart has a `MapSeries`, every geographic series uses the map's
@@ -67,7 +68,7 @@ Use it for routes or flows between places.
 Each [`GeoLine`](https://pkg.go.dev/github.com/belluikit/bellui/x/charts/series#GeoLine)
 has `From` and `To` as longitude, latitude pairs. `Curved` bends the lines into
 arcs, `Width` sets their thickness (default 2) and `Color` their colour.
-`GeoLine.Value` is not used for drawing in v1.0.0.
+`GeoLine.Value` is not used for drawing.
 
 ## Choropleth
 
@@ -90,6 +91,6 @@ in translucent grey. `Min`, `Max` and `ColorStops` work as in a
 [heatmap](../statistical/#heatmap); the default scale runs from pale to dark green.
 
 Set `MapCenter` and `MapZoom` to frame the regions, or add a `MapSeries`
-first to draw them over a tile map. Regions are filled without outlines. In
-v1.0.0 the choropleth shows tooltips only for a short built-in list of large
-countries, looked up by name.
+first to draw them over a tile map. Regions are filled without outlines. Every
+region with a value has a tooltip, placed on the region's shape in the
+GeoJSON.

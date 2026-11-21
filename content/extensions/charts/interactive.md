@@ -85,16 +85,16 @@ range:
 
 {{< example file="extensions/charts/zoomslider/main.go" region="code" >}}
 
-{{< callout type="warning" >}}
-Some limits of zoom in v1.0.0:
+{{< callout type="info" >}}
+Some things to know about zoom:
 
 - Only the X axis zooms. The Y axis keeps the range of all the data, as the
   screenshot shows: the visible values stay between 1000 and 1400 while the
   axis runs from 800 to 2000.
-- Bars and candlesticks keep the width they have at full range, so they look
-  thin when zoomed in far.
+- Bars, candlesticks, box plots and pictorial bars get wider as a zoom shows
+  fewer of them.
 - `SetZoomWindow` does nothing on a chart without `DataZoom`.
-- The slider has fixed dark colours that do not follow the theme.
+- The slider takes its colours from the theme.
 {{< /callout >}}
 
 `DataZoom` with `Enabled: false` still lets `SetZoomWindow` move the window,
@@ -116,15 +116,17 @@ Y axis and stack are kept; other settings of the series, such as colours,
 dashes and area fills, are not. Button labels are cut to four letters.
 
 `SaveAsImage: true` adds a **Save** button that asks for a file name and
-writes a PNG. In v1.0.0 that PNG holds only the chart's background colour.
-Until that is fixed, cut the chart out of a capture of the window instead:
-
-{{< example file="extensions/charts/toolbox/main.go" region="capture" >}}
+writes a PNG of the chart. The chart's `SaveAsImage` method does the same from
+your own button:
 
 {{< example file="extensions/charts/toolbox/main.go" region="save" >}}
 
-`Capture` returns what is on screen, at the screen's pixel density, so the
-image is as sharp as the window.
+The image holds the title, series, axes, legend, overlays and drawings, at
+the screen's pixel density. It leaves out the toolbox and the zoom buttons, and
+the tooltip and crosshair if they are showing.
+
+`DrawingTools` adds a row of drawing-tool buttons above the plot; see
+[Drawing tools](../trading/#drawing-tools).
 
 ## Brush selection
 
@@ -142,11 +144,9 @@ has the `SeriesIndex` and `DataIndex` of the point and its `Value`. The
 rectangle disappears when the drag ends, and the chart does not mark the
 selected points: to highlight them, change the option yourself.
 
-{{< callout type="info" >}}
-In v1.0.0 the brush selects points of line and scatter series, but not bars
-or candlesticks. `BrushSelectEvent` also declares `DataMinX`, `DataMaxX`,
-`DataMinY` and `DataMaxY`, but the chart leaves them at zero.
-{{< /callout >}}
+The brush selects points of line and scatter series, and the bars and
+candlesticks it covers. `BrushSelectEvent` also reports the rectangle in data
+coordinates, as `DataMinX`, `DataMaxX`, `DataMinY` and `DataMaxY`.
 
 ## Drill-down
 
@@ -183,11 +183,11 @@ From code, `DrillInto(label, option)` goes one level down, `DrillUp()` one
 level up, and `DrillPath()` returns the names of the levels. Going down or up
 resets the legend and the zoom.
 
-{{< callout type="info" >}}
-In v1.0.0, `EventDrilldown` and `EventDrillUp` fire for clicks on data points,
-on **<** and for calls to `DrillInto` and `DrillUp`, but not for clicks on
-**Root** or another level in the trail. `DrilldownEvent.Hit` is always nil.
-{{< /callout >}}
+`EventDrilldown` fires when the chart goes down a level, and `EventDrillUp`
+when it goes up, whether by a click in the trail or a call to `DrillUp`. The
+`DrilldownEvent` carries the new `Path`. For a click on a data point, `Hit` is
+the point clicked; it is nil when you call `DrillInto` yourself, and on the
+way up.
 
 ## Timeline
 
@@ -207,11 +207,11 @@ How it behaves:
 - `Play` advances one step every `Interval` (default 2 seconds). Without
   `Loop` it stops at the last step; with `Loop` it starts again at the first.
   `Stop` ends playback.
-- During playback your function runs on a timer goroutine, not the UI thread,
-  so wrap chart and widget updates in `bellui.Do`.
-- `TimelineState` has no lock. Stop playback before stepping by hand, as the
-  example does.
-- `TimelineConfig.AutoPlay` has no effect in v1.0.0: call `Play` yourself.
+- Every step, and your function, runs on the UI thread, during playback too,
+  so your function can update the chart and widgets directly. Call `Play`,
+  `Stop` and the step methods from the UI thread as well.
+- Stop playback before stepping by hand, as the example does.
+- `TimelineConfig.AutoPlay` has no effect yet: call `Play` yourself.
 
 With `Animation: true` in each option, `SetOption` animates from one step to
 the next.
@@ -220,9 +220,9 @@ the next.
 
 `Option.VisualMap` takes a list of
 [`component.VisualMapConfig`](https://pkg.go.dev/github.com/belluikit/bellui/x/charts/component#VisualMapConfig),
-which describe a colour scale from `Min` to `Max`. In v1.0.0 the chart does
-not use them: setting `Option.VisualMap`, or calling `VisualMap` on the
-builder, changes nothing on screen.
+which describe a colour scale from `Min` to `Max`. The chart does not use
+them yet: setting `Option.VisualMap`, or calling `VisualMap` on the builder,
+changes nothing on screen.
 
 The config's own methods do work. `MapColor` returns the colour for a value,
 blending between the colours in `InRange.Colors`, and `MapSize` returns a size

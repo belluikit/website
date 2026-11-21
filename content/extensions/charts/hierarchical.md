@@ -9,9 +9,9 @@ size of its parts, or flows between things. They ignore the chart's axes and
 lay themselves out in the plot area.
 
 Nodes take their colours from a fixed built-in palette unless you set a node's
-own `Color`. The tree, treemap, sankey and graph series draw their labels in a
-fixed light colour, so the labels are easy to read in the dark theme and faint
-in the light theme. The sunburst draws its labels in dark grey.
+own `Color`. The tree, sankey and graph series write their labels in the
+theme's text colour. The treemap and the sunburst write theirs in black or
+white, whichever stands out more on the tile.
 
 ## Tree
 
@@ -83,12 +83,12 @@ by index, and each
 joins a `Source` index to a `Target` index with a `Value`.
 
 {{< callout type="warning" >}}
-The sankey diagram does not render correctly in v1.0.0. It has only two
+The sankey diagram does not render correctly yet. It has only two
 columns: nodes that are only sources on the left, every other node on the
 right, so a flow with intermediate steps cannot be shown. Each link is drawn as
 a straight horizontal band at the height halfway between its two nodes, so a
 link between nodes at different heights does not meet either of them, as the
-screenshot shows. Until this is fixed, consider a [graph](#graph) for flows.
+screenshot shows. For flows, consider a [graph](#graph) instead.
 {{< /callout >}}
 
 ## Graph

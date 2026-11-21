@@ -28,7 +28,10 @@ func main() {
 		[]*tables.ColumnDef{
 			{Field: "region", HeaderName: "Region", Width: 120},
 			{Field: "product", HeaderName: "Product", Width: 120},
-			{Field: "revenue", HeaderName: "Revenue", Type: tables.ColumnNumber, Width: 100},
+			{
+				Field: "revenue", HeaderName: "Revenue", Type: tables.ColumnNumber, Width: 100,
+				AggFunc: bellui.Ptr(pipeline.AggSum), // each group header shows its total
+			},
 		},
 		func() int { return len(sales) },
 		func(row int) any { return sales[row] },

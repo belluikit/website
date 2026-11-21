@@ -39,8 +39,7 @@ is drawn, with the LTTB algorithm, which keeps the shape of the curve.
 the option (see [Live data](../#live-data)).
 
 {{< callout type="warning" >}}
-In v1.0.0 `Smooth` has no effect: the renderer never reads it, and lines are
-always drawn with straight segments. `SymbolTriangle` and `SymbolDiamond` are
+`Smooth` has no effect yet: lines are always drawn with straight segments. `SymbolTriangle` and `SymbolDiamond` are
 drawn as squares, the same as `SymbolRect`.
 {{< /callout >}}
 
@@ -58,7 +57,7 @@ The fill shows volume under the line, such as load or traffic over a day.
 `AreaStyle.Color` overrides the line's colour for the fill.
 
 {{< callout type="warning" >}}
-The area fill does not render correctly in v1.0.0. It is drawn as one
+The area fill does not render correctly yet. It is drawn as one
 rectangle per segment, from the higher of the segment's two points down to the
 bottom of the plot. The top of the fill is therefore a staircase that pokes
 above the line wherever the line slopes, as the screenshot shows. The fill
@@ -89,7 +88,7 @@ The main fields:
 `AppendValues` adds bars in place, like the line series.
 
 {{< callout type="warning" >}}
-v1.0.0 has no grouped bars. Two bar series in one chart without a common
+There are no grouped bars yet. Two bar series in one chart without a common
 `Stack` are drawn at the same position, so the later one covers the earlier
 one. `BarGap` is declared but has no effect.
 {{< /callout >}}

@@ -9,8 +9,8 @@ established projects, carrying fixes and platform support that Bellui needs;
 each keeps its original license. Any of them can be used on its own.
 
 How you get them differs. The graphics, windowing and desktop libraries are
-dependencies of Bellui itself and arrive with `go get`. goffmpeg and its
-prebuilt libraries come with [x/mmedia](/extensions/mmedia/). gocef-libs is
+dependencies of Bellui itself and arrive with `go get`. goffmpeg, its
+prebuilt libraries and oto come with [x/mmedia](/extensions/mmedia/). gocef-libs is
 fetched by the `bellui` command when it packages a Linux app with a web view.
 
 Uploader and Clair are separate tools, not libraries Bellui depends on.
@@ -40,4 +40,5 @@ They are described under [Tools](/tools/).
 | Library | What it does | License |
 | --- | --- | --- |
 | [goffmpeg](https://github.com/belluikit/goffmpeg) | Go bindings for FFmpeg (libavformat, libavcodec) with prebuilt libraries for each platform. Used by [x/mmedia](/extensions/mmedia/). | BSD-3-Clause |
-| [goffmpeg-libs](https://github.com/belluikit/goffmpeg-libs) | The prebuilt FFmpeg libraries for goffmpeg, one Go module per platform. | LGPL-2.1 |
+| [goffmpeg-libs](https://github.com/belluikit/goffmpeg-libs) | The prebuilt FFmpeg shared libraries for goffmpeg, in two codec sets, one Go module per platform. | LGPL-2.1 |
+| [oto](https://github.com/belluikit/oto) | Low-level sound output on desktop, mobile and the web. Plays [x/mmedia](/extensions/mmedia/)'s audio. Fork of ebitengine/oto. | Apache-2.0 |

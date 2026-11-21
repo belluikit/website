@@ -118,14 +118,6 @@ func main() {
 		return &chart.Grid{Left: 64, Right: 24, Top: top, Bottom: bottom}
 	}
 
-	// Axis tooltips only find line-like series, not candles or bars, so each
-	// pane carries an invisible line through the values to hover on.
-	hidden := series.LineStyle{Color: color.Transparent}
-	closes := make([]float64, len(candles))
-	for i, c := range candles {
-		closes[i] = c.Close
-	}
-
 	price := chart.New(chart.Option{
 		Title:    &chart.Title{Text: "ACME", SubText: "Daily, 10- and 30-day moving averages"},
 		Tooltip:  priceTip,
@@ -133,15 +125,13 @@ func main() {
 		Grid:     grid(12, 30),
 		Color: []color.Color{
 			color.NRGBA{R: 120, G: 120, B: 120, A: 255}, // legend swatch for the candles
-			color.Transparent,
-			color.NRGBA{R: 255, G: 167, B: 38, A: 255}, // MA10
-			color.NRGBA{R: 66, G: 165, B: 245, A: 255}, // MA30
+			color.NRGBA{R: 255, G: 167, B: 38, A: 255},  // MA10
+			color.NRGBA{R: 66, G: 165, B: 245, A: 255},  // MA30
 		},
 		XAxis: []axis.Config{{Type: axis.TypeCategory, Data: make([]string, len(dates))}},
 		YAxis: []axis.Config{{Type: axis.TypeValue, SplitCount: 5}},
 		Series: []series.Series{
 			&series.CandlestickSeries{SeriesName: "ACME", Data: candles, BarWidth: 0.7},
-			&series.LineSeries{Data: closes, LineStyle: hidden}, // no name: not in the legend
 			&series.LineSeries{SeriesName: "MA10", Data: movingAverage(candles, 10)},
 			&series.LineSeries{SeriesName: "MA30", Data: movingAverage(candles, 30)},
 		},
@@ -157,7 +147,6 @@ func main() {
 		YAxis:    []axis.Config{{Type: axis.TypeValue, SplitCount: 2}},
 		Series: []series.Series{
 			&series.BarSeries{Data: volume, BarWidth: 0.7},
-			&series.LineSeries{Data: volume, LineStyle: hidden},
 		},
 	})
 
@@ -167,64 +156,25 @@ func main() {
 	)
 	//docs:end panes
 
-	status := widget.NewLabel("Crosshair")
+	status := widget.NewLabel("")
 
 	//docs:start tools
-	// setTooltip swaps the price pane's tooltip, keeping the rest of its option.
-	setTooltip := func(cfg *component.TooltipConfig) {
-		opt := price.Option()
-		opt.Tooltip = cfg
-		price.SetOption(opt)
-	}
-	noTooltip := &component.TooltipConfig{Trigger: component.TooltipTriggerNone}
+	// One button per drawing tool, the active one highlighted, and Clear All.
+	tools := chart.NewDrawingToolbar(price)
 
-	// Crosshair: plain viewing. Select: click a drawing to select it, drag it
-	// to move it, press Delete to remove it. A click on a chart that shows a
-	// tooltip pins the tooltip instead of selecting, so Select turns it off.
-	crosshairMode := func() {
-		price.SetDrawingTool(interact.DrawingToolNone)
-		setTooltip(priceTip)
-		status.SetText("Crosshair")
-	}
-	selectMode := func() {
-		price.SetDrawingTool(interact.DrawingToolNone)
-		setTooltip(noTooltip)
-		status.SetText("Select: click a drawing, drag to move, Delete to remove")
-	}
-	bar := container.NewHBox(
-		widget.NewButton("Crosshair", crosshairMode),
-		widget.NewButton("Select", selectMode),
-	)
-	tools := []struct {
-		label string
-		tool  interact.DrawingToolMode
-	}{
-		{"H-line", interact.DrawingToolHLine},
-		{"V-line", interact.DrawingToolVLine},
-		{"Trend", interact.DrawingToolTrendLine},
-		{"Ray", interact.DrawingToolRay},
-		{"Rect", interact.DrawingToolRectangle},
-		{"Channel", interact.DrawingToolChannel},
-		{"Fib", interact.DrawingToolFibRetracement},
-		{"Text", interact.DrawingToolTextLabel},
-		{"Measure", interact.DrawingToolMeasure},
-	}
-	for _, t := range tools {
-		bar.Add(widget.NewButton(t.label, func() {
-			setTooltip(priceTip)
-			price.SetDrawingTool(t.tool)
-			status.SetText("Tool: " + t.label)
-		}))
-	}
-	bar.Add(widget.NewButton("Clear", price.ClearDrawings))
+	// A UI of your own follows the active tool through this event. It
+	// arrives on the main goroutine, whoever changed the tool.
+	price.Events.On(interact.EventDrawingToolChanged, func(evt any) {
+		status.SetText("Tool: " + evt.(interact.DrawingToolEvent).Tool.String())
+	})
 	//docs:end tools
 
 	//docs:start events
 	price.Events.On(interact.EventDrawingCreated, func(evt interface{}) {
 		e := evt.(interact.DrawingEvent)
-		// Tools stay active after a drawing. The new drawing is selected,
-		// so switch to Select mode to let the user move or delete it.
-		selectMode()
+		// Tools stay active after a drawing. Go back to Select, so the user
+		// can move or delete the new drawing. The toolbar follows.
+		price.SetDrawingTool(interact.DrawingToolNone)
 		status.SetText(fmt.Sprintf("Created %s at %v", e.DrawingID, e.Drawing.DataPoints()))
 	})
 	price.Events.On(interact.EventDrawingSelected, func(evt interface{}) {
@@ -235,6 +185,6 @@ func main() {
 	})
 	//docs:end events
 
-	w.SetContent(container.NewBorder(container.NewVBox(bar, status), nil, nil, nil, group))
+	w.SetContent(container.NewBorder(container.NewVBox(tools, status), nil, nil, nil, group))
 	bellui.ShowAndRun(w)
 }

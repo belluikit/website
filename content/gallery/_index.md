@@ -2,15 +2,15 @@
 cascade:
   type: docs
 title: Gallery
-description: The MD3 Gallery is a Bellui app that shows every Material Design 3 widget, the extensions and the theme system, one page per topic.
+description: The MD3 Gallery is a Bellui app that shows the Material Design 3 widgets, the extensions and the theme system, one page per topic.
 weight: 4
 ---
 
 The MD3 Gallery is a showcase app built with Bellui. Each page shows one group
 of widgets in a running window: buttons, inputs, navigation, sheets, dialogs,
 type styles and themes. It also shows the [extensions](/extensions/): charts,
-the data grid and the code editor. Every screenshot on this site was taken
-from it.
+the data grid, the code editor, the graph editor and the media players. Most
+screenshots on this site were taken from it.
 
 {{< screenshot name="actions" alt="The gallery's Actions page, with the navigation drawer button and page title on the left of the top bar and five action icons on the right" >}}
 
@@ -59,7 +59,8 @@ bellui serve
 
 Then open <http://localhost:8080> in a browser with WebGPU, such as Chrome or
 Edge. The first load downloads a large WebAssembly file (about 64 MB
-uncompressed), so give it a moment. A few pages are desktop-only. See
+uncompressed), so give it a moment. The Audio Player, Clair, Code Assistant
+and Media Player pages are not in the web build. See
 [Web](/docs/platforms/web/) for building static files and the WebGL
 alternative.
 
@@ -94,20 +95,31 @@ through `adb`. It needs the Android SDK and NDK.
 
 ## Platforms
 
-Most pages build everywhere, Android included. Two pages, Clair and Code
-Assistant, are only in desktop builds: they are left out when you build for
-Android, along with the libraries they use.
+Most pages build everywhere, Android and the web included. Build tags leave
+some out, along with the libraries they use:
+
+| Page | Left out of |
+| --- | --- |
+| Clair, Code Assistant | Android and web builds |
+| Media Player | Android and web builds |
+| Audio Player | Web builds |
+
+The media pages use [x/mmedia](/extensions/mmedia/), which links FFmpeg
+through cgo, so they cannot be built for the web.
 
 ## Tour
 
-The pages are listed in the order the drawer shows them.
+The pages are listed in the order the drawer shows them, which is
+alphabetical.
 
 ### Actions
 
 Every kind of button. The five button styles (filled, filled tonal, elevated,
 outlined and text), a floating action button in its standard and extended
-forms, icon buttons in four styles, a segmented button, a group of connected
-buttons, and a split button with a menu. See
+forms, icon buttons in four styles, red buttons for destructive actions in
+the text, outlined and filled styles and in every icon button style, a
+segmented button, a group of connected buttons, and a split button with a
+menu. See
 [Buttons and actions](/docs/widgets/buttons/).
 
 The screenshot at the top of this page is the Actions page.
@@ -117,6 +129,16 @@ The screenshot at the top of this page is the Actions page.
 A rotating-earth GIF played by `widget.AnimatedGif`, at the frame delays
 stored in the file. A toolbar above it has a two-state button that pauses
 and resumes the animation, and a refresh button that stops and starts it.
+
+### Audio Player
+
+The audio-only player from [x/mmedia](/extensions/mmedia/). A drop-down picks
+a short bundled clip in MP3, AAC, Ogg Vorbis, Opus, FLAC or WAV. You can also
+type an `http` or `https` address, of a file or an HLS playlist, or open a
+local file. Loop and Auto-play check boxes apply to the player. Below it, the
+current position and a log of what the player reports: opening, the end, and
+errors. A phone build plays fewer formats than a desktop build; see
+[Formats](/extensions/mmedia/#formats).
 
 ### Auth
 
@@ -133,8 +155,29 @@ Specialized, Advanced, Drilldown, 3D, Trading and Geo. They cover line, bar,
 scatter, pie, candlestick, heatmap, radar, gauge, funnel, box plot, treemap,
 Sankey, sunburst, graph, tree and parallel charts, 3D bars, scatter, surfaces
 and lines, and maps. The Trading tab has a chart that streams a new point
-every half second, and drawing tools. The Geo tab has a field for a map
+every half second, and a chart with a toolbar of drawing tools. The Geo tab
+has a field for a map
 tile URL or API key. See [Charts](/extensions/charts/).
+
+### Clair
+
+Not in Android or web builds. A search box over an index of Bellui's `widget` and
+`container` packages, built with [Clair](/tools/clair/). Type a query and
+press Enter to see matching declarations with their signatures and doc
+comments. The first search builds the index in your system's temporary
+folder. To do that it needs a Bellui source checkout, either next to the
+gallery (`../bellui`) or under `$GOPATH/src/github.com/belluikit/bellui`.
+
+### Code Assistant
+
+Not in Android or web builds. A small Go program with deliberate mistakes in an editor, next
+to a chat. You ask a question, and the assistant answers through Anthropic's
+API using [Clair](/tools/clair/), with the program and matching Bellui API
+entries included. It needs your own Anthropic API key, entered on the page
+and stored in the app's preferences. You can load the list of available
+models and choose one. Like the Clair page, it needs a Bellui source
+checkout to build its index, and shows an error instead of the editor when it
+cannot find one.
 
 ### Code Editor
 
@@ -144,8 +187,8 @@ The code editor extension, editing a Starlark script. It shows syntax
 highlighting, a gutter with line numbers, breakpoints and fold arrows, error
 and warning markers with wavy underlines, completion, hover help, signature
 help, go-to-definition, a find bar, and a secret hidden behind a redaction
-box. A button swaps in a 50,000-line file to show that large files stay
-responsive. A help line above the editor lists the keyboard shortcuts. See
+box. Buttons fold and unfold every region, and another swaps in a
+50,000-line file to show that large files stay responsive. A help line above the editor lists the keyboard shortcuts. See
 [Code editor](/extensions/editor/).
 
 ### Communication
@@ -164,8 +207,20 @@ field, file open, file save and folder open. See
 {{< screenshot name="containment" alt="The Containment page: a tree view on the left and elevated, filled and outlined cards on the right" >}}
 
 The three card styles, a carousel, a bottom sheet, a side sheet, a divider and
-a list. On the left, a tree view whose items you can drag to reorder, rename
-and delete. See [Containment and overlays](/docs/widgets/containment/).
+a list. On the left, a tree view whose items you can rename, delete, and drag
+to reorder or to move into another folder. On a touch screen, a drag on an
+item scrolls the tree; long-press the item first to move it. See [Containment and overlays](/docs/widgets/containment/).
+
+### DAG Editor
+
+The graph extension, [x/dag](/extensions/dag/), with a data pipeline on the
+canvas: styled nodes, a group and an attached note. Drag to pan, and pinch
+or scroll to zoom. Tap a node to show its fields in the Properties tab, and
+use the Add node tab to tap or drag a component onto the canvas. Right-click
+a node, or long-press it on a touch screen, for a menu that renames or
+deletes it. The buttons above undo, redo, delete the selection, arrange the
+nodes, and add a group or a note. Clearing the Editable check box makes the
+canvas read-only. On a phone, the tabs sit below the canvas.
 
 ### Data Grid
 
@@ -210,6 +265,12 @@ that open the date, time, and date-and-time pickers. See
 [Selection controls](/docs/widgets/selection/) and
 [Pickers](/docs/widgets/pickers/).
 
+### Media Player
+
+The video player from [x/mmedia](/extensions/mmedia/), playing a bundled
+six-second test video in a loop. "Open file…" plays a file of your own
+instead.
+
 ### Navigation
 
 {{< screenshot name="navigation" alt="The Navigation page with a navigation bar, a navigation rail and a top app bar" >}}
@@ -249,23 +310,3 @@ without changing the settings of other Bellui apps.
 All fifteen Material Design 3 type styles, from Display Large to Label Small.
 Each shows a sample and its size and weight in the current theme. See
 [Fonts and typography](/docs/theming/typography/).
-
-### Clair
-
-Desktop only. A search box over an index of Bellui's `widget` and
-`container` packages, built with [Clair](/tools/clair/). Type a query and
-press Enter to see matching declarations with their signatures and doc
-comments. The first search builds the index in your system's temporary
-folder. To do that it needs a Bellui source checkout, either next to the
-gallery (`../bellui`) or under `$GOPATH/src/github.com/belluikit/bellui`.
-
-### Code Assistant
-
-Desktop only. A small Go program with deliberate mistakes in an editor, next
-to a chat. You ask a question, and the assistant answers through Anthropic's
-API using [Clair](/tools/clair/), with the program and matching Bellui API
-entries included. It needs your own Anthropic API key, entered on the page
-and stored in the app's preferences. You can load the list of available
-models and choose one. Like the Clair page, it needs a Bellui source
-checkout to build its index, and shows an error instead of the editor when it
-cannot find one.

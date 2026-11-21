@@ -11,8 +11,10 @@ grid, a code editor, a graph editor and a media player. They live in the
 Bellui repository under `x/`, but each is a separate Go module. An app pays
 for one, in build time and binary size, only when it imports it.
 
-Each extension is released together with the toolkit and carries the same
-version number: `x/charts v1.2.0` goes with Bellui v1.2.0. Add one with
+Each extension is released together with the toolkit and usually carries
+the same version number: `x/charts v1.3.0-rc.4` goes with Bellui v1.3.0-rc.4.
+The media module can be one step ahead, because it is sometimes released on
+its own: `x/mmedia v1.3.0-rc.5` goes with Bellui v1.3.0-rc.4. Add one with
 `go get`:
 
 ```sh

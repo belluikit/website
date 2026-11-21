@@ -27,10 +27,8 @@ func main() {
 				Min:        0,
 				Max:        500,
 				ShowValue:  true,
-				// Minimum at the bottom right, maximum at the bottom left,
-				// with the gap at the bottom. Values grow counter-clockwise.
-				StartAngle: 135,
-				EndAngle:   -135,
+				// The default angles leave the gap at the bottom: the minimum
+				// at the bottom left, values growing clockwise over the top.
 				Sectors: []series.GaugeSector{
 					{Min: 0, Max: 300, Color: color.NRGBA{R: 38, G: 186, B: 121, A: 160}},
 					{Min: 300, Max: 420, Color: color.NRGBA{R: 250, G: 200, B: 88, A: 160}},
