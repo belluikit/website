@@ -36,11 +36,36 @@ Useful flags:
 - `--exe` wraps an executable you built yourself instead of building one
   (desktop and web only).
 - `--src` packages a different folder than the current one (not for mobile).
+- `--android-min-sdk` sets the oldest Android API level the app installs on.
+  The default is 23 (Android 6), and the lowest allowed is 21.
 
 {{< callout type="info" >}}
 Desktop packages are built with cgo, which needs a C compiler for the target
 system. The simplest way is to package each desktop platform on that platform.
 {{< /callout >}}
+
+## Shared libraries the app loads
+
+Some Go modules link C libraries as shared libraries instead of into the
+executable. The FFmpeg builds that [`x/mmedia`](/extensions/mmedia/) uses
+are one: an app built with them does not start without them. `bellui package`
+finds the libraries the executable loads from the `goffmpeg-libs` modules and
+puts them in the package:
+
+| Platform | Where they go |
+| --- | --- |
+| macOS | `Contents/Frameworks` in the `.app` |
+| Linux and BSD | `lib/<app id>/` in the archive, which its `Makefile` installs |
+| Windows | beside the `.exe` |
+| Android | each architecture's `lib/<abi>/` in the APK |
+| iOS | `Frameworks/` in the `.app`, signed with the app |
+
+The executable is pointed at the copies, so it no longer looks in your Go
+module cache. `bellui release` signs the macOS libraries with the app's
+certificate and puts the Windows DLLs in the MSIX. A build with
+`--tags goffmpeg_novideo` carries only the audio libraries. On Android and
+iOS, a library of the same name in `android/libs` or `ios/Frameworks` is an
+error.
 
 ## Platform notes
 
@@ -88,8 +113,12 @@ bellui package -os android/arm64 --app-id com.example.notes
 
 The APK is re-signed with `apksigner` from the SDK's build tools, which modern
 Android versions require. If the build tools are missing, the command warns
-that the APK will not install on Android 11 or later. See
-[Mobile](/docs/platforms/mobile/) for more.
+that the APK will not install on Android 11 or later.
+
+The package installs on Android 6 (API 23) and later unless
+`--android-min-sdk` says otherwise. An app can add Java code, libraries
+(jars and AARs), resources and its own `AndroidManifest.xml` in an `android/`
+folder. See [Mobile](/docs/platforms/mobile/#android) for these.
 {{< /tab >}}
 
 {{< tab name="iOS" >}}
@@ -101,8 +130,10 @@ bellui package -os iossimulator --tags iossimulator --app-id com.example.notes
 ```
 
 A simulator build needs the `iossimulator` build tag as well as the
-`iossimulator` target. See [Mobile](/docs/platforms/mobile/) for signing and
-the other requirements.
+`iossimulator` target. An app can add `Info.plist` values, entitlements,
+privacy declarations and frameworks in an `ios/` folder. See
+[Mobile](/docs/platforms/mobile/#ios) for these, for signing and the other
+requirements.
 {{< /tab >}}
 
 {{< tab name="Web" >}}

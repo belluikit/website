@@ -62,17 +62,17 @@ items of the text edit menu, in 15 languages. Arabic, Hebrew, Persian and
 Urdu are not among them. Your file can translate these messages, because
 Bellui looks them up the same way as yours: add the IDs from Bellui's
 English file,
-[`lang/translations/base.en.json`](https://github.com/belluikit/bellui/blob/v1.0.0/lang/translations/base.en.json),
+[`lang/translations/base.en.pxf`](https://github.com/belluikit/bellui/blob/v1.3.0-rc.4/lang/translations/base.en.pxf),
 to your own. The month names use IDs such as `march`, and the weekday
 initials at the top of the calendar use IDs such as `monday.narrow`. Each
-message you leave out shows in English and logs a "Translation failure"
-error.
+message you leave out shows in English.
 
 **Ship each language you mean to support.** When the user's language has no
-file, Bellui picks the closest one that has. For Persian that can be Arabic:
-in v1.0.0 an app with an Arabic file but no Persian file shows a Persian
-user the Arabic text. Urdu and Hebrew users fall back to English in the same
-situation.
+file, Bellui uses English. It does not pick another language that shares the
+script: a Persian, Urdu or Uyghur user of an app with an Arabic file but no
+file of their own sees English, not Arabic. The one exception is the main
+language of the user's region: a Chechen user in Russia gets your Russian
+file.
 
 ## Example
 
@@ -90,16 +90,7 @@ is specific to right-to-left layout:
 The translation file maps the English text to Arabic. It also translates
 Bellui's own "Cancel" and "OK":
 
-```json
-{
-  "Order": "الطلب",
-  "Name": "الاسم",
-  "Next": "التالي",
-  "Previous": "السابق",
-  "Cancel": "إلغاء",
-  "OK": "موافق"
-}
-```
+{{< example file="localisation/rtl/translations/ar.pxf" lang="text" >}}
 
 ## Fonts
 
@@ -195,6 +186,11 @@ Under a right-to-left layout, Bellui mirrors:
   groups, split buttons, spin boxes, the carousel and the status bar. A
   button with an icon puts the icon on the right of its text. `Select`
   shows its arrow on the left.
+- **Menus.** A menu item's check mark, icon and label start on the right,
+  and its shortcut and submenu arrow sit on the left. Submenus open to the
+  left of their item, or to the right when there is no room. In a pop-up
+  menu, Left opens a submenu and Right closes it.
+- **The navigation drawer** opens from the right by default.
 - **Directional icons.** `NavigateBack`, `NavigateNext`, `MenuExpand`,
   `MailReply`, `MailReplyAll` and `MailForward` are drawn mirrored, so a back
   arrow points right. See [Icons](/docs/theming/icons/).

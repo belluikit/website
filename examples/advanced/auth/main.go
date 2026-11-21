@@ -2,6 +2,7 @@
 package main
 
 import (
+	"errors"
 	"log"
 
 	"github.com/belluikit/bellui"
@@ -69,6 +70,28 @@ func main() {
 	})
 	//docs:end direct
 
-	w.SetContent(container.NewPadded(container.NewVBox(signIn, sso, signOut, status)))
+	//docs:start phone
+	apple := widget.NewButton("Sign in with Apple", func() {
+		go func() {
+			// On iOS this shows the Sign in with Apple sheet. With no
+			// ClientID, the token must be for the app's bundle ID.
+			r, err := auth.Authenticate(auth.OIDCConfig{Provider: "apple"})
+			bellui.Do(func() {
+				switch {
+				case errors.Is(err, auth.ErrCancelled):
+					status.SetText("Sign-in cancelled")
+				case err != nil:
+					status.SetText("Sign-in failed: " + err.Error())
+				default:
+					// Send r.AuthorizationCode to your server, which
+					// redeems it with Apple for a refresh token.
+					status.SetText("Signed in as " + r.Email)
+				}
+			})
+		}()
+	})
+	//docs:end phone
+
+	w.SetContent(container.NewPadded(container.NewVBox(signIn, sso, apple, signOut, status)))
 	bellui.ShowAndRun(w)
 }

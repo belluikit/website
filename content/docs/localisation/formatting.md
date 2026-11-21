@@ -71,13 +71,7 @@ to two decimals.
 [`FormatUnit(value, unit)`](https://pkg.go.dev/github.com/belluikit/bellui/lang#FormatUnit)
 formats a value in a unit you choose, from metres, kilometres, miles, feet,
 grams, kilograms and pounds. The unit's label takes the right plural form,
-such as Polish "1 mila", "2 mile", "5 mil".
-
-{{< callout type="warning" >}}
-In bellui v1.0.0, `FormatUnit`, `FormatDistance` and `FormatMass` log a "Unit
-format failure" error when the value has a fractional part, such as 1.24
-miles. The text they return is still correct.
-{{< /callout >}}
+such as Polish "1 mila", "2 mile", "5 mil", and "2,5 mili" for a fraction.
 
 ## Sorting text
 

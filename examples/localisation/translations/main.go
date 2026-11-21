@@ -18,6 +18,21 @@ var translations embed.FS
 
 //docs:end embed
 
+//docs:start types
+// User fills {Name} from its exported field.
+type User struct {
+	Name string
+}
+
+// Stats has a method, which a placeholder cannot call.
+type Stats struct {
+	files []string
+}
+
+func (s Stats) Count() int { return len(s.files) }
+
+//docs:end types
+
 func main() {
 	//docs:start load
 	if err := lang.AddTranslationsFS(translations, "translations"); err != nil {
@@ -30,7 +45,7 @@ func main() {
 
 	//docs:start use
 	name := "Ada"
-	welcome := lang.L("Welcome, {{.Name}}!", map[string]any{"Name": name})
+	welcome := lang.L("Welcome, {Name}!", map[string]any{"Name": name})
 
 	n := 3
 	selected := lang.N("files_selected", n, map[string]any{"Count": n})
@@ -40,6 +55,16 @@ func main() {
 	gender := "female"
 	update := lang.LSelect("profile_updated", gender, map[string]any{"Name": name})
 	//docs:end use
+
+	//docs:start several
+	user := User{Name: "Ada"}
+	stats := Stats{files: []string{"a.txt", "b.txt"}}
+	sent := lang.L("{Name} sent {Count} files", user, map[string]any{"Count": stats.Count()})
+	//docs:end several
+
+	//docs:start fill
+	progress := lang.Fill("{Done} of {Total}", map[string]any{"Done": 2, "Total": 5})
+	//docs:end fill
 
 	//docs:start locale
 	info := widget.NewLabel("System locale: " + lang.SystemLocale().String() +
@@ -51,6 +76,8 @@ func main() {
 		widget.NewLabel(selected),
 		widget.NewButton(save, func() {}),
 		widget.NewLabel(update),
+		widget.NewLabel(sent),
+		widget.NewLabel(progress),
 		info,
 	))
 	bellui.ShowAndRun(w)

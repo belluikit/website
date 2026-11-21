@@ -62,6 +62,13 @@ func main() {
 	})
 	//docs:end track
 
+	//docs:start reset
+	signOut := widget.NewButton("Sign out", func() {
+		// Later events are anonymous, under a new session ID.
+		analytics.Reset(t)
+	})
+	//docs:end reset
+
 	//docs:start nocapture
 	// Taps inside this region are never auto-captured.
 	private := analytics.NoCapture(container.NewVBox(
@@ -70,7 +77,7 @@ func main() {
 	))
 	//docs:end nocapture
 
-	w.SetContent(container.NewPadded(container.NewVBox(consent, export, private)))
+	w.SetContent(container.NewPadded(container.NewVBox(consent, export, signOut, private)))
 	bellui.ShowAndRun(w)
 
 	_ = analytics.Flush()

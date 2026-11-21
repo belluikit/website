@@ -57,6 +57,10 @@ path. Compare it with the master, then either fix the code or rerun with
 `UPDATE_TESTDATA=1` to accept the change. Add `testdata/failed/` to your
 `.gitignore`.
 
+Image masters depend on Bellui's software renderer and on the test theme.
+When you upgrade Bellui, a release that changes either can move some pixels.
+Look at the failed images, and refresh the masters once they look right.
+
 ## Rendering whole windows
 
 The `…Object…` functions size a fresh canvas to the object. To check a whole

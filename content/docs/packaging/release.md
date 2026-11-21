@@ -60,6 +60,7 @@ bellui release -os android --app-id com.example.notes --app-version 1.2.0 --app-
 | `--keystore` | Yes | Your `.keystore` file. |
 | `--key-name` | Yes | The alias of the signing key. |
 | `--keystore-pass`, `--key-pass` | No | Passwords. If you leave them out you are asked for them. |
+| `--android-min-sdk` | No | The oldest API level the app installs on. Defaults to 23 (Android 6). |
 
 A release builds an Android App Bundle, `Name.aab`, which is what Google Play
 expects; `bellui package` builds an `.apk` instead. You need `ANDROID_HOME`
@@ -78,10 +79,13 @@ bellui release -os ios --app-id com.example.notes --app-version 1.2.0 --app-buil
 | --- | --- | --- |
 | `--app-id`, `--app-version`, `--app-build` | Yes | |
 | `--profile` | Yes | The App Store provisioning profile. |
-| `--certificate` | No | Defaults to `Apple Distribution`. |
+| `--certificate` | No | Defaults to `Apple Distribution`. Also takes a certificate's SHA-1. |
 
 The command signs the app with `codesign`, using your team ID from the
-certificate, and zips it into `Name.ipa` for upload.
+certificate, and zips it into `Name.ipa` for upload. Apple lets you have
+several "Apple Distribution" certificates with the same name. The command
+then signs with the one in your keychain that the provisioning profile
+allows, and says which.
 {{< /tab >}}
 
 {{< /tabs >}}

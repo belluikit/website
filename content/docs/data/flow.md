@@ -83,9 +83,8 @@ function that unregisters it:
 
 Unlike a binding listener, it does not run when you register it.
 
-`Value` and `Derived` also have `Listen(func(old, new T))`. In this version
-both arguments receive the new value. If you need the previous value, keep a
-copy yourself in an `OnChange` listener.
+`Value` and `Derived` also have `Listen(func(old, new T))`, which receives
+the value from before the change and the value after it.
 
 A derived value keeps listening to its sources until you call its `Close`
 method. Call it when a derived value is no longer needed but its sources live

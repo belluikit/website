@@ -59,9 +59,22 @@ user, call `Identify` with an ID your app owns, for example its own account
 ID, and optional traits. Call it only once the user has consented. The tracker
 adds that ID to every following event.
 
+When the user signs out, call
+[`analytics.Reset`](https://pkg.go.dev/github.com/belluikit/bellui/analytics#Reset)
+with the tracker. It forgets the ID `Identify` set and starts a
+new session ID, so the events that follow are anonymous and not linked to the
+ones before. In PostHog they no longer land on the same person.
+
+{{< example file="advanced/analytics/main.go" region="reset" >}}
+
+`Reset` sends nothing and works while the tracker is disabled. Events already
+in the queue keep the identity they were recorded with. It ignores a tracker
+that `analytics.New` did not create. Calling `Identify("")` is not the same:
+it records an identify event (a `$identify` in PostHog) and keeps the session ID.
+
 Each [`Event`](https://pkg.go.dev/github.com/belluikit/bellui/analytics#Event)
 also carries a `SessionID`. It is random, made fresh every time the app
-starts, and never saved as an identity.
+starts and at every `Reset`, and never saved as an identity.
 
 ## When events are sent
 
