@@ -7,8 +7,11 @@
 #
 # It copies the example next to itself under a "_shot" directory (which
 # go build ./... ignores), replaces its bellui.ShowAndRun(w) call with a
-# version that resizes the window, waits, captures Canvas().Capture() in
-# both theme variants and quits, and runs it with BELLUI_SCALE=2.
+# version that resizes the window, waits, captures Canvas().Capture() and
+# quits, and runs it with BELLUI_SCALE=2: once with BELLUI_THEME=light and
+# once with BELLUI_THEME=dark. Each variant gets its own process, because
+# x/charts charts keep the colours they were first drawn in when the theme
+# variant changes while the app runs (belluikit/bellui#1381).
 set -eu
 cd "$(dirname "$0")/../.."
 src="examples/$1"; name="$2"; size="${3:-900x650}"; delay="${4:-3}"
@@ -29,6 +32,8 @@ cat > "$tmp/zz_shot.go" <<'EOF'
 package main
 
 import (
+	"errors"
+	"image"
 	"image/png"
 	"log"
 	"os"
@@ -38,7 +43,6 @@ import (
 
 	"github.com/belluikit/bellui"
 	"github.com/belluikit/bellui/geo"
-	"github.com/belluikit/bellui/theme"
 )
 
 func shotShowAndRun(w bellui.Window) {
@@ -50,25 +54,26 @@ func shotShowAndRun(w bellui.Window) {
 	delay, _ := strconv.ParseFloat(os.Getenv("SHOT_DELAY"), 64)
 	go func() {
 		a := bellui.CurrentApp()
-		for _, v := range []string{"light", "dark"} {
-			bellui.DoAndWait(func() {
-				if v == "light" {
-					a.Settings().SetThemeVariant(theme.VariantLight)
-				} else {
-					a.Settings().SetThemeVariant(theme.VariantDark)
-				}
-			})
-			time.Sleep(time.Duration(delay * float64(time.Second)))
-			bellui.DoAndWait(func() {
-				fn := os.Getenv("SHOT_OUT") + "-" + v + ".png"
-				f, err := os.Create(fn)
-				if err == nil {
-					err = png.Encode(f, w.Canvas().Capture())
-					f.Close()
-				}
-				log.Printf("SHOT %s err=%v", fn, err)
-			})
+		time.Sleep(time.Duration(delay * float64(time.Second)))
+		// Capture returns nil when macOS reports the window as covered by
+		// another one, so try again a few times before giving up.
+		var img image.Image
+		for try := 0; img == nil && try < 10; try++ {
+			if try > 0 {
+				time.Sleep(500 * time.Millisecond)
+			}
+			bellui.DoAndWait(func() { img = w.Canvas().Capture() })
 		}
+		fn := os.Getenv("SHOT_OUT") + "-" + os.Getenv("BELLUI_THEME") + ".png"
+		err := errors.New("Capture returned nil: is the window covered?")
+		if img != nil {
+			var f *os.File
+			if f, err = os.Create(fn); err == nil {
+				err = png.Encode(f, img)
+				f.Close()
+			}
+		}
+		log.Printf("SHOT %s err=%v", fn, err)
 		bellui.DoAndWait(a.Quit)
 	}()
 	bellui.ShowAndRun(w)
@@ -77,11 +82,15 @@ EOF
 
 out="$PWD/static/images/gallery/$name"
 log="$moddir/_shot/$name.log"
-if ! (cd "$tmp" && BELLUI_SCALE=2 SHOT_SIZE="$size" SHOT_DELAY="$delay" SHOT_OUT="$out" GOWORK=off go run . "$@") > "$log" 2>&1; then
-	tail -20 "$log" >&2
-	rm -rf "$moddir/_shot"
-	exit 1
-fi
-grep 'SHOT ' "$log"
+(cd "$tmp" && GOWORK=off go build -o shot .) > "$log" 2>&1 || { tail -20 "$log" >&2; rm -rf "$moddir/_shot"; exit 1; }
+for v in light dark; do
+	if ! (cd "$tmp" && BELLUI_THEME=$v BELLUI_SCALE=2 SHOT_SIZE="$size" SHOT_DELAY="$delay" SHOT_OUT="$out" ./shot "$@") > "$log" 2>&1; then
+		tail -20 "$log" >&2
+		rm -rf "$moddir/_shot"
+		exit 1
+	fi
+	grep 'SHOT ' "$log"
+	grep -q 'SHOT .* err=<nil>' "$log" || { rm -rf "$moddir/_shot"; exit 1; }
+done
 rm -rf "$moddir/_shot"
 ls -la "$out-light.png" "$out-dark.png"
