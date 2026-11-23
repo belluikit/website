@@ -1,6 +1,6 @@
 ---
 title: Right-to-left languages
-description: Translate an app into Arabic, Hebrew, Persian or Urdu, what Bellui mirrors for you, what it does not, fonts, and the text-direction limits of v1.0.0.
+description: Translate an app into Arabic, Hebrew, Persian or Urdu, what Bellui mirrors for you, what it does not, fonts, and the text-direction limits of v1.3.0-rc.4.
 weight: 4
 ---
 
@@ -141,7 +141,7 @@ appears on screen, not through the characters in stored order.
 ### Mixed Arabic and Latin text
 
 {{< callout type="warning" >}}
-In Bellui v1.0.0, a line that mixes right-to-left text with Latin words,
+In Bellui v1.3.0-rc.4, a line that mixes right-to-left text with Latin words,
 digits or punctuation is often drawn with its pieces in the wrong order. This
 affects labels, entries, rich text and `canvas.Text`.
 {{< /callout >}}
@@ -200,7 +200,7 @@ Under a right-to-left layout, Bellui mirrors:
 
 ## What does not mirror
 
-These keep their left-to-right arrangement in a right-to-left app in v1.0.0.
+These keep their left-to-right arrangement in a right-to-left app in v1.3.0-rc.4.
 Check each one you use:
 
 - **Sliders and progress bars** fill from the left, and a slider's minimum
