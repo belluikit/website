@@ -65,6 +65,44 @@ as its label, and the chips wrap onto the next row when a row is full.
 - `OnChanged` receives the selected options, in the order they were
   selected. `Selected` holds them.
 - `SetSelected` selects options from code, fires `OnChanged` and refreshes.
+  `SetSelectedSilently` does the same without firing anything.
+- `Alignment` places each row of chips. `bellui.TextAlignLeading` (the
+  default) puts it at the start, `TextAlignCenter` in the middle and
+  `TextAlignTrailing` at the end. A shorter last row is placed the same way.
+  Start and end follow the layout direction, so under right-to-left the chips
+  run from the right edge.
+
+### Excluding options
+
+{{< example file="widgets/chips/main.go" region="exclude" >}}
+
+A filter often needs "not this one" as well as "only these". Set `Excludable`
+on a group with `Multiple`, and each tap moves a chip from off to selected,
+to excluded, and back to off. `Excludable` does nothing without `Multiple`.
+
+- An excluded chip shows a cross where the check mark goes, an
+  error-coloured outline, and its label struck through, so the state does not
+  depend on colour alone. Material 3 has no excluded filter chip, so this
+  look is BellUI's own. A screen reader reads it as "Rock, excluded".
+- `Excluded` holds the excluded options, in the order they were excluded. An
+  option is never in both `Selected` and `Excluded`.
+- `OnStateChanged` receives each option whose state changed, with its new
+  `ChipState`: `ChipStateOff`, `ChipStateSelected` or `ChipStateExcluded`.
+  A tap changes one option. Both lists are already updated when it runs.
+  The tap from selected to excluded also takes the option out of
+  `Selected`, so `OnChanged` fires first with the smaller selection.
+- `State` returns one option's state.
+- `SetExcluded` excludes options from code and fires `OnStateChanged`. If it
+  takes an option out of `Selected`, it fires `OnChanged` too.
+  `SetExcludedSilently` fires nothing.
+- To refuse a change, put the lists back from `OnStateChanged` with
+  `SetSelectedSilently` and `SetExcludedSilently`.
+
+`OnChanged` keeps its `func([]string)` signature and still reports only the
+selection. Code written for an earlier version works unchanged.
+`OnStateChanged` runs in every group, not only excludable ones, after
+`OnChanged`. In a single-choice group, a tap that moves the selection reports
+two options: the one that lost the selection and the one that gained it.
 
 ## Select
 

@@ -178,7 +178,8 @@ struct literal.
 {{< example file="widgets/chips/main.go" region="chips" >}}
 
 For a set of filter chips where the user picks one or several options, use
-[`ChipGroup`](../selection/#chipgroup).
+[`ChipGroup`](../selection/#chipgroup). A `ChipGroup` can also let the user
+[exclude options](../selection/#excluding-options).
 
 ## Toolbar
 

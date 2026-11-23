@@ -48,11 +48,27 @@ func main() {
 	})
 	//docs:end group
 
+	//docs:start exclude
+	genres := widget.NewChipGroup([]string{"Rock", "Jazz", "Pop", "Folk"}, true, nil)
+	genres.Excludable = true
+	genres.OnStateChanged = func(option string, state widget.ChipState) {
+		switch state {
+		case widget.ChipStateSelected:
+			status.SetText("Show " + option)
+		case widget.ChipStateExcluded:
+			status.SetText("Hide " + option)
+		case widget.ChipStateOff:
+			status.SetText(option + " no longer filtered")
+		}
+	}
+	//docs:end exclude
+
 	w.SetContent(container.NewVBox(
 		container.NewHBox(directions, running),
 		tags,
 		sizes,
 		toppings,
+		genres,
 		status,
 	))
 	bellui.ShowAndRun(w)
