@@ -67,6 +67,15 @@ Two ways to make them:
   example `examples/extensions/shots/dag/`; the check script compiles them
   but does not require a page to show their code.
 
+Each variant is captured by its own run of the app, started with
+`BELLUI_THEME=light` or `BELLUI_THEME=dark`, rather than by switching the
+variant in a running app: x/charts charts keep the colours they were first
+drawn in (belluikit/bellui#1381).
+
+Before committing, compress new captures with
+`pngquant --force --ext .png --skip-if-larger <files>`, as the rest of the
+set is. It shrinks them with no visible change.
+
 ## Deploying (Cloudflare Pages)
 
 The site is built and served by Cloudflare Pages from this repository.

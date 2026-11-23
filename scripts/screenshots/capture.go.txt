@@ -1,19 +1,38 @@
 // Capture hook for the gallery's main.go: paste it just before
 // bellui.ShowAndRun(w). It needs the imports image, image/png, log, os,
-// path/filepath, strings and time, and uses main's registry, current,
+// path/filepath, strconv, strings and time, and uses main's registry, current,
 // rebuild, appBar, a and w.
 //
-//   BELLUI_SCALE=2 SHOTS_DIR=out \
-//   SHOTS_PAGES="Actions,Inputs,Navigation,Containment,Communication,Charts,Data Grid,Code Editor,Theme,Typography" \
-//   go run .
+//   go build -o shot . && mkdir -p home
+//   for v in light dark; do
+//     HOME=$PWD/home BELLUI_THEME=$v SHOTS_VARIANTS=$v BELLUI_SCALE=2 SHOTS_DIR=out \
+//     SHOTS_SIZE=900x650 SHOTS_PAGES="Actions,Inputs,Navigation,Containment,Communication" ./shot
+//   done
 //
-// writes out/<page>-light.png and out/<page>-dark.png, then quits.
+// writes out/<page>-<variant>.png for each page and variant, then quits.
+// The empty HOME keeps out a theme you picked on the gallery's Theme page:
+// the gallery stores that choice in its preferences and restores it at
+// startup, and the site's captures use the default theme.
+// SHOTS_SIZE resizes the window first (the current set uses 900x650 for the
+// pages above, 1124x650 for Charts and Data Grid, and 1167x682 for Code
+// Editor, Theme and Typography). Run one variant per process, as above:
+// x/charts charts keep the colours they were first drawn in when the
+// variant changes while the app runs (belluikit/bellui#1381).
 
 	if dir := os.Getenv("SHOTS_DIR"); dir != "" {
 		go func() {
 			names := strings.Split(os.Getenv("SHOTS_PAGES"), ",")
+			variants := []string{"light", "dark"}
+			if v := os.Getenv("SHOTS_VARIANTS"); v != "" {
+				variants = strings.Split(v, ",")
+			}
+			if sz := strings.Split(os.Getenv("SHOTS_SIZE"), "x"); len(sz) == 2 {
+				width, _ := strconv.Atoi(sz[0])
+				height, _ := strconv.Atoi(sz[1])
+				bellui.DoAndWait(func() { w.Resize(geo.NewSize(float32(width), float32(height))) })
+			}
 			time.Sleep(3 * time.Second)
-			for _, variant := range []string{"light", "dark"} {
+			for _, variant := range variants {
 				bellui.DoAndWait(func() {
 					if variant == "light" {
 						a.Settings().SetThemeVariant(theme.VariantLight)
@@ -39,8 +58,19 @@
 						appBar.Refresh()
 					})
 					time.Sleep(2500 * time.Millisecond)
+					// Capture returns nil while macOS reports the window as
+					// covered by another one, so try again a few times.
 					var img image.Image
-					bellui.DoAndWait(func() { img = w.Canvas().Capture() })
+					for try := 0; img == nil && try < 10; try++ {
+						if try > 0 {
+							time.Sleep(500 * time.Millisecond)
+						}
+						bellui.DoAndWait(func() { img = w.Canvas().Capture() })
+					}
+					if img == nil {
+						log.Printf("SHOTS: %s %s: Capture returned nil; is the window covered?", name, variant)
+						continue
+					}
 					fn := filepath.Join(dir, strings.ToLower(strings.ReplaceAll(name, " ", "-"))+"-"+variant+".png")
 					f, err := os.Create(fn)
 					if err == nil {
