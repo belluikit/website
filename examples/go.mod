@@ -2,7 +2,7 @@ module github.com/belluikit/website/examples
 
 go 1.26.2
 
-require github.com/belluikit/bellui v1.3.0-rc.4.0.20261123101245-cc87d9e88bc8
+require github.com/belluikit/bellui v1.3.0-rc.5
 
 require (
 	github.com/Microsoft/go-winio v0.6.2 // indirect
