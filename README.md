@@ -89,6 +89,12 @@ The site is built and served by Cloudflare Pages from this repository.
 
 The custom domain is `bellui.com`. `bellui.io` is meant to redirect to it once DNS is set up.
 
+Cloudflare's Email Obfuscation is on for the zone. It treats a versioned module path like `bellui@v1.3.0-rc.4` as an email address. Pages that are read without JavaScript then show "[email protected]" instead (#25).
+
+A Configuration Rule, `Docs: no email obfuscation`, turns it off for `/` and for paths under `/docs/`, `/develop/`, `/extensions/`, `/gallery/`, `/tools/`, `/libraries/` and `/about/`. It stays on for `/privacy/` and `/support/`, which show a real address.
+
+**A new top-level section needs adding to that rule.** To check, run `curl -s https://bellui.com/<page>/ | grep -c __cf_email__`. It gives 0 on a page the rule covers.
+
 ## Live demo
 
 `/demo/` runs the [gallery](https://github.com/belluikit/gallery) in the
