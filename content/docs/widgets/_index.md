@@ -79,7 +79,7 @@ Call `Disable()` to keep a widget on screen while the user cannot use it, and
 | Pickers | `DatePicker`, `TimePicker`, `DateTimePicker`, `WheelPicker`, `FontPicker`, `ThemeSelector` |
 | Navigation | `TopAppBar`, `NavigationBar`, `NavigationRail`, `BottomAppBar` |
 | Collections and containment | `List`, `Tree`, `TreeView`, `FileTree`, `Carousel`, `SwipeArea` |
-| Containers and forms | `Form` (its submit and cancel buttons), `container.AppTabs`, `container.DocTabs`, `container.InnerWindow` |
+| Containers and forms | `Form` (its submit and cancel buttons), `container.AppTabs`, `container.DocTabs`, [`container.InnerWindow`](/docs/widgets/containment/#inner-windows) |
 
 Some do not, for example `Hyperlink`, `Table`, `GridWrap` and
 `NavigationDrawer`.

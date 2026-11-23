@@ -1,12 +1,14 @@
 ---
 title: Containment and overlays
-description: Cards, accordions, carousels and swipe areas that hold content, and sheets, pop-ups, menus and tooltips that float above it.
+description: Cards, accordions, carousels and swipe areas that hold content, sheets, pop-ups, menus and tooltips that float above it, and inner windows the user moves around.
 weight: 6
 ---
 
 Some widgets exist to hold other content. Cards, accordions and carousels
 group it in place. Sheets, pop-ups, menus and tooltips float above the rest
 of the window for a moment. A swipe area reports swipes across what it holds.
+Inner windows are small windows inside your app's window, which the user
+drags, resizes and closes.
 
 {{< screenshot name="containment" alt="The gallery's Containment page: a tree view on the left, elevated, filled and outlined cards, and a carousel showing its first slide" >}}
 
@@ -21,6 +23,7 @@ of the window for a moment. A swipe area reports swipes across what it holds.
 | Extra actions or content sliding up from the bottom | `BottomSheet` |
 | Supplementary details beside the main content | `SideSheet` |
 | Any content floating above the window | `PopUp` |
+| Several movable, resizable windows inside the app's window | `container.InnerWindow` in a `container.MultipleWindows` |
 | A right-click menu on a widget | `ContextMenu` |
 | A menu opened from a button | `ShowPopUpMenuAtRelativePosition` |
 | A short hint on hover | `SetToolTipText`, or `Tooltip` for non-widget content |
@@ -139,6 +142,65 @@ dialogs are built on it.
   screen reader's dismiss action. When it is set, it replaces the plain hide,
   so your function must call `Hide()` itself. Calling `Hide()` from code does
   not run it.
+
+## Inner windows
+
+[`container.InnerWindow`](https://pkg.go.dev/github.com/belluikit/bellui/container#InnerWindow)
+draws a window inside your app's window: a title bar with close, minimise and
+maximise buttons, your content below it, and a corner handle at the bottom
+right for resizing. Put inner windows in a
+[`container.MultipleWindows`](https://pkg.go.dev/github.com/belluikit/bellui/container#MultipleWindows),
+which lets the user move them around.
+
+{{< screenshot name="innerwindow" alt="Two inner windows on a plain background. The Notes window has a document icon at the right of its title bar and an empty text area. The About window overlaps it, with a short hint about dragging and resizing." >}}
+
+{{< example file="widgets/innerwindow/main.go" region="windows" >}}
+
+`MultipleWindows` gives each window its behaviour:
+
+- dragging the title bar moves the window;
+- dragging the bottom-right corner resizes it, never below its minimum size;
+- tapping the title bar brings the window to the front.
+
+It does this by setting each window's `OnDragged`, `OnResized` and
+`OnTappedBar`, so any functions you set there yourself are replaced. A window
+outside a `MultipleWindows` does not move by itself: set those three to move,
+resize and restack it as you like.
+
+`MultipleWindows` does not place windows for you. Each one starts at the
+position you give it with `Move`, at its minimum size unless you call
+`Resize`. `Add` puts another window on top of the others. You can also change
+the `Windows` slice and call `Refresh`; the last window in it is drawn on top.
+
+### Window buttons
+
+The close button hides the window. To ask first, set `CloseIntercept`. Your
+function then runs instead, and calls `Close` when the window should go:
+
+{{< example file="widgets/innerwindow/main.go" region="close" >}}
+
+Minimise and maximise do nothing on their own. Each button works only once
+you set its function, `OnMinimized` or `OnMaximized`; until then, it is shown
+disabled on desktop and hidden on phones and tablets. Your function decides
+what the button does. `SetMaximized` only swaps the maximise icon for a
+restore icon, so resize the window yourself:
+
+{{< example file="widgets/innerwindow/main.go" region="maximise" >}}
+
+`Icon` adds an icon to the title bar. It is drawn disabled unless you set
+`OnTappedIcon`. `SetTitle` changes the title, and `SetPadded(false)` removes
+the padding around your content.
+
+The buttons sit at the left of the title bar on macOS, and at the right on
+Windows, Linux and BSD. Set `Alignment` to `widget.ButtonAlignLeading` or
+`widget.ButtonAlignTrailing` to choose for every platform.
+
+### Disabling an inner window
+
+`Disable()` stops the user from closing, moving or resizing the window, and
+disables every widget inside it that can be disabled, as described in
+[Disabled widgets](/docs/widgets/#disabled-widgets). Your code can still
+call `Close`, `SetContent` and `SetMaximized`.
 
 ## Menus
 
