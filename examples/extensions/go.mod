@@ -3,12 +3,12 @@ module github.com/belluikit/website/examples/extensions
 go 1.26.2
 
 require (
-	github.com/belluikit/bellui v1.3.0-rc.4
-	github.com/belluikit/bellui/x/charts v1.3.0-rc.4
-	github.com/belluikit/bellui/x/dag v1.3.0-rc.4
-	github.com/belluikit/bellui/x/editor v1.3.0-rc.4
-	github.com/belluikit/bellui/x/mmedia v1.3.0-rc.5
-	github.com/belluikit/bellui/x/tables v1.3.0-rc.4
+	github.com/belluikit/bellui v1.3.0
+	github.com/belluikit/bellui/x/charts v1.3.0
+	github.com/belluikit/bellui/x/dag v1.3.0
+	github.com/belluikit/bellui/x/editor v1.3.0
+	github.com/belluikit/bellui/x/mmedia v1.3.0
+	github.com/belluikit/bellui/x/tables v1.3.0
 )
 
 require (

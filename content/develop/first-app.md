@@ -35,7 +35,7 @@ Reading it from the top:
 ### Fetch the dependencies
 
 ```sh
-go get github.com/belluikit/bellui@v1.3.0-rc.4
+go get github.com/belluikit/bellui@v1.3.0
 go mod tidy
 ```
 
