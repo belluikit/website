@@ -30,11 +30,12 @@ into the `messages` map and write its placeholders as `{Name}`.
 `lang` functions, and writes them into a catalog:
 
 ```sh
-mkdir -p translations
 bellui translate translations/en.pxf .
 ```
 
-The folder must exist. Run it again after you change the code: it adds new
+It creates the `translations` folder if it is missing. Before v1.3.0 the
+folder had to exist already, so with an older `bellui` command, create it
+first. Run it again after you change the code: it adds new
 messages and leaves the ones already in the file alone. With `--update`
 (`-u`) it replaces those too, with the text from the source.
 

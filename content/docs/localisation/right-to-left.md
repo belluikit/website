@@ -1,6 +1,6 @@
 ---
 title: Right-to-left languages
-description: Translate an app into Arabic, Hebrew, Persian or Urdu, what Bellui mirrors for you, what it does not, fonts, and the text-direction limits of v1.3.0-rc.4.
+description: Translate an app into Arabic, Hebrew, Persian or Urdu, what Bellui mirrors for you, what it does not, fonts, and the text-direction limits of v1.3.0.
 weight: 4
 ---
 
@@ -62,7 +62,7 @@ items of the text edit menu, in 15 languages. Arabic, Hebrew, Persian and
 Urdu are not among them. Your file can translate these messages, because
 Bellui looks them up the same way as yours: add the IDs from Bellui's
 English file,
-[`lang/translations/base.en.pxf`](https://github.com/belluikit/bellui/blob/v1.3.0-rc.4/lang/translations/base.en.pxf),
+[`lang/translations/base.en.pxf`](https://github.com/belluikit/bellui/blob/v1.3.0/lang/translations/base.en.pxf),
 to your own. The month names use IDs such as `march`, and the weekday
 initials at the top of the calendar use IDs such as `monday.narrow`. Each
 message you leave out shows in English.
@@ -141,7 +141,7 @@ appears on screen, not through the characters in stored order.
 ### Mixed Arabic and Latin text
 
 {{< callout type="warning" >}}
-In Bellui v1.3.0-rc.4, a line that mixes right-to-left text with Latin words,
+In Bellui v1.3.0, a line that mixes right-to-left text with Latin words,
 digits or punctuation is often drawn with its pieces in the wrong order. This
 affects labels, entries, rich text and `canvas.Text`.
 {{< /callout >}}
@@ -176,14 +176,19 @@ Arabic one, since containers place their children in the right order.
 
 Under a right-to-left layout, Bellui mirrors:
 
-- **Containers and layouts.** `HBox`, `Border`, `Grid`, `Form` and the
-  responsive layout place their first child on the right. A form puts its
-  labels on the right of the fields.
+- **Containers and layouts.** `HBox`, `Border`, `Grid`, `Form`, the
+  responsive layout, the wrapping layouts (`RowWrapLayout`, `GridWrapLayout`)
+  and the flex boxes place their first child on the right. A wrapping layout
+  starts each new row at the right edge too. A form puts its labels on the
+  right of the fields.
 - **Text alignment.** Text aligned to the leading edge, the default for
   labels and entries, sits on the right.
 - **Widgets laid out in a row**, among them the top and bottom app bars, the
-  navigation bar, app tabs, chips, check boxes, segmented buttons, button
-  groups, split buttons, spin boxes, the carousel and the status bar. A
+  navigation bar, app tabs, chips and chip groups, check boxes, radio
+  buttons, check and radio groups, segmented buttons, button groups, split
+  buttons, spin boxes, the carousel and the status bar. A radio button sits
+  on the right of its label, and a horizontal radio or check group puts its
+  first option rightmost. A
   button with an icon puts the icon on the right of its text. `Select`
   shows its arrow on the left.
 - **Menus.** A menu item's check mark, icon and label start on the right,
@@ -200,7 +205,7 @@ Under a right-to-left layout, Bellui mirrors:
 
 ## What does not mirror
 
-These keep their left-to-right arrangement in a right-to-left app in v1.3.0-rc.4.
+These keep their left-to-right arrangement in a right-to-left app in v1.3.0.
 Check each one you use:
 
 - **Sliders and progress bars** fill from the left, and a slider's minimum
@@ -208,7 +213,6 @@ Check each one you use:
 - **`Split`** keeps its leading pane on the left.
 - **`Tree`** keeps the expand arrow on the left of each row.
 - **`Table`** keeps column 0 on the left.
-- **`RadioGroup`** keeps the radio button on the left of each option.
 - **Buttons with `ButtonAlignLeading`**, including `Accordion` headers, keep
   their content on the left.
 - **All other icons**: media controls such as play, fast forward and skip,

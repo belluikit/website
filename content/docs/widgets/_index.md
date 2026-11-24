@@ -79,10 +79,11 @@ Call `Disable()` to keep a widget on screen while the user cannot use it, and
 | Pickers | `DatePicker`, `TimePicker`, `DateTimePicker`, `WheelPicker`, `FontPicker`, `ThemeSelector` |
 | Navigation | `TopAppBar`, `NavigationBar`, `NavigationRail`, `BottomAppBar` |
 | Collections and containment | `List`, `Tree`, `TreeView`, `FileTree`, `Carousel`, `SwipeArea` |
-| Containers and forms | `Form` (its submit and cancel buttons), `container.AppTabs`, `container.DocTabs`, [`container.InnerWindow`](/docs/widgets/containment/#inner-windows) |
+| Containers and forms | `Form`, `container.AppTabs`, `container.DocTabs`, [`container.InnerWindow`](/docs/widgets/containment/#inner-windows) |
 
-Some do not, for example `Hyperlink`, `Table`, `GridWrap` and
-`NavigationDrawer`.
+Some cannot, for example `Hyperlink`, `Table`, `GridWrap` and
+`NavigationDrawer`. Put them inside one that can, such as a tab or an inner
+window, and they are blocked with it.
 
 A disabled widget:
 
@@ -94,6 +95,19 @@ A disabled widget:
 - still does what your code asks: `Select`, `SetText`, `Next` and similar
   calls work as before.
 
+Everything inside a disabled widget is blocked too, including widgets that
+cannot be disabled themselves:
+
+- A tap, double tap, long press, mouse press, hover or drag inside it does
+  nothing. A link in a disabled tab does not open.
+- Tab skips everything inside it.
+- What has no disabled look of its own is drawn at 38% opacity. That covers
+  a label, a link, a card, the pages of a `Carousel` and your own widgets.
+  Widgets that have their own disabled look, such as a `Button` or an
+  `Entry`, draw it once and are not dimmed a second time.
+- The mouse wheel and a scrolling drag still reach the widget under them.
+  That widget decides whether to scroll.
+
 `Disable()` is safe to call before the widget is first shown. Some widgets
 add their own rules:
 
@@ -101,15 +115,19 @@ add their own rules:
   wheel, touch or scroll bar, and a wheel over it does not scroll the page
   around it either. Its selected row shows in the disabled colours.
 - In a collection, a `Carousel` or a `SwipeArea`, the widgets you supply,
-  such as row templates and pages, are yours and are left as they are.
+  such as row templates and pages, are not disabled. They take no input and
+  are drawn dimmed, as above.
 - A disabled `TopAppBar` keeps its title at full colour. Only its buttons
   look disabled.
 - A `RichEntry` cannot be focused or selected while it is disabled.
-- `ButtonGroup`, `BottomAppBar`, `AppTabs`, `DocTabs` and `InnerWindow`
-  disable what they hold. `Enable()` turns back on only what `Disable`
+- `ButtonGroup`, `BottomAppBar`, `AppTabs`, `DocTabs`, `InnerWindow` and
+  `Form` disable what they hold. `Enable()` turns back on only what `Disable`
   turned off, so a widget you disabled yourself stays disabled. The tab
   containers and `InnerWindow` also disable content you add while they are
-  disabled.
+  disabled. A disabled `Form` also draws its labels, hints and validation
+  messages in the disabled colour.
+- A disabled `Entry` disables its `ActionItem`, such as a search field's
+  clear button or a date entry's calendar button.
 
 {{< example file="widgets/disable/main.go" region="disable" >}}
 

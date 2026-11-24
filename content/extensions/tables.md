@@ -17,7 +17,7 @@ changes are also available from code.
 ## Install
 
 ```sh
-go get github.com/belluikit/bellui/x/tables@v1.3.0-rc.4
+go get github.com/belluikit/bellui/x/tables@v1.3.0
 ```
 
 ## A first grid
@@ -100,7 +100,11 @@ you want on, not only the one you came to change.
 `grid.SelectionMode` chooses what a click selects: `SelectionSingleCell` (the
 default), `SelectionMultiCell`, `SelectionSingleRow`, `SelectionMultiRow` or
 `SelectionNone`. With multi-row selection, shift-click selects a range and
-ctrl-click or cmd-click toggles one row. `Options.CheckboxSelection`
+ctrl-click or cmd-click toggles one row. With multi-cell selection, a click
+selects one cell, ctrl-click or cmd-click adds or removes a cell, and
+shift-click selects the rectangle from the last clicked cell.
+`grid.API().SelectedCells()` lists the selected cells. Each cell's `Row` is
+an index into your data, like the selected rows. `Options.CheckboxSelection`
 adds a checkbox column.
 
 `OnSelectionChanged` receives the selected rows as indexes into your data, not
@@ -110,7 +114,8 @@ a row) report clicks and activation.
 
 The arrow keys and Tab move the cursor. The copy shortcut copies whole rows as
 tab-separated text, every column of each selected row, or of the selected
-cell's row. The paste shortcut puts the clipboard text into
+cell's row. With multi-cell selection it copies only the selected cells, one
+line for each row that has any. The paste shortcut puts the clipboard text into
 the current cell, if that cell is editable.
 
 ## Editing
@@ -280,8 +285,10 @@ disabled grid keeps its place and its rows, and draws its text in the
 disabled colours. It takes no input: no tap, drag, scroll, key or shortcut,
 and Tab skips it. It neither selects, sorts, filters, resizes, reorders nor
 edits. An open editor closes without saving its value. Cells drawn by a
-column's `CellRenderer`, and master-detail content, are your own widgets and
-are left as they are. You can call `Disable` before the grid is shown.
+column's `CellRenderer`, and master-detail content, are your own widgets.
+The grid does not disable them, but they are drawn dimmed and take no tap, as
+everything inside a [disabled widget](/docs/widgets/#disabled-widgets) is.
+You can call `Disable` before the grid is shown.
 
 ## Licence
 

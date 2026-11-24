@@ -22,7 +22,7 @@ and cards styled by a `NodeStyler` (see [Node appearance](#node-appearance)).
 ## Install
 
 ```sh
-go get github.com/belluikit/bellui/x/dag@v1.3.0-rc.4
+go get github.com/belluikit/bellui/x/dag@v1.3.0
 ```
 
 ## The graph model
@@ -185,7 +185,9 @@ cancelled.
 
 Disabling refuses the user, not your code: `AddNode`, `DeleteSelected`,
 `SelectNode`, the graph and the undo stack still work. A node's `Content`
-is your own widget and is left as it is. The palette and the properties
+is your own widget. The canvas does not disable it, but it is drawn dimmed
+and takes no tap, as everything inside a
+[disabled widget](/docs/widgets/#disabled-widgets) is. The palette and the properties
 panel are separate widgets, so disable them yourself if you need to. You can
 call `Disable` before the canvas is shown.
 
