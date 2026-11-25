@@ -197,8 +197,9 @@ Windows, Linux and BSD. Set `Alignment` to `widget.ButtonAlignLeading` or
 
 ### Disabling an inner window
 
-`Disable()` stops the user from closing, moving or resizing the window, and
-disables every widget inside it that can be disabled, as described in
+`Disable()` stops the user from closing, moving or resizing the window. It
+also disables every widget inside it that can be disabled, and blocks and
+dims the rest, as described in
 [Disabled widgets](/docs/widgets/#disabled-widgets). Your code can still
 call `Close`, `SetContent` and `SetMaximized`.
 

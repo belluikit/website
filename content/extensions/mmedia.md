@@ -16,10 +16,10 @@ prebuilt FFmpeg libraries with it.
 ## Install
 
 ```sh
-go get github.com/belluikit/bellui/x/mmedia@v1.3.0-rc.5
+go get github.com/belluikit/bellui/x/mmedia@v1.3.0
 ```
 
-There is no FFmpeg to install. `x/mmedia` v1.3.0-rc.5 requires `goffmpeg`
+There is no FFmpeg to install. `x/mmedia` v1.3.0 requires `goffmpeg`
 v0.13.1, which brings the FFmpeg libraries for your platform as a Go module
 (`goffmpeg-libs` v0.10.0). They are published for macOS, Linux and Windows on
 amd64 and arm64, Android, iOS and the iOS Simulator.

@@ -82,7 +82,7 @@ Wayland, xkbcommon and OpenGL development packages, and a Vulkan driver.
   Android and iOS. Install it with:
 
   ```sh
-  go install github.com/belluikit/bellui/cmd/bellui@v1.3.0-rc.4
+  go install github.com/belluikit/bellui/cmd/bellui@v1.3.0
   ```
 
   See [Packaging and distribution](/docs/packaging/) for what each platform needs.

@@ -180,7 +180,7 @@ it.
 
 On Linux your app carries Chromium. `bellui package` places the pinned CEF
 files next to your binary, and the app finds them there at run time. The
-`bellui` command v1.3.0-rc.4 bundles CEF 156.0.30, which is Chromium
+`bellui` command v1.3.0 bundles CEF 156.0.30, which is Chromium
 156.0.8078.96, and checks the files against their published checksums. The
 `BELLUI_CEF_DIR` environment variable points it somewhere else. A binary
 started without the files leaves the view blank and logs `ErrRuntimeMissing`.
@@ -192,7 +192,7 @@ update lands, rebuild and re-package your app against a current Bellui release
 and ship it to your users. An app packaged months ago still carries the
 Chromium of that time. The Bellui project's update policy for the pinned
 version is in
-[CEF-MAINTENANCE.md](https://github.com/belluikit/bellui/blob/v1.3.0-rc.4/docs/CEF-MAINTENANCE.md).
+[CEF-MAINTENANCE.md](https://github.com/belluikit/bellui/blob/v1.3.0/docs/CEF-MAINTENANCE.md).
 {{< /callout >}}
 
 Browsing data (cookies, local storage and the HTTP cache) is kept between runs,

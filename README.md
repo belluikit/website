@@ -69,8 +69,10 @@ Two ways to make them:
 
 Each variant is captured by its own run of the app, started with
 `BELLUI_THEME=light` or `BELLUI_THEME=dark`, rather than by switching the
-variant in a running app: x/charts charts keep the colours they were first
-drawn in (belluikit/bellui#1381).
+variant in a running app. Before v1.3.0, x/charts charts kept the colours
+they were first drawn in when the variant changed (belluikit/bellui#1381).
+v1.3.0 fixed that, and a run per variant still keeps the two captures
+independent.
 
 Before committing, compress new captures with
 `pngquant --force --ext .png --skip-if-larger <files>`, as the rest of the
@@ -89,7 +91,7 @@ The site is built and served by Cloudflare Pages from this repository.
 
 The custom domain is `bellui.com`. `bellui.io` is meant to redirect to it once DNS is set up.
 
-Cloudflare's Email Obfuscation is on for the zone. It treats a versioned module path like `bellui@v1.3.0-rc.4` as an email address. Pages that are read without JavaScript then show "[email protected]" instead (#25).
+Cloudflare's Email Obfuscation is on for the zone. It treats a versioned module path like `bellui@v1.3.0` as an email address. Pages that are read without JavaScript then show "[email protected]" instead (#25).
 
 A Configuration Rule, `Docs: no email obfuscation`, turns it off for `/` and for paths under `/docs/`, `/develop/`, `/extensions/`, `/gallery/`, `/tools/`, `/libraries/` and `/about/`. It stays on for `/privacy/` and `/support/`, which show a real address.
 

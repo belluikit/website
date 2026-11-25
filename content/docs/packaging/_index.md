@@ -15,7 +15,7 @@ you.
 The command is its own Go module, separate from the Bellui library:
 
 ```sh
-go install github.com/belluikit/bellui/cmd/bellui@v1.3.0-rc.4
+go install github.com/belluikit/bellui/cmd/bellui@v1.3.0
 ```
 
 Check that it is on your `PATH`:

@@ -11,7 +11,7 @@ change them with a small app called `bellui_settings`, which ships with Bellui.
 ## Installing it
 
 ```sh
-go install github.com/belluikit/bellui/cmd/bellui_settings@v1.3.0-rc.4
+go install github.com/belluikit/bellui/cmd/bellui_settings@v1.3.0
 ```
 
 Then run `bellui_settings`. To get a proper application bundle with an icon,

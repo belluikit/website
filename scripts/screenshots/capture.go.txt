@@ -15,9 +15,9 @@
 // startup, and the site's captures use the default theme.
 // SHOTS_SIZE resizes the window first (the current set uses 900x650 for the
 // pages above, 1124x650 for Charts and Data Grid, and 1167x682 for Code
-// Editor, Theme and Typography). Run one variant per process, as above:
-// x/charts charts keep the colours they were first drawn in when the
-// variant changes while the app runs (belluikit/bellui#1381).
+// Editor, Theme and Typography). Run one variant per process, as above.
+// Before v1.3.0, x/charts charts kept the colours they were first drawn in
+// when the variant changed (belluikit/bellui#1381).
 
 	if dir := os.Getenv("SHOTS_DIR"); dir != "" {
 		go func() {

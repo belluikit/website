@@ -57,7 +57,9 @@ selection) or moves the selection handles.
   `EntryStyleOutlined` has a border and no fill.
 - **Icon.** `SetIcon` shows an icon at the leading edge. It is decoration
   only and cannot be tapped. `ActionItem` holds an object for the trailing
-  edge; the password entry puts its reveal button there.
+  edge; the password entry puts its reveal button there. Disabling the entry
+  disables its action item too, if the action item can be disabled, and
+  `Enable` turns it back on.
 - **Password.** `NewPasswordEntry` hides the characters and adds a button that
   reveals them. Screen readers are never given the text.
 - **Multi-line.** `NewMultiLineEntry` accepts new lines. Set `Wrapping` to
@@ -143,8 +145,9 @@ For a number the user nudges up and down, see [SpinBox](../selection/#spinbox).
 [`SearchField`](https://pkg.go.dev/github.com/belluikit/bellui/widget#SearchField)
 is an entry with a search icon, a clear button and the placeholder
 "Search...". The function you pass to `NewSearchField` is its own `OnChanged`
-and runs on every keystroke, which suits live filtering. `OnSearched` runs
-when the user presses Enter.
+and runs each time the text changes, which suits live filtering. `OnSearched`
+runs when the user presses Enter. A `Validator` you set works as on any
+entry.
 
 ## Completion
 

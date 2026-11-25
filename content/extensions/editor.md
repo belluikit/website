@@ -17,7 +17,7 @@ highlighting, or highlighting without a gutter.
 ## Install
 
 ```sh
-go get github.com/belluikit/bellui/x/editor@v1.3.0-rc.4
+go get github.com/belluikit/bellui/x/editor@v1.3.0
 ```
 
 ## A first editor

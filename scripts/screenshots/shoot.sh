@@ -9,9 +9,10 @@
 # go build ./... ignores), replaces its bellui.ShowAndRun(w) call with a
 # version that resizes the window, waits, captures Canvas().Capture() and
 # quits, and runs it with BELLUI_SCALE=2: once with BELLUI_THEME=light and
-# once with BELLUI_THEME=dark. Each variant gets its own process, because
-# x/charts charts keep the colours they were first drawn in when the theme
-# variant changes while the app runs (belluikit/bellui#1381).
+# once with BELLUI_THEME=dark. Each variant gets its own process. Before
+# v1.3.0 that was needed because x/charts charts kept the colours they were
+# first drawn in when the variant changed (belluikit/bellui#1381); now it
+# keeps the two captures independent.
 set -eu
 cd "$(dirname "$0")/../.."
 src="examples/$1"; name="$2"; size="${3:-900x650}"; delay="${4:-3}"
