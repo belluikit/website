@@ -50,4 +50,4 @@ or Urdu, also mirrors the layout. This happens automatically: the app does
 not need to call anything. Bellui has no translation of its own text into
 these languages, and no bundled text font with their letters, so check
 [Right-to-left languages](right-to-left/) before you ship one. It also
-lists what does not mirror and the limits of mixed-direction text in v1.3.0.
+lists what does not mirror and the limits of mixed-direction text in v1.5.0.

@@ -141,7 +141,7 @@ appears on screen, not through the characters in stored order.
 ### Mixed Arabic and Latin text
 
 {{< callout type="warning" >}}
-In Bellui v1.3.0, a line that mixes right-to-left text with Latin words,
+In Bellui v1.5.0, a line that mixes right-to-left text with Latin words,
 digits or punctuation is often drawn with its pieces in the wrong order. This
 affects labels, entries, rich text and `canvas.Text`.
 {{< /callout >}}
@@ -166,6 +166,10 @@ inside English text is drawn correctly unless the phrase contains digits:
 wrong side. A line in a single direction, such as only Arabic or only Hebrew
 words and spaces, is always drawn correctly, as are the labels, buttons and
 title in the screenshot.
+
+Rich text is drawn right when each direction is a segment of its own: a
+`RichText` or `RichEntry` line made of several segments puts them in reading
+order. Mixed text inside one segment is drawn as in a label.
 
 Until this is fixed, check every translated string that contains a number, a
 Latin name or punctuation in the running app. Where you can, keep Latin text,
@@ -195,7 +199,8 @@ Under a right-to-left layout, Bellui mirrors:
   and its shortcut and submenu arrow sit on the left. Submenus open to the
   left of their item, or to the right when there is no room. In a pop-up
   menu, Left opens a submenu and Right closes it.
-- **The navigation drawer** opens from the right by default.
+- **The navigation drawer** opens from the right by default, and each row
+  starts at the right: the icon against the right edge, the label to its left.
 - **Directional icons.** `NavigateBack`, `NavigateNext`, `MenuExpand`,
   `MailReply`, `MailReplyAll` and `MailForward` are drawn mirrored, so a back
   arrow points right. See [Icons](/docs/theming/icons/).
@@ -205,7 +210,7 @@ Under a right-to-left layout, Bellui mirrors:
 
 ## What does not mirror
 
-These keep their left-to-right arrangement in a right-to-left app in v1.3.0.
+These keep their left-to-right arrangement in a right-to-left app in v1.5.0.
 Check each one you use:
 
 - **Sliders and progress bars** fill from the left, and a slider's minimum
