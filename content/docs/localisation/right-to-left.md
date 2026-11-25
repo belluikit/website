@@ -1,6 +1,6 @@
 ---
 title: Right-to-left languages
-description: Translate an app into Arabic, Hebrew, Persian or Urdu, what Bellui mirrors for you, what it does not, fonts, and the text-direction limits of v1.3.0.
+description: Translate an app into Arabic, Hebrew, Persian or Urdu, what Bellui mirrors for you, what it does not, fonts, and the text-direction limits of v1.5.0.
 weight: 4
 ---
 
