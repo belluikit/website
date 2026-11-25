@@ -72,6 +72,11 @@ The package has ready-made styles: `RichTextStyleInline`,
 `RichTextStyleHeading`, `RichTextStyleSubHeading`, `RichTextStyleBlockquote`,
 `RichTextStyleCodeInline` and `RichTextStyleCodeBlock`.
 
+To change a ready-made style, copy it and change the fields you need. A copy
+of `RichTextStyleBlockquote` stays a blockquote, drawn indented, whatever you
+change in it. A style you write out field by field with the same values is
+not a blockquote.
+
 {{< example file="widgets/richtext/main.go" region="segments" >}}
 
 Inline segments flow on together in one paragraph. A segment whose style is
