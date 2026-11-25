@@ -62,7 +62,7 @@ items of the text edit menu, in 15 languages. Arabic, Hebrew, Persian and
 Urdu are not among them. Your file can translate these messages, because
 Bellui looks them up the same way as yours: add the IDs from Bellui's
 English file,
-[`lang/translations/base.en.pxf`](https://github.com/belluikit/bellui/blob/v1.3.0/lang/translations/base.en.pxf),
+[`lang/translations/base.en.pxf`](https://github.com/belluikit/bellui/blob/v1.5.0/lang/translations/base.en.pxf),
 to your own. The month names use IDs such as `march`, and the weekday
 initials at the top of the calendar use IDs such as `monday.narrow`. Each
 message you leave out shows in English.

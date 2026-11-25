@@ -192,7 +192,7 @@ update lands, rebuild and re-package your app against a current Bellui release
 and ship it to your users. An app packaged months ago still carries the
 Chromium of that time. The Bellui project's update policy for the pinned
 version is in
-[CEF-MAINTENANCE.md](https://github.com/belluikit/bellui/blob/v1.3.0/docs/CEF-MAINTENANCE.md).
+[CEF-MAINTENANCE.md](https://github.com/belluikit/bellui/blob/v1.5.0/docs/CEF-MAINTENANCE.md).
 {{< /callout >}}
 
 Browsing data (cookies, local storage and the HTTP cache) is kept between runs,
