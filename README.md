@@ -111,10 +111,17 @@ To update it:
    the gallery's `manifest.pxf`; do not commit that).
 2. Upload `wasm/MD3 Gallery.wasm` to the bucket as
    `gallery/<gallery commit>/gallery.wasm`. A new folder per build lets the
-   file be cached forever.
+   file be cached forever, so set that header on upload:
+
+   ```sh
+   npx wrangler r2 object put "bellui-assets/gallery/<commit>/gallery.wasm" \
+     --file "wasm/MD3 Gallery.wasm" --content-type application/wasm \
+     --cache-control "public, max-age=31536000, immutable" --remote
+   ```
 3. Point `GALLERY_WASM` in `static/demo/index.html` at the new path, and copy
    any other changed files from `wasm/` into `static/demo/`.
-4. Check that `curl -I` on the new URL shows `content-type: application/wasm`.
+4. Check that `curl -I` on the new URL shows `content-type: application/wasm`
+   and that `cache-control`.
 
 ## License
 
