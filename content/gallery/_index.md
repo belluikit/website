@@ -53,7 +53,7 @@ instead of forcing a desktop width.
 To run it in a browser, install the `bellui` command and serve the checkout:
 
 ```sh
-go install github.com/belluikit/bellui/cmd/bellui@v1.3.0
+go install github.com/belluikit/bellui/cmd/bellui@v1.5.0
 bellui serve
 ```
 

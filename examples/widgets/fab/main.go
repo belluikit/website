@@ -33,7 +33,8 @@ func main() {
 	var add *widget.FAB
 	add = widget.NewFAB(theme.ContentAddIcon(), func() {
 		// The menu opens above and to the left of the point you pass:
-		// here, the FAB's top-right corner in window coordinates.
+		// here, the FAB's top-right corner in window coordinates. In a
+		// right-to-left window, pass its top-left corner instead.
 		pos := bellui.CurrentApp().Driver().AbsolutePositionForObject(add)
 		menu.Toggle(w.Canvas(), pos.AddXY(add.Size().Width, 0))
 	})

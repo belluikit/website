@@ -17,7 +17,7 @@ changes are also available from code.
 ## Install
 
 ```sh
-go get github.com/belluikit/bellui/x/tables@v1.3.0
+go get github.com/belluikit/bellui/x/tables@v1.5.0
 ```
 
 ## A first grid

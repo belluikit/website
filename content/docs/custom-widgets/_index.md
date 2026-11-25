@@ -21,4 +21,5 @@ new input handling, or a reusable unit with its own state and API.
 {{< cards >}}
   {{< card link="building/" title="Building a widget" subtitle="BaseWidget, the renderer, MinSize, Layout and Refresh, with a complete rating widget." >}}
   {{< card link="extending/" title="Extending a widget" subtitle="Add taps to an icon, filter an entry's input." >}}
+  {{< card link="pressed-state/" title="Pressed state" subtitle="The MD3 ripple on a widget of your own, with PressTarget." >}}
 {{< /cards >}}

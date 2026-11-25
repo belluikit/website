@@ -47,6 +47,23 @@ trailing `Actions`, each a
 [`TopAppBarAction`](https://pkg.go.dev/github.com/belluikit/bellui/widget#TopAppBarAction)
 with an icon and a function.
 
+Give each action a `Label`. Screen readers read it as the button's name, and
+it lets the action move into an overflow menu when the bar is narrow:
+
+- When the actions would leave the title less than three button widths, the
+  bar folds actions into a menu behind a ⋮ button. The menu lists each one by
+  its label and icon, and choosing one calls its `OnTapped`.
+- Actions fold from the last one, so put the most important first. An action
+  with no `Label` never folds, and neither does one with `Pinned` set.
+- A single action is never folded on its own, since its ⋮ would take the same
+  room.
+- On a 360 dp phone with a navigation icon and five labelled actions, the
+  bar shows two actions and the ⋮.
+
+A title that doesn't fit in the room the actions leave is cut short with an
+ellipsis before the first action. Screen readers still read the whole title.
+On a disabled bar the ⋮ still opens its menu, with every item disabled.
+
 [`NavigationDrawer`](https://pkg.go.dev/github.com/belluikit/bellui/widget#NavigationDrawer)
 is a side panel that you open over the content with `Show(canvas)` or
 `Toggle(canvas)`, and close with `Hide()`. `IsOpen()` tells you whether it

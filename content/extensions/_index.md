@@ -12,13 +12,13 @@ Bellui repository under `x/`, but each is a separate Go module. An app pays
 for one, in build time and binary size, only when it imports it.
 
 Each extension is released together with the toolkit and carries the same
-version number: `x/charts v1.3.0` goes with Bellui v1.3.0. Between releases
+version number: `x/charts v1.5.0` goes with Bellui v1.5.0. Between releases
 the media module is sometimes released on its own, so a pre-release of
 `x/mmedia` can be one step ahead of the toolkit's. Add an extension with
 `go get`:
 
 ```sh
-go get github.com/belluikit/bellui/x/charts@v1.3.0
+go get github.com/belluikit/bellui/x/charts@v1.5.0
 ```
 
 {{< cards >}}

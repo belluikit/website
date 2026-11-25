@@ -107,6 +107,8 @@ minimum size to their layouts:
 - **Keyboard:** implement [`event.Focusable`](https://pkg.go.dev/github.com/belluikit/bellui/event#Focusable)
   to receive keys when focused.
 - **Tooltips:** `BaseWidget.SetToolTipText` gives the widget a hover tooltip.
+- **Pressed state:** embed `widget.PressTarget` to show the MD3 ripple on a
+  press. See [Pressed state](../pressed-state/).
 - **Touch drags:** a `Draggable` widget can take touch drags in some
   directions only, and keep moving after a fling. See
   [Drags on touch screens](/docs/concepts/input-events/#drags-on-touch-screens).

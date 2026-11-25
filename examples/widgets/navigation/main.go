@@ -61,8 +61,12 @@ func main() {
 	top := widget.NewTopAppBar("My app", theme.MenuIcon(), func() {
 		drawer.Toggle(w.Canvas())
 	})
+	// On a narrow window, labelled actions that don't fit fold into a ⋮
+	// menu, starting from the last. Pinned keeps Search on the bar.
 	top.Actions = []widget.TopAppBarAction{
-		{Icon: theme.SettingsIcon(), OnTapped: func() { content.SetText("Settings") }},
+		{Icon: theme.SearchIcon(), Label: "Search", Pinned: true, OnTapped: func() { content.SetText("Search") }},
+		{Icon: theme.SettingsIcon(), Label: "Settings", OnTapped: func() { content.SetText("Settings") }},
+		{Icon: theme.InfoIcon(), Label: "About", OnTapped: func() { content.SetText("About") }},
 	}
 	//docs:end top
 

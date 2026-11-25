@@ -149,8 +149,11 @@ To keep it in a corner, put it at the end of a box with a spacer before it.
 is the MD3 speed dial: a list of labelled mini FABs that opens over the
 content. It is not a widget you place in a layout. You open it with
 `Show`, `Toggle` or close it with `Hide`, giving the canvas and a position.
-The menu opens above and to the left of that position. Tapping an item
-closes the menu and calls its `OnTapped`.
+Pass the FAB's top corner on its trailing side: in a left-to-right window
+that is its top-right corner, and the menu opens up and to the left of it. In
+a right-to-left window pass the top-left corner, and the menu opens up and to
+the right. A menu that would cross an edge of the window is moved inside it.
+Tapping an item closes the menu and calls its `OnTapped`.
 
 {{< example file="widgets/fab/main.go" region="menu" >}}
 

@@ -173,3 +173,11 @@ focused thumb, and the arrows across it switch between thumbs.
 is a number field with increment and decrement buttons. Each press adds or
 subtracts `Step`, and `SetValue` clamps to `Min` and `Max`. The up and down
 arrow keys step the value when it has focus.
+
+- The user can type a value. It is clamped to the range as they type, and
+  the field shows the clamped value when they press Enter or leave the field.
+- The field is as wide as the wider of `Min` and `Max`. For a side with no
+  limit, use `math.Inf(-1)` or `math.Inf(1)`, which takes no width.
+- After setting `Value`, `Min`, `Max` or `Step` directly, call `Refresh`. It
+  clamps the value, shows it formatted for the step and updates the buttons,
+  without calling `OnChanged`. `SetValue` is the setter that calls it.
