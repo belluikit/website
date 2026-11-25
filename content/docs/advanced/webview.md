@@ -180,7 +180,7 @@ it.
 
 On Linux your app carries Chromium. `bellui package` places the pinned CEF
 files next to your binary, and the app finds them there at run time. The
-`bellui` command v1.3.0 bundles CEF 156.0.30, which is Chromium
+`bellui` command v1.5.0 bundles CEF 156.0.30, which is Chromium
 156.0.8078.96, and checks the files against their published checksums. The
 `BELLUI_CEF_DIR` environment variable points it somewhere else. A binary
 started without the files leaves the view blank and logs `ErrRuntimeMissing`.
