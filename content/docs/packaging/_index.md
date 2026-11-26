@@ -27,6 +27,26 @@ bellui version
 This prints the version of the command and, when run inside your app's module,
 the version of the Bellui library your app uses.
 
+### If the install fails
+
+`go install` can stop with this error:
+
+```
+module github.com/belluikit/bellui@v1.5.0 found, but does not contain package github.com/belluikit/bellui/cmd/bellui
+```
+
+Look up the command's module first, then install again:
+
+```sh
+go list -m github.com/belluikit/bellui/cmd/bellui@v1.5.0
+go install github.com/belluikit/bellui/cmd/bellui@v1.5.0
+```
+
+The error comes from a [bug in the go command](https://github.com/golang/go/issues/58116).
+It happens when two things are true. `GOPRIVATE` or `GONOPROXY` is set, to any
+pattern. And the Bellui library at that version is already in your module
+cache, for example because you have built an app with it.
+
 ## Commands
 
 | Command | What it does |

@@ -57,6 +57,9 @@ go install github.com/belluikit/bellui/cmd/bellui@v1.5.0
 bellui serve
 ```
 
+If `go install` says the module does not contain the package, see
+[If the install fails](/docs/packaging/#if-the-install-fails).
+
 Then open <http://localhost:8080> in a browser with WebGPU, such as Chrome or
 Edge. The first load downloads a large WebAssembly file (about 64 MB
 uncompressed), so give it a moment. The Audio Player, Clair, Code Assistant
